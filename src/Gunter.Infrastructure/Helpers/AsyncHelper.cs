@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gunter.Infrastructure
+namespace Gunter.Core.Infrastructure.Helpers
 {
     public static class AsyncHelper
     {
@@ -16,17 +16,17 @@ namespace Gunter.Infrastructure
 
         public static TResult RunSync<TResult>(Func<Task<TResult>> func)
         {
-            return AsyncHelper._myTaskFactory
-              .StartNew<Task<TResult>>(func)
-              .Unwrap<TResult>()
+            return _myTaskFactory
+              .StartNew(func)
+              .Unwrap()
               .GetAwaiter()
               .GetResult();
         }
 
         public static void RunSync(Func<Task> func)
         {
-            AsyncHelper._myTaskFactory
-              .StartNew<Task>(func)
+            _myTaskFactory
+              .StartNew(func)
               .Unwrap()
               .GetAwaiter()
               .GetResult();

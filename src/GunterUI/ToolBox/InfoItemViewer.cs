@@ -1,6 +1,6 @@
 ﻿using Gunter.Core.Contracts;
+using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Extensions.InfoSources;
-using Gunter.Infrastructure;
 using GunterUI.Extensions;
 using System;
 using System.Collections.Generic;

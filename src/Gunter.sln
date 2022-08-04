@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gunter.Console", "Gunter.Console\Gunter.Console.csproj", "{3B5EC0E2-4654-401C-A924-1D5C95EBF66F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gunter.Core.Messaging", "Gunter.Core.Messaging\Gunter.Core.Messaging.csproj", "{EB182E37-20E0-4D18-86B1-0212E4F2DFFF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,10 @@ Global
 		{3B5EC0E2-4654-401C-A924-1D5C95EBF66F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B5EC0E2-4654-401C-A924-1D5C95EBF66F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B5EC0E2-4654-401C-A924-1D5C95EBF66F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB182E37-20E0-4D18-86B1-0212E4F2DFFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB182E37-20E0-4D18-86B1-0212E4F2DFFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB182E37-20E0-4D18-86B1-0212E4F2DFFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB182E37-20E0-4D18-86B1-0212E4F2DFFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -116,6 +122,7 @@ Global
 		{FA597E8D-CE26-4BAF-9831-BF5BE0672903} = {4DC9CBD9-F428-482F-BAC5-90F77B27AA6B}
 		{1A38F0C6-1784-4031-924D-48E5B70762E5} = {4DC9CBD9-F428-482F-BAC5-90F77B27AA6B}
 		{02DD29EF-4845-45B7-9AB3-4647920BE6C6} = {8E5428B9-226E-4891-BC0D-5C7C96790698}
+		{EB182E37-20E0-4D18-86B1-0212E4F2DFFF} = {4DC9CBD9-F428-482F-BAC5-90F77B27AA6B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCCDBC49-0629-4B96-82A0-0718A49BC3F3}

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gunter.Infrastructure
+namespace Gunter.Core.Infrastructure.Exceptions
 {
     public class GunterInfoSourceException : Exception
     {

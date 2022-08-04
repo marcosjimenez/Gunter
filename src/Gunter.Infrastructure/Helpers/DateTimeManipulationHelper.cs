@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gunter.Infrastructure
-{ 
+namespace Gunter.Core.Infrastructure.Helpers
+{
     public static class DateTimeManipulationHelper
     {
         public const string Segundos = "s - Segundos";

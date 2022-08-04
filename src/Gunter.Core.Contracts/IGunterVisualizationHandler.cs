@@ -15,6 +15,6 @@ namespace Gunter.Core.Contracts
     }
     public interface IGunterVisualizationHandler<T> : IGunterVisualizationHandler
     {
-        bool CanHandle(T value);
+        
     }
 }

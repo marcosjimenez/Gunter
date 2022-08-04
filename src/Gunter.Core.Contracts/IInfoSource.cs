@@ -24,5 +24,6 @@ namespace Gunter.Core.Contracts
         SpecialProperties GetMandatoryParams();
 
         IGunterInfoItem Container { get; }
+
     }
 }

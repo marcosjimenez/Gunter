@@ -1,6 +1,5 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom;
-using Gunter.Infrastructure;
 using Gunter.Extensions.Common;
 using Gunter.Core.Contracts;
 using Gunter.Infrastructure.Cache;
@@ -15,6 +14,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using static Gunter.Extensions.InfoSources.Specialized.Models.AEMETInfoItem;
 using Gunter.Extensions.InfoSources.Specialized.Models;
+using Gunter.Core.Infrastructure.Helpers;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {

@@ -71,5 +71,14 @@ namespace Gunter.Core
             
         }
 
+        public void ReceiveInfoItemMessage(IGunterInfoItem item, string message)
+        {
+            
+        }
+
+        public void SendInfoItemMessage(IGunterInfoItem item, string message)
+        {
+
+        }
     }
 }

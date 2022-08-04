@@ -22,9 +22,9 @@ namespace Gunter.Core.Contracts
 
         IList<IGunterVisualizationHandler> VisualizationHandlers { get; }
 
-
         void Update();
 
         void InfoSourceUpdated(IInfoSource source);
+
     }
 }

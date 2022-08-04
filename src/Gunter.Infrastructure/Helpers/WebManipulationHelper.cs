@@ -1,16 +1,16 @@
 ﻿using Flurl;
 using Flurl.Http;
 
-namespace Gunter.Infrastructure
+namespace Gunter.Core.Infrastructure.Helpers
 {
     public static class WebManipulationHelper
     {
 
-        public static async Task<T> Get<T>(string url, Dictionary<string,string> parameters)
+        public static async Task<T> Get<T>(string url, Dictionary<string, string> parameters)
         {
             var webUrl = url.WithHeader("Accept", "text/plain");
 
-            foreach(var item in parameters)
+            foreach (var item in parameters)
                 webUrl = webUrl.SetQueryParam(item.Key, item.Value);
 
             var result = await webUrl.GetJsonAsync<T>();

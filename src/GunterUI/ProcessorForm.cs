@@ -7,12 +7,12 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Gunter.Core;
-using Gunter.Infrastructure;
 using Gunter.Extensions.InfoSources.Specialized;
 using Gunter.Extensions.InfoSources;
 using Gunter.Extensions.Visualization.Handlers;
 using GunterUI.Extensions;
 using System.Diagnostics;
+using Gunter.Core.Infrastructure.Helpers;
 
 namespace GunterUI
 {
