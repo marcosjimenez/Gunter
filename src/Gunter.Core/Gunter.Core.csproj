@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gunter.Core.Contracts\Gunter.Core.Contracts.csproj" />
+    <ProjectReference Include="..\Gunter.Extensions.Models\Gunter.Extensions.Models.csproj" />
+    <ProjectReference Include="..\Gunter.Infrastructure\Gunter.Core.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
