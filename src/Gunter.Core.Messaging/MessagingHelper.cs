@@ -18,28 +18,33 @@ namespace Gunter.Core.Messaging
         //private readonly MqttClientOptions options;
         //private readonly IMqttClient mqttClient;
 
-        //private static readonly Lazy<MessagingHelper> lazy = new(() => new MessagingHelper());
+        private static readonly Lazy<MessagingHelper> lazy = new(() => new MessagingHelper());
 
-        //public delegate void MessageReceivedEventHandler(object sender, MessageReceivedEventArgs e);
-        //public event MessageReceivedEventHandler MessageReceived;
+        public delegate void MessageReceivedEventHandler(object sender, MessageReceivedEventArgs e);
+        public event MessageReceivedEventHandler MessageReceived;
 
-        //public static MessagingHelper Instance
-        //{
-        //    get
-        //    {
-        //        return lazy.Value;
-        //    }
-        //}
+        public static MessagingHelper Instance
+        {
+            get
+            {
+                return lazy.Value;
+            }
+        }
 
-        //private MessagingHelper()
-        //{
-        //    var factory = new MqttFactory();
-        //    mqttClient = factory.CreateMqttClient();
-        //    options = new MqttClientOptionsBuilder()
-        //        .WithTcpServer(brokerIp)
-        //        .WithClientId(clientId)
-        //        .Build();
-        //}
+        public void ReceiveMessage(MessageReceivedEventArgs e)
+        {
+
+        }
+
+        private MessagingHelper()
+        {
+            //var factory = new MqttFactory();
+            //mqttClient = factory.CreateMqttClient();
+            //options = new MqttClientOptionsBuilder()
+            //    .WithTcpServer(brokerIp)
+            //    .WithClientId(clientId)
+            //    .Build();
+        }
 
         //public async Task Start(string brokerIp, string clientId, Action<string> callback = null)
         //{

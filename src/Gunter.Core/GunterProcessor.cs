@@ -1,4 +1,5 @@
 ﻿using Gunter.Core.Contracts;
+using Gunter.Core.Infrastructure.Exceptions;
 using Gunter.Infrastructure;
 using Gunter.Infrastructure.Cache;
 using System.Collections.Concurrent;

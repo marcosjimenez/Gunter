@@ -14,11 +14,16 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Gunter.Core.Infrastructure.Helpers;
+using System.Threading;
+using System.Collections.Concurrent;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class GunterBotInfoSource : InfoSourceBase<string>, IInfoSource
+    public class GunterBotInfoSource : InfoSourceBase<GunterBotInfoItem>, IInfoSource
     {
+
+        private ConcurrentBag<GunterBotInfoItem> _messages = new();
+
         public string LastItem { get => lastItem; }
 
         public SpecialProperties SpecialProperties { get; set; }
@@ -35,19 +40,19 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         private string lastItem { get; set; }
         private readonly IGunterInfoItem _container;
-        private readonly TimeSpan MinInterval = new TimeSpan();
 
-        private Dictionary<string, string> data = new();
+        private Dictionary<string, GunterBotInfoItem> data = new();
 
         private TelegramBotClient botClient;
         private Telegram.Bot.Types.User botUser;
+        private CancellationTokenSource receivingCancelToken = new CancellationTokenSource();
 
         public GunterBotInfoSource()
         {
             Id = string.Empty;
             Name = string.Empty;
             SpecialProperties = new SpecialProperties();
-            _mandatoryInputs.AddOrUpdate("city", "Chiloeches");
+            _mandatoryInputs.AddOrUpdate("token", "{YOUR_ACCESS_TOKEN_HERE}");
             _container = null;
             lastItem = string.Empty;
         }
@@ -61,6 +66,15 @@ namespace Gunter.Extensions.InfoSources.Specialized
             lastItem = string.Empty;
             _container = container;
         }
+
+        ~GunterBotInfoSource()
+        {
+            if (receivingCancelToken is not null)
+                receivingCancelToken.Cancel();
+
+            //AsyncHelper.RunSync(() => botClient.CloseAsync());
+        }
+
         public object GetData()
         {
             return lastItem;
@@ -68,26 +82,32 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public void SetSpecialProperties(SpecialProperties specialProperties)
         {
+            specialProperties.AddOrUpdate("command", string.Empty);
             SpecialProperties = specialProperties;
+            InitBot();
         }
 
-        public override Dictionary<string, string> GetLastData()
+        public override Dictionary<string, GunterBotInfoItem> GetLastData()
         {
-            _mandatoryInputs.TryGetProperty("city", out string? city);
 
-            var fileUrl = ExternalDataCache.GenerateCacheFileName(string.Empty, "GUNTERBOT", string.Empty);
+            _mandatoryInputs.TryGetProperty("command", out string? command);
 
-            if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
-            {
-                var json = Encoding.UTF8.GetString(content);
-                //weather = System.Text.Json.JsonSerializer.Deserialize<OpenWeatherInfoItem.RootObject>(json);
-            }
-            else
-            {
-                //weather = WeatherApi.getOneDayWeather(city);
-                //var json = System.Text.Json.JsonSerializer.Serialize(weather, typeof(OpenWeatherInfoItem.RootObject));
-                //ExternalDataCache.Instance.TryAddFile(json, fileUrl, DateTimeManipulationHelper.QuarterDayTimeSpan);
-            }
+            while(!_messages.IsEmpty)
+                if (_messages.TryTake(out var result))
+                    data.Add(result.MessageId, result);
+
+            //var fileUrl = ExternalDataCache.GenerateCacheFileName(string.Empty, "GUNTERBOT", string.Empty);
+            //if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
+            //{
+            //    var json = Encoding.UTF8.GetString(content);
+            //    //weather = System.Text.Json.JsonSerializer.Deserialize<OpenWeatherInfoItem.RootObject>(json);
+            //}
+            //else
+            //{
+            //    //weather = WeatherApi.getOneDayWeather(city);
+            //    //var json = System.Text.Json.JsonSerializer.Serialize(weather, typeof(OpenWeatherInfoItem.RootObject));
+            //    //ExternalDataCache.Instance.TryAddFile(json, fileUrl, DateTimeManipulationHelper.QuarterDayTimeSpan);
+            //}
 
             //if (weather is not null)
             //{
@@ -96,10 +116,17 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
             return data;
         }
+        private async Task SendMessageToBot(string message, long chatId)
+        {
+            Message sentMessage = await botClient.SendTextMessageAsync(
+                chatId: chatId,
+                text: message,
+                cancellationToken: new CancellationToken());
+        }
 
         private User GetBotUser ()
         {
-            botClient ??= new TelegramBotClient(GetToken() ?? string.Empty);
+            botClient ??= new TelegramBotClient(GetToken());
             botUser ??= AsyncHelper.RunSync(() => botClient.GetMeAsync());
 
             return botUser;
@@ -107,15 +134,15 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         private string GetToken()
         {
-            if (_mandatoryInputs.TryGetProperty<string>("token", out string? token))
+            if (SpecialProperties.TryGetProperty<string>("token", out string? token))
                 return token;
 
             return string.Empty;
         }
 
-        private void InitializeBot()
+        private void InitBot()
         {
-            using var cts = new CancellationTokenSource();
+            var me = GetBotUser();
 
             // StartReceiving does not block the caller thread. Receiving is done on the ThreadPool.
             var receiverOptions = new ReceiverOptions
@@ -126,35 +153,30 @@ namespace Gunter.Extensions.InfoSources.Specialized
                 updateHandler: HandleUpdateAsync,
                 pollingErrorHandler: HandlePollingErrorAsync,
                 receiverOptions: receiverOptions,
-                cancellationToken: cts.Token
+                cancellationToken: receivingCancelToken.Token
             );
 
-            //var me = GetBotUser();
-            //Console.WriteLine($"Start listening for @{me.Username}");
-            //Console.ReadLine();
-
-            // Send cancellation request to stop bot
-            cts.Cancel();
+            //receivingCancelToken.Cancel();
         }
 
-        async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             // Only process Message updates: https://core.telegram.org/bots/api#message
             if (update.Message is not { } message)
-                return;
+                return Task.CompletedTask;
             // Only process text messages
             if (message.Text is not { } messageText)
-                return;
+                return Task.CompletedTask;
 
-            var chatId = message.Chat.Id;
+            _messages.Add(new GunterBotInfoItem
+            {
+                MessageId = message.MessageId.ToString(),
+                ChatId = message.Chat.Id.ToString(),
+                MessageText = messageText,
+                TimeStamp = message.EditDate.HasValue ? message.EditDate.Value : DateTime.Now
+            });
 
-            Console.WriteLine($"Received a '{messageText}' message in chat {chatId}.");
-
-            // Echo received message text
-            Message sentMessage = await botClient.SendTextMessageAsync(
-                chatId: chatId,
-                text: "You said:\n" + messageText,
-                cancellationToken: cancellationToken);
+            return Task.CompletedTask;
         }
 
         Task HandlePollingErrorAsync(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
@@ -172,8 +194,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public void Update()
         {
-            var botUser = GetBotUser();
-
             GetLastData();
             _container?.InfoSourceUpdated(this);
         }

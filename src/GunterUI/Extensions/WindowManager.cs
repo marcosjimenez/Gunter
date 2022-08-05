@@ -1,4 +1,5 @@
-﻿using Gunter.Core.Contracts;
+﻿using Contracts;
+using Gunter.Core.Contracts;
 using Gunter.Infrastructure.Cache;
 using GunterUI.ToolBox;
 using System;
@@ -48,7 +49,12 @@ namespace GunterUI.Extensions
 
             if (_forms.TryGetValue(id, out Form? form))
             {
+
                 form.BringToFront();
+                form.Update();
+
+                var withExtraData = form as IDataWindow;
+                withExtraData?.SetExtraData(data);
             }
             else
             {
@@ -71,9 +77,9 @@ namespace GunterUI.Extensions
                         break;
                 }
                 form.FormClosing += (obj, e) => { _forms.Remove(id); };
-                _forms.Add(id, form);
                 form.MdiParent = MainForm;
                 form.Show();
+                _forms.Add(id, form);
             }
         }
     }

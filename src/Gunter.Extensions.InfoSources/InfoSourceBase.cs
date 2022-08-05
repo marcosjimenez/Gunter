@@ -1,4 +1,5 @@
 ﻿using AngleSharp.Dom;
+using Gunter.Core.Infrastructure.Exceptions;
 using Gunter.Extensions.Common;
 using Gunter.Infrastructure;
 using System;

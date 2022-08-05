@@ -87,7 +87,7 @@ namespace GunterUI
         private void NewInfoItem()
         {
             var target = _processor.CreateInfoItem(string.Empty);
-            target.Name = $"InfoItem {infoItemCounter}";
+            target.Name = $"InfoItem {infoItemCounter++}";
             _processor.AddInfoItem(target.Id.ToString(), target);
             AddOrUpdateInfoItem(target.Id.ToString(), target);
         }
@@ -199,6 +199,9 @@ namespace GunterUI
                         break;
                     case SpecializedInfoSources.AEMET:
                         source.Container.VisualizationHandlers.Add(new AEMETVisualizationHandler<AEMETInfoSource>((AEMETInfoSource)source));
+                        break;
+                    case SpecializedInfoSources.GunterBot:
+                        source.Container.VisualizationHandlers.Add(new GunterBotVisualizationHandler<GunterBotInfoSource>((GunterBotInfoSource)source));
                         break;
                 }
 

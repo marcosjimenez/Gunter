@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Contracts;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,12 +9,14 @@ using System.Windows.Forms;
 
 namespace GunterUI
 {
-    public partial class WebViewForm : Form
+    public partial class WebViewForm : Form, IDataWindow
     {
 
         public string CurrentUrl { get; set; }
 
         public string HtmlContent { get; set; }
+
+        public Form Form { get => this; }
 
         public WebViewForm()
         {
@@ -36,6 +39,11 @@ namespace GunterUI
             CurrentUrl = string.Empty;
         }
 
+        public new void Update()
+        {
+            webView21.Refresh();
+            base.Update();
+        }
 
         private async Task InitializeWebView()
         {
@@ -52,6 +60,22 @@ namespace GunterUI
             {
                 webView21.NavigateToString(HtmlContent);
             }
+        }
+
+        public bool SetExtraData(object data)
+        {
+            if (Uri.TryCreate(data.ToString(), UriKind.Absolute, out var resultUri))
+            {
+                CurrentUrl = resultUri.ToString();
+                webView21.CoreWebView2.Navigate(CurrentUrl);
+            }
+            else
+            {
+                
+                webView21.NavigateToString(data.ToString());
+            }
+
+            return true;
         }
     }
 }
