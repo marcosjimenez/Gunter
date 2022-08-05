@@ -103,7 +103,6 @@ namespace GunterUI
                 return;
             }
 
-
             txtInfoItemId.Text = selectedInfoItem.Id.ToString();
             txtInfoItemName.Text = selectedInfoItem.Name;
 

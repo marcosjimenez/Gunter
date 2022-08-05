@@ -65,12 +65,11 @@ namespace GunterUI.ToolBox
                 else
                 {
 
-                    using var bmp = new Bitmap(1200, 600, PixelFormat.Format24bppRgb);
-                    using var g = Graphics.FromImage(bmp);
-                    using var ms = new MemoryStream(handler.GetImage());
-                    var image = Image.FromStream(ms);
-
-                    imageVisualization.Image = image;
+                    //using var bmp = new Bitmap(1200, 600, PixelFormat.Format24bppRgb);
+                    //using var g = Graphics.FromImage(bmp);
+                    //using var ms = new MemoryStream(handler.GetImage());
+                    //var image = Image.FromStream(ms);
+                    //imageVisualization.Image = image;
 
                     //var base64Image = Convert.ToBase64String(handler.GetImage());
                     //html = @$"<!DOCTYPE html>
@@ -112,17 +111,19 @@ namespace GunterUI.ToolBox
         {
             greenLed.Visible = false;
             redLed.Visible = true;
+            var enableTimer = timer.Enabled;
             timer.Enabled = false;
             _target?.Update();
             ShowData();
             CalculateNextUpdate();
-            timer.Enabled = true;
             greenLed.Visible = true;
             redLed.Visible = false;
+            timer.Enabled = enableTimer;
         }
 
         private void CalculateNextUpdate ()
         {
+            var enableTimer = timer.Enabled;
             timer.Enabled = false;
             txtSegundos.Minimum = (txtDias.Value == 0 && txtHoras.Value == 0 && txtMinutos.Value == 0) ? 10 : 0;
             lblUltimaActualizacion.Text = $"Updated {nextUpdate.ToString()}";
@@ -133,7 +134,7 @@ namespace GunterUI.ToolBox
             timerCounter = 0;
 
             lblSiguienteActualizacion.Text = $"Next {nextUpdate.ToString()}";
-            timer.Enabled = true;
+            timer.Enabled = enableTimer;
         }
 
         private TimeSpan GetUITimeSpan()
@@ -165,12 +166,15 @@ namespace GunterUI.ToolBox
         private void timer_Tick(object? sender, EventArgs e)
         {
             timerCounter++;
+            timer.Enabled = false;
             if (timerCounter > MaxTimerCounter)
             {
-                UpdateAll();
+                if (chkActualizar.Checked)
+                    UpdateAll();
                 timerCounter = 0;
             }
             lblUltimaActualizacion.Text = $"Updated {DateTimeManipulationHelper.GetRelativeDateTime(_target.LastUpdate)}";
+            timer.Enabled = true;
         }
 
         private void TargetToolBox_FormClosing(object sender, FormClosingEventArgs e)
