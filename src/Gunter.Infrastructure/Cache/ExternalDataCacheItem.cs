@@ -5,6 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Gunter.Core.Infrastructure.Helpers;
 
 namespace Gunter.Infrastructure.Cache
 {

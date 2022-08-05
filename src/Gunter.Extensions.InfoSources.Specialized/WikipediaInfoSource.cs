@@ -2,7 +2,6 @@
 using Gunter.Extensions.Common;
 using Gunter.Extensions.InfoSources.Specialized.Models;
 using Gunter.Infrastructure.Cache;
-using Gunter.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +10,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using WikiDotNet;
 using static Gunter.Extensions.InfoSources.Specialized.Models.OpenWeatherForecastModel;
+using Gunter.Core.Infrastructure.Helpers;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {

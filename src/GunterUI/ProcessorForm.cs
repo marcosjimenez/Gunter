@@ -7,12 +7,12 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Gunter.Core;
-using Gunter.Infrastructure;
 using Gunter.Extensions.InfoSources.Specialized;
 using Gunter.Extensions.InfoSources;
 using Gunter.Extensions.Visualization.Handlers;
 using GunterUI.Extensions;
 using System.Diagnostics;
+using Gunter.Core.Infrastructure.Helpers;
 
 namespace GunterUI
 {
@@ -87,7 +87,7 @@ namespace GunterUI
         private void NewInfoItem()
         {
             var target = _processor.CreateInfoItem(string.Empty);
-            target.Name = $"InfoItem {infoItemCounter}";
+            target.Name = $"InfoItem {infoItemCounter++}";
             _processor.AddInfoItem(target.Id.ToString(), target);
             AddOrUpdateInfoItem(target.Id.ToString(), target);
         }
@@ -102,7 +102,6 @@ namespace GunterUI
                 specialPropertiesViewer1.SetProperties(null);
                 return;
             }
-
 
             txtInfoItemId.Text = selectedInfoItem.Id.ToString();
             txtInfoItemName.Text = selectedInfoItem.Name;
@@ -199,6 +198,9 @@ namespace GunterUI
                         break;
                     case SpecializedInfoSources.AEMET:
                         source.Container.VisualizationHandlers.Add(new AEMETVisualizationHandler<AEMETInfoSource>((AEMETInfoSource)source));
+                        break;
+                    case SpecializedInfoSources.GunterBot:
+                        source.Container.VisualizationHandlers.Add(new GunterBotVisualizationHandler<GunterBotInfoSource>((GunterBotInfoSource)source));
                         break;
                 }
 

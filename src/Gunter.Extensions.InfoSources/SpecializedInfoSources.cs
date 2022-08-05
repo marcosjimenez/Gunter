@@ -7,6 +7,7 @@
         public const string Twitter = "Twitter TimeLine";
         public const string WindowsEventLog = "Windows Event Log";
         public const string AEMET = "AEMET Agencia Estatal de Meteorología";
+        public const string GunterBot = "GunterBot";
 
         public static string[] GetList()
             => new[] {
@@ -14,6 +15,7 @@
                 AEMET,
                 Wikipedia,
                 Twitter,
-                WindowsEventLog};
+                WindowsEventLog,
+                GunterBot};
     }
 }

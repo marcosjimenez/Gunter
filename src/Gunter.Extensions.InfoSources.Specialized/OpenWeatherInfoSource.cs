@@ -3,7 +3,6 @@ using Gunter.Core.Contracts;
 using Gunter.Extensions.Common;
 using Gunter.Extensions.InfoSources.Specialized.Models;
 using Gunter.Infrastructure.Cache;
-using Gunter.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +11,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using System.Net;
+using Gunter.Core.Infrastructure.Helpers;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {

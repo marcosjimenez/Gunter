@@ -1,4 +1,5 @@
 ﻿using Gunter.Core.Contracts;
+using Gunter.Core.Infrastructure.Exceptions;
 using Gunter.Infrastructure;
 using Gunter.Infrastructure.Cache;
 using System.Collections.Concurrent;
@@ -71,5 +72,14 @@ namespace Gunter.Core
             
         }
 
+        public void ReceiveInfoItemMessage(IGunterInfoItem item, string message)
+        {
+            
+        }
+
+        public void SendInfoItemMessage(IGunterInfoItem item, string message)
+        {
+
+        }
     }
 }

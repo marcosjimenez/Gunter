@@ -20,5 +20,6 @@
         IEnumerable<string> GetIds();
 
         void InfoItemUpdated(IGunterInfoItem item);
+
     }
 }

@@ -54,6 +54,9 @@ namespace GunterUI.Dialogs
                 case SpecializedInfoSources.AEMET:
                     retVal = new AEMETInfoSource(item, id, cboTipo.Text);
                     break;
+                case SpecializedInfoSources.GunterBot:
+                    retVal = new GunterBotInfoSource(item, id, cboTipo.Text);
+                    break;
                 default:
                     retVal = new AEMETInfoSource(item, id, cboTipo.Text);
                     break;
@@ -89,6 +92,9 @@ namespace GunterUI.Dialogs
                     break;
                 case SpecializedInfoSources.AEMET:
                     specialPropertiesViewer1.SetProperties(new AEMETInfoSource().GetMandatoryParams());
+                    break;
+                case SpecializedInfoSources.GunterBot:
+                    specialPropertiesViewer1.SetProperties(new GunterBotInfoSource().GetMandatoryParams());
                     break;
                 default:
                     specialPropertiesViewer1.SetProperties(new SpecialProperties());
