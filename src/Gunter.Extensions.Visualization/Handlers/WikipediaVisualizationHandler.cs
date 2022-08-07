@@ -5,11 +5,8 @@ using System.Text;
 
 namespace Gunter.Extensions.Visualization.Handlers
 {
-    public  class WikipediaVisualizationHandler<T> : IGunterVisualizationHandler<T> where T : WikipediaInfoSource
+    public  class WikipediaVisualizationHandler : VisualizationHandlerBase<WikipediaInfoSource>, IGunterVisualizationHandler
     {
-
-        public bool CanHandle(T value) => value?.IsReady() ?? false;
-
         private WikipediaInfoSource objectToDraw;
 
         protected string HTML_Body = @"
@@ -32,6 +29,11 @@ namespace Gunter.Extensions.Visualization.Handlers
 </html>
 ";
 
+        public WikipediaVisualizationHandler(string id)
+        {
+            Id = id;
+        }
+
         public WikipediaVisualizationHandler(WikipediaInfoSource infoSource)
         {
             objectToDraw = infoSource;
@@ -39,7 +41,7 @@ namespace Gunter.Extensions.Visualization.Handlers
 
         public string GetHTML()
         {
-            var prediccion = objectToDraw.LastItem;
+            var prediccion = objectToDraw?.LastItem;
 
             var sb = new StringBuilder(HTML_Body);
             if (prediccion is not null)
@@ -63,6 +65,5 @@ namespace Gunter.Extensions.Visualization.Handlers
 
             return bytes;
         }
-
     }
 }

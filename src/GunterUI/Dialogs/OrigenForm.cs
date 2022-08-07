@@ -37,9 +37,9 @@ namespace GunterUI.Dialogs
             InitializeComponent();
         }
 
-        public IInfoSource GetSelectedSource(IGunterInfoItem item)
+        public IGunterInfoSource GetSelectedSource(IGunterInfoItem item)
         {
-            IInfoSource retVal;
+            IGunterInfoSource retVal;
             var specialProperties = specialPropertiesViewer1.SpecialProperties;
 
             var id = Guid.NewGuid().ToString();
@@ -56,6 +56,9 @@ namespace GunterUI.Dialogs
                     break;
                 case SpecializedInfoSources.GunterBot:
                     retVal = new GunterBotInfoSource(item, id, cboTipo.Text);
+                    break;
+                case SpecializedInfoSources.Twitter:
+                    retVal = new TwitterInfoSource(item, id, cboTipo.Text);
                     break;
                 default:
                     retVal = new AEMETInfoSource(item, id, cboTipo.Text);
@@ -95,6 +98,9 @@ namespace GunterUI.Dialogs
                     break;
                 case SpecializedInfoSources.GunterBot:
                     specialPropertiesViewer1.SetProperties(new GunterBotInfoSource().GetMandatoryParams());
+                    break;
+                case SpecializedInfoSources.Twitter:
+                    specialPropertiesViewer1.SetProperties(new TwitterInfoSource().GetMandatoryParams());
                     break;
                 default:
                     specialPropertiesViewer1.SetProperties(new SpecialProperties());

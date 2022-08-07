@@ -2,28 +2,16 @@
 
 namespace Gunter.Core.Contracts
 {
-    public interface IInfoSource
+    public interface IGunterInfoSource : IGunterComponent
     {
-        string Id { get; set; }
-
-        string Name { get; set; }
-
         string Category { get;  }
         string SubCategry { get; }
-
-        SpecialProperties SpecialProperties { get; }
-
+        SpecialProperties SpecialProperties { get; set; }
         bool IsOnline { get; }
-
-        void SetSpecialProperties(SpecialProperties specialProperties);
-
-        void Update();
-
-        object GetData();
-
-        SpecialProperties GetMandatoryParams();
-
         IGunterInfoItem Container { get; }
-
+        void SetSpecialProperties(SpecialProperties specialProperties);
+        void Update();
+        object GetData();
+        SpecialProperties GetMandatoryParams();
     }
 }

@@ -8,44 +8,50 @@ namespace Gunter.Extensions.Common
 {
     public class SpecialProperties
     {
-        private readonly Dictionary<string, object> _properties = new Dictionary<string, object>();
+        public string Id { get; set; } = Guid.NewGuid().ToString();
+
+        public Dictionary<string, SpecialProperty> Properties { get; set; } = new();
 
         public SpecialProperties()
         {
-            _properties = new Dictionary<string, object>();
+
+        }
+
+        public SpecialProperties(string id = "")
+        {
+
         }
 
         public SpecialProperties AddOrUpdate(string key, object value)
+            => AddOrUpdate(key, value.ToString());
+
+        public SpecialProperties AddOrUpdate(string key, string value, out SpecialProperty specialProperty)
         {
-            if (!_properties.ContainsKey(key))
+            var property = new SpecialProperty
             {
-                _properties.Add(key, value);
+                Name = key,
+                Value = value
+            };
+
+            if (!Properties.ContainsKey(key))
+            {
+                Properties.Add(key, property);
             }
             else
             {
-                _properties[key] = value;
+                Properties[key] = property;
             }
+
+            specialProperty = property;
 
             return this;
         }
 
-        public bool TryGetProperty<T>(string key, out T? value)
+        public bool TryGetProperty(string key, out string value)
         {
-            _properties.TryGetValue(key, out var retVal);
-
-            if (retVal == null)
-            {
-                value =  default(T);
-            }
-            else
-            {
-                value = (T?)retVal;
-            }
-
-            return !(retVal is null);
+            Properties.TryGetValue(key, out var retVal);
+            value = retVal?.Value ?? string.Empty;
+            return value is not null;
         }
-
-        public Dictionary<string, object> Properties => _properties;
-
     }
 }

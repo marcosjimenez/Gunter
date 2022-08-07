@@ -16,12 +16,12 @@ using Telegram.Bot.Types.Enums;
 using Gunter.Core.Infrastructure.Helpers;
 using System.Threading;
 using System.Collections.Concurrent;
+using Gunter.Core.Constants;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class GunterBotInfoSource : InfoSourceBase<GunterBotInfoItem>, IInfoSource
+    public class GunterBotInfoSource : InfoSourceBase<GunterBotInfoItem>, IGunterInfoSource
     {
-
         private ConcurrentBag<GunterBotInfoItem> _messages = new();
 
         public string LastItem { get => lastItem; }
@@ -29,9 +29,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public SpecialProperties SpecialProperties { get; set; }
 
         public bool IsOnline => true;
-
-        public string Id { get; set; }
-        public string Name { get; set; }
 
         public IGunterInfoItem Container { get => _container; }
 
@@ -55,6 +52,11 @@ namespace Gunter.Extensions.InfoSources.Specialized
             _mandatoryInputs.AddOrUpdate("token", "{YOUR_ACCESS_TOKEN_HERE}");
             _container = null;
             lastItem = string.Empty;
+        }
+
+        public GunterBotInfoSource(string id)
+        {
+            Id = id;
         }
 
         public GunterBotInfoSource(IGunterInfoItem container, string id, string name)
@@ -134,7 +136,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         private string GetToken()
         {
-            if (SpecialProperties.TryGetProperty<string>("token", out string? token))
+            if (SpecialProperties.TryGetProperty("token", out string token))
                 return token;
 
             return string.Empty;

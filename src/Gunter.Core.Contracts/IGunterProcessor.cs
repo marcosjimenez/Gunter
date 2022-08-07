@@ -1,25 +1,18 @@
-﻿namespace Gunter.Core.Contracts
+﻿using System.Text.Json.Serialization;
+
+namespace Gunter.Core.Contracts
 {
-    public interface IGunterProcessor
+    public interface IGunterProcessor : IGunterComponent
     {
+        List<IGunterInfoItem> InfoItems { get; set; }
 
-        public Guid Id { get; }
-
-        public string Name { get; set; }
-
+        string GetLogAndClear();
         IGunterInfoItem CreateInfoItem(string name);
-
-        void AddInfoItem(IGunterInfoItem persona);
-
-        void AddInfoItem(string id, IGunterInfoItem persona);
-
+        IGunterInfoItem AddInfoItem(string id, IGunterInfoItem persona);
         IGunterInfoItem RemoveInfoItem(string id);
-
-        IEnumerable<KeyValuePair<string, IGunterInfoItem>> GetInfoItems();
         IGunterInfoItem GetInfoItem(string Id);
         IEnumerable<string> GetIds();
-
+        IEnumerable<IGunterInfoItem> GetInfoItems();
         void InfoItemUpdated(IGunterInfoItem item);
-
     }
 }

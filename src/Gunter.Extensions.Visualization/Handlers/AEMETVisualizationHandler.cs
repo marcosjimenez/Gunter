@@ -6,9 +6,8 @@ using System.Text;
 
 namespace Gunter.Extensions.Visualization.Handlers
 {
-    public class AEMETVisualizationHandler<T> : IGunterVisualizationHandler<T>  where T : AEMETInfoSource
+	public class AEMETVisualizationHandler : VisualizationHandlerBase<AEMETInfoSource>, IGunterVisualizationHandler
     {
-        public bool CanHandle(T value) => value?.IsReady() ?? false;
 
         private AEMETInfoSource objectToDraw;
 
@@ -65,8 +64,12 @@ namespace Gunter.Extensions.Visualization.Handlers
 </body>
 </html>
 ";
+        public AEMETVisualizationHandler(string id)
+		{
+			Id = id;
+		}
 
-        public AEMETVisualizationHandler(AEMETInfoSource infoSource)
+		public AEMETVisualizationHandler(AEMETInfoSource infoSource)
         {
             objectToDraw = infoSource;
         }

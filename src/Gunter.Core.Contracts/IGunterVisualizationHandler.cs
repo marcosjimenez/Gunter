@@ -7,14 +7,12 @@ using System.Threading.Tasks;
 
 namespace Gunter.Core.Contracts
 {
-    public interface IGunterVisualizationHandler
+    public interface IGunterVisualizationHandler : IGunterComponent
     {
+        public bool CanHandle(IGunterInfoSource infoSource);
+
         byte[] GetImage();
 
         string GetHTML();
-    }
-    public interface IGunterVisualizationHandler<T> : IGunterVisualizationHandler
-    {
-        
     }
 }

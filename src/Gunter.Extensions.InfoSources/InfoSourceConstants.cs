@@ -12,11 +12,13 @@ namespace Gunter.Extensions.InfoSources
         public const string SUB_BOTS = "Bots";
 
         public const string CAT_INFORMATION = "Servicios de Información";
-        public const string SUB_ENCYCLOPAEDIA = "encyclopaedia";
+        public const string SUB_ENCYCLOPAEDIA = "Encyclopaedia";
+        public const string SUB_SOCIALNETWORKS = "Redes sociales";
 
         public const string CAT_WEATHER = "Meteorología";
         public const string SUB_OFFICIAL = "Predicciones Oficiales";
         public const string SUB_NONOFFICIAL = "Predicciones No Oficiales";
+
 
         private static string[] Gategories = { 
             CAT_COMMUNICATION, 

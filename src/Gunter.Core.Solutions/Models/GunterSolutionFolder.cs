@@ -1,20 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Gunter.Core.Models.Solutions
+﻿namespace Gunter.Core.Solutions.Models
 {
     public class GunterSolutionFolder
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; } = "New Folder";
+        public string ParentFolderId { get; set; } = string.Empty;
 
-        public GunterSolutionFolder(string id, string name)
+        public GunterSolutionFolder()
+        {
+
+        }
+
+        public GunterSolutionFolder(string parentFolderId)
+        {
+            ParentFolderId = parentFolderId;
+        }
+
+        public GunterSolutionFolder(string id, string name, string parentFolderId)
         {
             Id = id;
             Name = name;
+            ParentFolderId = parentFolderId;
         }
     }
 }

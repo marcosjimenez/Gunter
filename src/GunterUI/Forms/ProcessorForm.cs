@@ -63,7 +63,7 @@ namespace GunterUI
 
             foreach (var item in _processor.GetInfoItems())
             {
-                var listviewItem = AddOrUpdateInfoItem(item.Key, item.Value);
+                var listviewItem = AddOrUpdateInfoItem(item.Id.ToString(), item);
             }
 
             lvInfoItems.EndUpdate();
@@ -117,7 +117,7 @@ namespace GunterUI
             lvSources.BeginUpdate();
             lvSources.Items.Clear();
 
-            foreach (var item in selectedInfoItem.Sources)
+            foreach (var item in selectedInfoItem.InfoSources)
             {
                 var lvItem = lvSources.Items.Add(item.Id, item.Name, "DataSource");
                 lvItem.SubItems.Add(item.Category);
@@ -172,7 +172,7 @@ namespace GunterUI
             if (selectedInfoItem is null || lvSources.SelectedItems.Count == 0)
                 return;
 
-            var source = selectedInfoItem.Sources.Where(x => x.Id == lvSources.SelectedItems[0].Name).Single();
+            var source = selectedInfoItem.InfoSources.Where(x => x.Id == lvSources.SelectedItems[0].Name).Single();
             specialPropertiesViewer1.SetProperties(source.SpecialProperties);
 
         }
@@ -191,20 +191,20 @@ namespace GunterUI
                 switch (frm.SelectedType)
                 {
                     case SpecializedInfoSources.Wikipedia:
-                        source.Container.VisualizationHandlers.Add(new WikipediaVisualizationHandler<WikipediaInfoSource>((WikipediaInfoSource)source));
+                        source.Container.VisualizationHandlers.Add(new WikipediaVisualizationHandler((WikipediaInfoSource)source));
                         break;
                     case SpecializedInfoSources.OpenWeather:
-                        source.Container.VisualizationHandlers.Add(new OpenWeatherVisualizationHandler<OpenWeatherInfoSource>((OpenWeatherInfoSource)source));
+                        source.Container.VisualizationHandlers.Add(new OpenWeatherVisualizationHandler((OpenWeatherInfoSource)source));
                         break;
                     case SpecializedInfoSources.AEMET:
-                        source.Container.VisualizationHandlers.Add(new AEMETVisualizationHandler<AEMETInfoSource>((AEMETInfoSource)source));
+                        source.Container.VisualizationHandlers.Add(new AEMETVisualizationHandler((AEMETInfoSource)source));
                         break;
                     case SpecializedInfoSources.GunterBot:
-                        source.Container.VisualizationHandlers.Add(new GunterBotVisualizationHandler<GunterBotInfoSource>((GunterBotInfoSource)source));
+                        source.Container.VisualizationHandlers.Add(new GunterBotVisualizationHandler((GunterBotInfoSource)source));
                         break;
                 }
 
-                selectedInfoItem.Sources.Add(source);
+                selectedInfoItem.InfoSources.Add(source);
                 LoadSources();
             }
         }
@@ -214,7 +214,7 @@ namespace GunterUI
             if (selectedInfoItem is null || lvSources.SelectedItems.Count == 0)
                 return;
 
-            var source = selectedInfoItem.Sources.Where(x => x.Id == lvSources.SelectedItems[0].Name).Single();
+            var source = selectedInfoItem.InfoSources.Where(x => x.Id == lvSources.SelectedItems[0].Name).Single();
             WindowManager.Instance.ShowForm(WindowManager.AvailableForm.InfoSourceForm, source.Id, source);
         }
 

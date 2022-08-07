@@ -11,14 +11,14 @@ namespace GunterUI
 {
     public partial class InfoSourceViewer : Form
     {
-        private readonly IInfoSource _infoSource;
+        private readonly IGunterInfoSource _infoSource;
 
         public InfoSourceViewer()
         {
             InitializeComponent();
         }
 
-        public InfoSourceViewer(IInfoSource infoSouce)
+        public InfoSourceViewer(IGunterInfoSource infoSouce)
         {
             _infoSource = infoSouce;
             InitializeComponent();

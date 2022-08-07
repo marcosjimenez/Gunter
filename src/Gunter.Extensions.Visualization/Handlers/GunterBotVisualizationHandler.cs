@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Gunter.Extensions.Visualization.Handlers
 {
-    public class GunterBotVisualizationHandler<T> : IGunterVisualizationHandler<T> where T : GunterBotInfoSource
+    public class GunterBotVisualizationHandler : VisualizationHandlerBase<GunterBotInfoSource>, IGunterVisualizationHandler
     {
         private GunterBotInfoSource objectToDraw;
 
@@ -34,6 +34,11 @@ namespace Gunter.Extensions.Visualization.Handlers
 </body>
 </html>
 ";
+
+        public GunterBotVisualizationHandler(string id)
+        {
+            Id = Id;
+        }
 
         public GunterBotVisualizationHandler(GunterBotInfoSource infoSource)
         {

@@ -1,4 +1,4 @@
-﻿namespace Gunter.Core.Models.Solutions
+﻿namespace Gunter.Core.Solutions.Models
 {
     public class GunterSolution
     {
@@ -6,24 +6,38 @@
 
         public string Name { get; set; } = "New Solution";
 
-        public string FullPath { get; set; } = string.Empty;
-        public List<GunterSolutionFolder> Folders { get; set; }
-        public List<GunterSolutionItem> Items { get; set; }
+        public string FileName { get; set; } = string.Empty;
+        public string FilePath { get; set; } = string.Empty;
 
-        public GunterSolution(string id, string name)
+        public IList<GunterSolutionFolder> Folders { get; set; }
+        public virtual IList<GunterProject> Projects { get; set; }
+
+        public GunterSolution()
         {
-            Id = id;
-            Name = name;
             Folders = new List<GunterSolutionFolder>();
-            Items = new List<GunterSolutionItem>();
+            Projects = new List<GunterProject>();
         }
 
-        public GunterSolution(string id, string name, List<GunterSolutionFolder> folders, List<GunterSolutionItem> items)
+        public GunterProject AddProject(GunterProject project)
         {
-            Id = id;
-            Name = name;
-            Folders = folders;
-            Items = items;
+            Projects.Add(project);
+            return project;
+        }
+
+        public void RemoveProject(GunterProject project)
+            => Projects.Remove(project);
+
+        public GunterProject? GetProject(string id)
+            => Projects.Where(x => x.Id == id).FirstOrDefault();
+
+        public void AddFolder(GunterSolutionFolder folder)
+            => Folders.Add(folder);
+        public GunterSolutionFolder AddFolder(string name)
+        {
+            var retVal = new GunterSolutionFolder();
+            retVal.Name = name;
+
+            return retVal;
         }
     }
 }

@@ -42,10 +42,10 @@ namespace GunterUI.Extensions
 
 
         // TEMP
-        public void ShowForm(AvailableForm availableForm, string id, object data = null)
+        public Form GetForm(AvailableForm availableForm, string id, object data = null)
         {
             if (data is null)
-                return;
+                return null;
 
             if (_forms.TryGetValue(id, out Form? form))
             {
@@ -67,7 +67,7 @@ namespace GunterUI.Extensions
                         form = new ProcessorForm((IGunterProcessor)data);
                         break;
                     case AvailableForm.InfoSourceForm:
-                        form = new InfoSourceViewer((IInfoSource)data);
+                        form = new InfoSourceViewer((IGunterInfoSource)data);
                         break;
                     case AvailableForm.WebViewer:
                         form = new WebViewForm(data.ToString() ?? string.Empty);
@@ -76,11 +76,17 @@ namespace GunterUI.Extensions
                         form = new Form();
                         break;
                 }
-                form.FormClosing += (obj, e) => { _forms.Remove(id); };
-                form.MdiParent = MainForm;
-                form.Show();
                 _forms.Add(id, form);
+                form.FormClosing += (obj, e) => { _forms.Remove(id); };
             }
+                return form;
+        }
+
+        public void ShowForm(AvailableForm availableForm, string id, object data = null)
+        {
+            var form = GetForm(availableForm, id, data);
+            form.MdiParent = MainForm;
+            form.Show();
         }
     }
 }

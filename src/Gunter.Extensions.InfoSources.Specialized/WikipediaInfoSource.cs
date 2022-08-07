@@ -2,33 +2,24 @@
 using Gunter.Extensions.Common;
 using Gunter.Extensions.InfoSources.Specialized.Models;
 using Gunter.Infrastructure.Cache;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using WikiDotNet;
-using static Gunter.Extensions.InfoSources.Specialized.Models.OpenWeatherForecastModel;
 using Gunter.Core.Infrastructure.Helpers;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class WikipediaInfoSource : InfoSourceBase<WikipediaInfoItem>, IInfoSource
+    public class WikipediaInfoSource : InfoSourceBase<WikipediaInfoItem>, IGunterInfoSource
     {
-        public string Id { get; set; }
-        public string Name { get; set; }
-
         private WikipediaInfoItem lastItem;
         public WikipediaInfoItem LastItem { get => lastItem; }
 
         private readonly IGunterInfoItem _container;
-        private SpecialProperties _specialProperties;
         private Dictionary<string, WikipediaInfoItem> data = new();
 
         public bool IsOnline => true;
 
-        public SpecialProperties SpecialProperties { get => _specialProperties; }
+        public SpecialProperties SpecialProperties { get; set; }
         public IGunterInfoItem Container { get => _container; }
 
         public string Category { get => InfoSourceConstants.CAT_COMMUNICATION; }
@@ -41,6 +32,11 @@ namespace Gunter.Extensions.InfoSources.Specialized
             Name = string.Empty;
             _container = null;
             InitializeProperties();
+        }
+
+        public WikipediaInfoSource(string id)
+        {
+            Id = id;
         }
 
         public WikipediaInfoSource(IGunterInfoItem container, string id, string name)
@@ -59,9 +55,9 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public override Dictionary<string, WikipediaInfoItem> GetLastData()
         {
-            _specialProperties.TryGetProperty("expression", out string? searchString);
-            _specialProperties.TryGetProperty("resultLimit", out string? resultLimitString);
-            _specialProperties.TryGetProperty("language", out string? language);
+            SpecialProperties.TryGetProperty("expression", out string? searchString);
+            SpecialProperties.TryGetProperty("resultLimit", out string? resultLimitString);
+            SpecialProperties.TryGetProperty("language", out string? language);
 
             if (string.IsNullOrWhiteSpace(resultLimitString) || !Int32.TryParse(resultLimitString, out var resultLimit))
             {
@@ -100,11 +96,11 @@ namespace Gunter.Extensions.InfoSources.Specialized
                     }
 
                     WikiSearchResult? result = response.Query.SearchResults.OrderByDescending(x => x.PageId).FirstOrDefault();
-                    if (result == null)
-                        throw new ArgumentNullException(nameof(result));
+                    if (result is null)
+                        return data;
 
-                    _specialProperties.AddOrUpdate("preview", result.Preview);
-                    _specialProperties.AddOrUpdate("wikipedia_url", result.Url);
+                    SpecialProperties.AddOrUpdate("preview", result.Preview);
+                    SpecialProperties.AddOrUpdate("wikipedia_url", result.Url);
 
                     var item = WikipediaInfoItem.FromSearchResult(result);
                     lastItem = item;
@@ -123,7 +119,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public void SetSpecialProperties(SpecialProperties specialProperties)
         {
-            _specialProperties = specialProperties;
+            SpecialProperties = specialProperties;
         }
 
         public void Update()
@@ -133,7 +129,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         private void InitializeProperties()
         {
-            _specialProperties = new SpecialProperties()
+            SpecialProperties = new SpecialProperties()
                 .AddOrUpdate("language", "es")
                 .AddOrUpdate("getfirstpage", true)
                 .AddOrUpdate("preview", string.Empty)

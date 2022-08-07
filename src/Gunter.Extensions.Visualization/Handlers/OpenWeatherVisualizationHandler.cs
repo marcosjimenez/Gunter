@@ -10,11 +10,8 @@ using System.Threading.Tasks;
 
 namespace Gunter.Extensions.Visualization.Handlers
 {
-    public class OpenWeatherVisualizationHandler<T> : IGunterVisualizationHandler<T> where T : OpenWeatherInfoSource
+	public class OpenWeatherVisualizationHandler : VisualizationHandlerBase<OpenWeatherInfoSource>, IGunterVisualizationHandler
     {
-
-        public bool CanHandle(T value) => value?.IsReady() ?? false;
-
         private OpenWeatherInfoSource objectToDraw;
 
         protected string HTML_Template = @"
@@ -68,15 +65,22 @@ namespace Gunter.Extensions.Visualization.Handlers
 </html>
 ";
 
-		public OpenWeatherVisualizationHandler(OpenWeatherInfoSource infoSource)
+		public OpenWeatherVisualizationHandler(string id)
+		{
+			Id = id;
+		}
+
+        public OpenWeatherVisualizationHandler(OpenWeatherInfoSource infoSource)
 		{
 			objectToDraw = infoSource;
         }
 
         public string GetHTML()
         {
-            var prediccion = objectToDraw.LastItem;
+			if (objectToDraw?.LastItem is null)
+				return string.Empty;
 
+            var prediccion = objectToDraw.LastItem;
 			if (prediccion.main is null)
 				return String.Empty;
 

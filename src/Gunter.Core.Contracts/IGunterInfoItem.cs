@@ -2,10 +2,9 @@
 
 namespace Gunter.Core.Contracts
 {
-    public interface IGunterInfoItem
+    public interface IGunterInfoItem : IGunterComponent
     {
-        Guid Id { get; }
-        string Name { get; set; }
+        string ClassId { get; }
 
         DateTime LastUpdate { get; }
 
@@ -14,17 +13,17 @@ namespace Gunter.Core.Contracts
         [Browsable(false)]
         IEnumerable<object> Events { get; }
 
-        IList<IInfoSource> Sources { get; }
-
-        IGunterProcessor Processor { get; }
+        List<IGunterInfoSource> InfoSources { get; }
 
         IList<byte[]> Visualizations { get; }
 
-        IList<IGunterVisualizationHandler> VisualizationHandlers { get; }
+        List<IGunterVisualizationHandler> VisualizationHandlers { get; }
 
         void Update();
 
-        void InfoSourceUpdated(IInfoSource source);
+        void InfoSourceUpdated(IGunterInfoSource source);
+
+        IGunterProcessor GetProcessor();
 
     }
 }

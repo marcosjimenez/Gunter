@@ -11,4 +11,9 @@
     <PackageReference Include="Flurl.Http" Version="3.2.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Gunter.Core.Contracts\Gunter.Core.Contracts.csproj" />
+    <ProjectReference Include="..\Gunter.Core.Models\Gunter.Core.Models.csproj" />
+  </ItemGroup>
+
 </Project>

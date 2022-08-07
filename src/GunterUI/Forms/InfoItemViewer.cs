@@ -1,6 +1,8 @@
 ﻿using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Extensions.InfoSources;
+using Gunter.Extensions.InfoSources.Specialized;
+using Gunter.Extensions.Visualization.Handlers;
 using GunterUI.Extensions;
 using System;
 using System.Collections.Generic;
@@ -24,13 +26,13 @@ namespace GunterUI.ToolBox
 
         private DateTimeOffset nextUpdate;
 
-        private IGunterInfoItem _target;
+        private IGunterInfoItem currentInfoItem;
 
-        public IGunterInfoItem Target { get => _target; set { _target = value; } }
+        public IGunterInfoItem Target { get => currentInfoItem; set { currentInfoItem = value; } }
 
         public InfoItemViewer(IGunterInfoItem target)
         {
-            _target = target;
+            currentInfoItem = target;
             InitializeComponent();
 
             ShowData();
@@ -48,13 +50,13 @@ namespace GunterUI.ToolBox
 
         public void ShowData()
         {
-            txtNombre.Text = _target.Name;
-            txtId.Text = _target.Id.ToString();
+            txtNombre.Text = currentInfoItem.Name;
+            txtId.Text = currentInfoItem.Id.ToString();
             LoadSources();
 
-            if (_target.VisualizationHandlers.Count > 0)
+            if (currentInfoItem.VisualizationHandlers.Count > 0)
             {
-                var handler = _target.VisualizationHandlers[0];
+                var handler = currentInfoItem.VisualizationHandlers[0];
                 var html = handler.GetHTML();
                 if (!string.IsNullOrWhiteSpace(html))
                     try
@@ -99,7 +101,7 @@ namespace GunterUI.ToolBox
             lvSources.BeginUpdate();
             lvSources.Items.Clear();
 
-            foreach(var item in _target.Sources)
+            foreach(var item in currentInfoItem.InfoSources)
             {
                 CreateSourceListViewItem(item.Id, item.Id, "DataSource", null, item.Name);
             }
@@ -113,7 +115,7 @@ namespace GunterUI.ToolBox
             redLed.Visible = true;
             var enableTimer = timer.Enabled;
             timer.Enabled = false;
-            _target?.Update();
+            currentInfoItem?.Update();
             ShowData();
             CalculateNextUpdate();
             greenLed.Visible = true;
@@ -128,7 +130,7 @@ namespace GunterUI.ToolBox
             txtSegundos.Minimum = (txtDias.Value == 0 && txtHoras.Value == 0 && txtMinutos.Value == 0) ? 10 : 0;
             lblUltimaActualizacion.Text = $"Updated {nextUpdate.ToString()}";
             var nextTimeSpan = GetUITimeSpan();
-            nextUpdate = _target.LastUpdate.Add(nextTimeSpan);
+            nextUpdate = currentInfoItem.LastUpdate.Add(nextTimeSpan);
 
             MaxTimerCounter = (int)nextTimeSpan.TotalSeconds;
             timerCounter = 0;
@@ -173,7 +175,7 @@ namespace GunterUI.ToolBox
                     UpdateAll();
                 timerCounter = 0;
             }
-            lblUltimaActualizacion.Text = $"Updated {DateTimeManipulationHelper.GetRelativeDateTime(_target.LastUpdate)}";
+            lblUltimaActualizacion.Text = $"Updated {DateTimeManipulationHelper.GetRelativeDateTime(currentInfoItem.LastUpdate)}";
             timer.Enabled = true;
         }
 
@@ -189,6 +191,57 @@ namespace GunterUI.ToolBox
         private void txtNombre_TextChanged(object sender, EventArgs e)
         {
             this.Text = txtNombre.Text;
+        }
+
+        private void lvSources_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (currentInfoItem is null || lvSources.SelectedItems.Count == 0)
+                return;
+
+            var source = currentInfoItem.InfoSources.Where(x => x.Id == lvSources.SelectedItems[0].Name).Single();
+            specialPropertiesViewer1.SetProperties(source.SpecialProperties);
+
+        }
+
+        private void cmdAddSource_Click(object sender, EventArgs e)
+        {
+            if (currentInfoItem is null)
+                return;
+
+            using var frm = new Dialogs.OrigenForm(currentInfoItem.GetProcessor());
+            if (frm.ShowDialog() == DialogResult.OK)
+            {
+                var source = frm.GetSelectedSource(currentInfoItem);
+
+                // TEMP: TESTING Visualizations
+                switch (frm.SelectedType)
+                {
+                    case SpecializedInfoSources.Wikipedia:
+                        source.Container.VisualizationHandlers.Add(new WikipediaVisualizationHandler((WikipediaInfoSource)source));
+                        break;
+                    case SpecializedInfoSources.OpenWeather:
+                        source.Container.VisualizationHandlers.Add(new OpenWeatherVisualizationHandler((OpenWeatherInfoSource)source));
+                        break;
+                    case SpecializedInfoSources.AEMET:
+                        source.Container.VisualizationHandlers.Add(new AEMETVisualizationHandler((AEMETInfoSource)source));
+                        break;
+                    case SpecializedInfoSources.GunterBot:
+                        source.Container.VisualizationHandlers.Add(new GunterBotVisualizationHandler((GunterBotInfoSource)source));
+                        break;
+                }
+
+                currentInfoItem.InfoSources.Add(source);
+                LoadSources();
+            }
+        }
+
+        private void lvSources_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (currentInfoItem is null || lvSources.SelectedItems.Count == 0)
+                return;
+
+            var source = currentInfoItem.InfoSources.Where(x => x.Id == lvSources.SelectedItems[0].Name).Single();
+            WindowManager.Instance.ShowForm(WindowManager.AvailableForm.InfoSourceForm, source.Id, source);
         }
     }
 }

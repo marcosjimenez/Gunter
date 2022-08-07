@@ -5,6 +5,15 @@ namespace GunterUI
 {
     public partial class SpecialPropertiesViewer : UserControl
     {
+
+        public class PropertyUpdatedEventArgs : EventArgs
+        {
+            public SpecialProperty Property { get; set; } = new();
+        }
+
+        public delegate void PropertyUpdatedDelegate(object sender, PropertyUpdatedEventArgs e);
+        public event PropertyUpdatedDelegate OnPropertyChanged;
+
         public bool CanEdit { get; set; }
 
         public SpecialPropertiesViewer()
@@ -37,7 +46,7 @@ namespace GunterUI
             foreach(var item in SpecialProperties.Properties)
             {
                 var lvItem = listView1.Items.Add(item.Key, item.Key);
-                lvItem.SubItems.Add(item.Value.ToString());
+                lvItem.SubItems.Add(item.Value.Value.ToString());
                 lvItem.SubItems.Add(string.Empty);
             }
 
@@ -57,8 +66,11 @@ namespace GunterUI
             if (string.IsNullOrWhiteSpace(newValue.Trim()))
                 return;
 
-            SpecialProperties.AddOrUpdate(item.Text, newValue);
+            SpecialProperties.AddOrUpdate(item.Text, newValue, out var property);
             item.SubItems[1].Text = newValue;
+
+            OnPropertyChanged?.Invoke(this, new PropertyUpdatedEventArgs { Property = property });
+
         }
     }
 }

@@ -15,10 +15,11 @@ using System.Xml.Serialization;
 using static Gunter.Extensions.InfoSources.Specialized.Models.AEMETInfoItem;
 using Gunter.Extensions.InfoSources.Specialized.Models;
 using Gunter.Core.Infrastructure.Helpers;
+using Gunter.Core.Constants;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class AEMETInfoSource : InfoSourceBase<string>, IInfoSource
+    public class AEMETInfoSource : InfoSourceBase<string>, IGunterInfoSource
     {
         private AEMETResponseModel lastItem { get; set; }
         private readonly IGunterInfoItem _container;
@@ -33,15 +34,17 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public bool IsOnline => true;
 
-        public string Id { get; set; }
-        public string Name { get; set; }
-
         public IGunterInfoItem Container { get => _container; }
 
         public string Category { get => InfoSourceConstants.CAT_WEATHER; }
         public string SubCategry { get => InfoSourceConstants.SUB_OFFICIAL; }
 
-        public AEMETInfoSource()
+        public AEMETInfoSource(string id)
+        {
+            Id = id;
+        }
+
+        public AEMETInfoSource() 
         {
             Id = string.Empty;
             Name = string.Empty;

@@ -357,7 +357,7 @@
             this.cmdRefreshSources});
             this.toolStrip2.Location = new System.Drawing.Point(728, 108);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(135, 27);
+            this.toolStrip2.Size = new System.Drawing.Size(174, 27);
             this.toolStrip2.TabIndex = 42;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -369,6 +369,7 @@
             this.cmdAddSource.Name = "cmdAddSource";
             this.cmdAddSource.Size = new System.Drawing.Size(29, 24);
             this.cmdAddSource.Text = "toolStripButton2";
+            this.cmdAddSource.Click += new System.EventHandler(this.cmdAddSource_Click);
             // 
             // cmdEditSource
             // 

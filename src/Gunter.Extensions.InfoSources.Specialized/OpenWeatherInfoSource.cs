@@ -15,7 +15,7 @@ using Gunter.Core.Infrastructure.Helpers;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class OpenWeatherInfoSource : InfoSourceBase<string>, IInfoSource
+    public class OpenWeatherInfoSource : InfoSourceBase<string>, IGunterInfoSource
     {
         private OpenWeatherInfoItem.RootObject lastItem { get; set; }
         private readonly IGunterInfoItem _container;
@@ -29,9 +29,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public bool IsOnline => true;
 
-        public string Id { get; set; }
-        public string Name { get; set; }
-
         public IGunterInfoItem Container { get => _container; }
 
         private const string BaseUrl = "http://api.openweathermap.org/data/2.5";
@@ -40,13 +37,19 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public string Category { get => InfoSourceConstants.CAT_WEATHER; }
         public string SubCategry { get => InfoSourceConstants.SUB_NONOFFICIAL; }
 
-        public OpenWeatherInfoSource()
+
+        public OpenWeatherInfoSource() : base()
         {
             Id = string.Empty;
             Name = string.Empty;
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate("city", "Chiloeches");
             lastItem = new();
+        }
+
+        public OpenWeatherInfoSource(string id)
+        {
+            Id = id;
         }
 
         public OpenWeatherInfoSource(IGunterInfoItem container, string id, string name)
