@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Json-Editor\JsonTreeView\JsonTreeView.csproj" />
     <ProjectReference Include="..\Gunter.Core.Models\Gunter.Core.Models.csproj" />
     <ProjectReference Include="..\Gunter.Core.Solutions\Gunter.Core.Solutions.csproj" />
     <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />

@@ -48,6 +48,9 @@ namespace Controls
             {
                 string json = JsonConvert.SerializeObject(data);
                 JObject obj = JObject.Parse(json);
+
+                jsonViewer.LoadObject(data);
+
                 treeView1.BeginUpdate();
                 treeView1.Nodes.Clear();
                 TreeNode parent = Ele2Node(obj);

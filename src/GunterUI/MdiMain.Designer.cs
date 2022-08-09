@@ -388,31 +388,32 @@
             // contenidoToolStripMenuItem
             // 
             this.contenidoToolStripMenuItem.Name = "contenidoToolStripMenuItem";
-            this.contenidoToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            this.contenidoToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.contenidoToolStripMenuItem.Text = "&Contenido";
             // 
             // índiceToolStripMenuItem
             // 
             this.índiceToolStripMenuItem.Name = "índiceToolStripMenuItem";
-            this.índiceToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            this.índiceToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.índiceToolStripMenuItem.Text = "Índ&ice";
             // 
             // buscarToolStripMenuItem
             // 
             this.buscarToolStripMenuItem.Name = "buscarToolStripMenuItem";
-            this.buscarToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            this.buscarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.buscarToolStripMenuItem.Text = "&Buscar";
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(164, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(221, 6);
             // 
             // acercadeToolStripMenuItem
             // 
             this.acercadeToolStripMenuItem.Name = "acercadeToolStripMenuItem";
-            this.acercadeToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
+            this.acercadeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.acercadeToolStripMenuItem.Text = "&Acerca de...";
+            this.acercadeToolStripMenuItem.Click += new System.EventHandler(this.acercadeToolStripMenuItem_Click);
             // 
             // kryptonDockableWorkspace
             // 

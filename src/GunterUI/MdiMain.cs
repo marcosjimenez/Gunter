@@ -8,6 +8,7 @@ using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Log;
 using Gunter.UI;
 using Krypton.Workspace;
+using Dialogs;
 
 namespace GunterUI
 {
@@ -262,6 +263,12 @@ namespace GunterUI
         private void cerrarActualToolStripMenuItem_Click(object sender, EventArgs e)
         {
             kryptonDockableNavigator.PerformCloseAction(kryptonDockableNavigator.SelectedPage);
+        }
+
+        private void acercadeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using var dlg = new AboutBox();
+            dlg.ShowDialog();
         }
     }
 }
