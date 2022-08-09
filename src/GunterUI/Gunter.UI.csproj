@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="Krypton.Docking" Version="65.22.6.152" />
     <PackageReference Include="Krypton.Navigator" Version="65.22.6.152" />
     <PackageReference Include="Krypton.Ribbon" Version="65.22.6.152" />

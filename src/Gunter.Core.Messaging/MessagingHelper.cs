@@ -10,7 +10,7 @@ namespace Gunter.Core.Messaging
     public class MessagingHelper
     {
         public const string BrokerIp = "127.0.0.1";
-
+        public const string ManagerID = "Manager";
 
         private static readonly Lazy<MessagingHelper> lazy = new(() => new MessagingHelper());
 
@@ -24,7 +24,7 @@ namespace Gunter.Core.Messaging
         private MessagingHelper()
         {
             AsyncHelper.RunSync(() => CreateServer());
-            messagingClient = CreateClient("Manager");
+            messagingClient = CreateClient(ManagerID);
             messagingClient.MessageReceived += (sender, e) =>
             {
                 var a = e.Message;

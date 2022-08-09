@@ -1,7 +1,4 @@
-﻿using CommandLine;
-using CommandLine.Text;
-using Controls.ParserOptions;
-using Gunter.Core.Contracts;
+﻿using Gunter.Core.Contracts;
 using Gunter.Core.Messaging;
 using Gunter.Core.Messaging.Models;
 
@@ -16,70 +13,13 @@ namespace Controls
         public event Action<string> ReceiveMessage;
         public string MessagingClientId => messagingClient?.Id ?? String.Empty;
 
-        private readonly Parser parser;
-
-
         public ConsoleViewer()
         {
             InitializeComponent();
-            parser = new Parser(config => config.HelpWriter = null);
         }
 
         private void AddText(string text)
             =>  txtConsole.AppendText($"{text}{Environment.NewLine}");
-
-
-        private string ParseCommand(params string[] args)
-        {
-            var helpWriter = new StringWriter();
-            var parser = new Parser(with => with.HelpWriter = helpWriter);
-
-            var parserResult = parser.ParseArguments<MessageOptions, CVarOptions>(args);
-
-            return parserResult.MapResult(
-                       (MessageOptions opts) => RunMessageCommand(opts),
-                       (CVarOptions opts) => RunCvarCommand(opts),
-                        errs => DisplayHelp(parserResult, errs));
-        }
-
-        static string DisplayHelp(ParserResult<object> parserResult, IEnumerable<Error> errs)
-        {
-            var helpText = HelpText.AutoBuild(parserResult, h =>
-            {
-                h.AutoHelp = false;     // hides --help
-                h.AutoVersion = false;  // hides --version
-                h.Copyright = String.Empty;
-                h.Heading = String.Empty;
-                return HelpText.DefaultParsingErrorsHandler(parserResult, h);
-            }, e => e);
-            return helpText;
-        }
-
-        private string RunMessageCommand(MessageOptions options)
-        {
-            var retVal = string.Empty;
-
-            if (options.Send?.Count() > 0)
-            {
-                var parameters = options.Send.ToList();
-                messagingClient.SendToComponent(parameters[0].ToString(), parameters[1].ToString());
-
-                retVal = $"Message sent to { parameters[1] }";
-            }
-
-            return retVal;
-        }
-
-
-        private string RunCvarCommand(CVarOptions options)
-        {
-            var retVal = string.Empty;
-
-            
-
-
-            return retVal;
-        }
 
         private string ExecuteCommand(string command)
         {
@@ -92,36 +32,11 @@ namespace Controls
             if (parameters.Count() == 0)
                 return String.Empty;
 
-            result = ParseCommand(parameters);
-            AddText(result);
-            return retVal;
+            //result = commandManager.ProcessCommand(parameters);
+            //if (!string.IsNullOrWhiteSpace(result))
+            //    AddText(result);
 
-            //switch (parameters[0])
-            //{
-            //    case "sendmessage":
-            //        if (parameters.Length > 2)
-            //        {
-            //            messagingClient.SendToComponent(parameters[2], parameters[1]);
-            //        }
-            //        break;
-            //    case "list_msgcli" :
-            //        var sb = new StringBuilder();
-            //        foreach(var item in MessagingHelper.Instance.GetClientIds())
-            //        {
-            //            sb.AppendLine(item);
-            //        }
-            //        result = sb.ToString();
-            //        break;
-            //    case "cls":
-            //        txtConsole.Clear();
-            //        break;
-            //    case "ver":
-            //        result = "Ver 1.0";
-            //        break;
-            //    default:
-            //        result = $"Invalid command: {command}";
-            //        break;
-            //}
+            return retVal;          
         }
 
         private void ConsoleView_Load(object sender, EventArgs e)
@@ -186,7 +101,7 @@ namespace Controls
             messagingClient = MessagingHelper.Instance.CreateClient("ConsoleViewer");
             messagingClient.MessageReceived += (sender, e) =>
             {
-                AddText(e.Message);
+                AddText($"Received mqtt message: {e.Message}");
             };
             messagingClient.ConnectAsync();
         }
