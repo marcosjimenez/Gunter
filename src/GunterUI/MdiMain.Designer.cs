@@ -138,7 +138,7 @@
             this.ayudaToolStripButton});
             this.toolStrip1.Location = new System.Drawing.Point(0, 28);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1248, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(1111, 27);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -238,7 +238,7 @@
             this.ayudaToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1248, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1111, 28);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -342,13 +342,13 @@
             // personalizarToolStripMenuItem
             // 
             this.personalizarToolStripMenuItem.Name = "personalizarToolStripMenuItem";
-            this.personalizarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.personalizarToolStripMenuItem.Size = new System.Drawing.Size(171, 26);
             this.personalizarToolStripMenuItem.Text = "&Personalizar";
             // 
             // opcionesToolStripMenuItem
             // 
             this.opcionesToolStripMenuItem.Name = "opcionesToolStripMenuItem";
-            this.opcionesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.opcionesToolStripMenuItem.Size = new System.Drawing.Size(171, 26);
             this.opcionesToolStripMenuItem.Text = "&Opciones";
             // 
             // ventanaToolStripMenuItem
@@ -431,7 +431,7 @@
             this.kryptonDockableWorkspace.Root.WorkspaceControl = this.kryptonDockableWorkspace;
             this.kryptonDockableWorkspace.SeparatorStyle = Krypton.Toolkit.SeparatorStyle.LowProfile;
             this.kryptonDockableWorkspace.ShowMaximizeButton = false;
-            this.kryptonDockableWorkspace.Size = new System.Drawing.Size(1240, 662);
+            this.kryptonDockableWorkspace.Size = new System.Drawing.Size(1103, 608);
             this.kryptonDockableWorkspace.SplitterWidth = 5;
             this.kryptonDockableWorkspace.TabIndex = 9;
             this.kryptonDockableWorkspace.TabStop = true;
@@ -445,7 +445,7 @@
             this.kryptonPanel.Location = new System.Drawing.Point(0, 55);
             this.kryptonPanel.Name = "kryptonPanel";
             this.kryptonPanel.Padding = new System.Windows.Forms.Padding(4);
-            this.kryptonPanel.Size = new System.Drawing.Size(1248, 670);
+            this.kryptonPanel.Size = new System.Drawing.Size(1111, 616);
             this.kryptonPanel.TabIndex = 11;
             // 
             // kryptonStatusStrip1
@@ -454,11 +454,11 @@
             this.kryptonStatusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.kryptonStatusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.kryptonStatusStrip1.Location = new System.Drawing.Point(0, 725);
+            this.kryptonStatusStrip1.Location = new System.Drawing.Point(0, 671);
             this.kryptonStatusStrip1.Name = "kryptonStatusStrip1";
             this.kryptonStatusStrip1.ProgressBars = null;
             this.kryptonStatusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
-            this.kryptonStatusStrip1.Size = new System.Drawing.Size(1248, 26);
+            this.kryptonStatusStrip1.Size = new System.Drawing.Size(1111, 26);
             this.kryptonStatusStrip1.TabIndex = 13;
             this.kryptonStatusStrip1.Text = "kryptonStatusStrip1";
             // 
@@ -476,7 +476,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1248, 751);
+            this.ClientSize = new System.Drawing.Size(1111, 697);
             this.Controls.Add(this.kryptonStatusStrip1);
             this.Controls.Add(this.kryptonPanel);
             this.Controls.Add(this.toolStrip1);
@@ -485,6 +485,7 @@
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MdiMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Manager";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MdiMain_FormClosing);
             this.Load += new System.EventHandler(this.MdiMain_Load);

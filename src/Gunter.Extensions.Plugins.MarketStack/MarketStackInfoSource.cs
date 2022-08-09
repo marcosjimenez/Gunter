@@ -79,9 +79,9 @@ namespace Gunter.Extensions.Plugins.MarketStack
             }
 
             var currencies = TryGetFromMarketStack<MarketStackCurrenciesResponse>(apiKey, MarketStackAPI.Endpoint_Currencies);
-            if (exchanges is not null)
+            if (currencies is not null)
             {
-                lastItem.Exchanges = exchanges;
+                lastItem.Currencies = currencies;
             }
 
 

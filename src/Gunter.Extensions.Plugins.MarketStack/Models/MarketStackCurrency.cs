@@ -17,7 +17,7 @@ namespace Gunter.Extensions.Plugins.MarketStack.Models
         public int Count { get; set; } 
         public int Total { get; set; } 
     }
-
+    
     public class MarketStackCurrenciesResponse
     {
         public Pagination Pagination { get; set; } = new();
