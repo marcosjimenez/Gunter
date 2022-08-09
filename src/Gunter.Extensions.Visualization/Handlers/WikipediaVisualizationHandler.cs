@@ -7,6 +7,7 @@ namespace Gunter.Extensions.Visualization.Handlers
 {
     public  class WikipediaVisualizationHandler : VisualizationHandlerBase<WikipediaInfoSource>, IGunterVisualizationHandler
     {
+        public new string Name { get; set; } = "Visor de Wikipedia";
         private WikipediaInfoSource objectToDraw;
 
         protected string HTML_Body = @"

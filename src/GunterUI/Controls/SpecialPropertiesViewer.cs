@@ -1,4 +1,5 @@
-﻿using Gunter.Extensions.Common;
+﻿using Gunter.Core.Contracts;
+using Gunter.Core.Models;
 using GunterUI.Extensions;
 
 namespace GunterUI
@@ -69,7 +70,7 @@ namespace GunterUI
             SpecialProperties.AddOrUpdate(item.Text, newValue, out var property);
             item.SubItems[1].Text = newValue;
 
-            OnPropertyChanged?.Invoke(this, new PropertyUpdatedEventArgs { Property = property });
+            OnPropertyChanged?.Invoke(this, new PropertyUpdatedEventArgs { Property = (SpecialProperty)property });
 
         }
     }

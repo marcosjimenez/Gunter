@@ -1,21 +1,10 @@
-﻿using AngleSharp;
-using AngleSharp.Dom;
-using Gunter.Extensions.Common;
-using Gunter.Core.Contracts;
+﻿using Gunter.Core.Contracts;
 using Gunter.Infrastructure.Cache;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
-using static Gunter.Extensions.InfoSources.Specialized.Models.AEMETInfoItem;
 using Gunter.Extensions.InfoSources.Specialized.Models;
 using Gunter.Core.Infrastructure.Helpers;
-using Gunter.Core.Constants;
+using Gunter.Core.Models;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
@@ -30,14 +19,12 @@ namespace Gunter.Extensions.InfoSources.Specialized
         private Dictionary<string, string> data = new();
 
         public AEMETResponseModel LastItem { get => lastItem; }
-        public SpecialProperties SpecialProperties { get; set; }
-
         public bool IsOnline => true;
 
         public IGunterInfoItem Container { get => _container; }
 
-        public string Category { get => InfoSourceConstants.CAT_WEATHER; }
-        public string SubCategry { get => InfoSourceConstants.SUB_OFFICIAL; }
+        public string Category { get => InfoSourceConstants.CAT_INFORMATION; }
+        public string SubCategory { get => InfoSourceConstants.SUB_WEATHER; }
 
         public AEMETInfoSource(string id)
         {
@@ -46,8 +33,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public AEMETInfoSource() 
         {
-            Id = string.Empty;
-            Name = string.Empty;
+            Name = "AEMET InfoSource";
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate("file", Chiloeches);
             lastItem = new();
@@ -72,17 +58,9 @@ namespace Gunter.Extensions.InfoSources.Specialized
             return lastItem;
         }
 
-
-        public void SetSpecialProperties(SpecialProperties specialProperties)
-        {
-            SpecialProperties = specialProperties;
-        }
-
         public override Dictionary<string, string> GetLastData()
         {
-            var config = Configuration.Default.WithDefaultLoader();
-            var context = BrowsingContext.New(config);
-            _mandatoryInputs.TryGetProperty("file", out string? file);
+            SpecialProperties.TryGetProperty("file", out string? file);
 
             string xml = string.Empty;
             var fileUrl = ExternalDataCache.GenerateCacheFileName("AEMET", file, "weather");
@@ -92,7 +70,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             }
             else
             {
-                xml = AsyncHelper.RunSync(() => WebManipulationHelper.DownloadFileAsStringAsync(fileUrl));
+                xml = AsyncHelper.RunSync(() => WebManipulationHelper.DownloadFileAsStringAsync(string.Concat(BaseAddress, file)));
                 ExternalDataCache.Instance.TryAddFile(xml, fileUrl, DateTimeManipulationHelper.OneDayTimeSpan);
             }
 

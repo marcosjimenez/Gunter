@@ -1,14 +1,21 @@
-﻿using Gunter.Core.Contracts;
+﻿using Gunter.Core.BaseComponents;
+using Gunter.Core.Constants;
+using Gunter.Core.Contracts;
 
 namespace Gunter.Core.Solutions.Models
 {
-    public class GunterProject
+    public class GunterProject : IGunterComponent
     {
         private readonly object lockObject;
 
         public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string Name { get; set; } = "New Project";
         public string FolderId { get; set; } = string.Empty;
+        public string Name { get; set; } = "New Project";
+        public string Description { get; set; } = "Project description";
+
+        public string ClassId => IdentificationConstants.CLASSID.GunterProject;
+
+        public byte[] Image { get; set; } = { };
 
         public virtual List<GunterProcessor> Processors { get; set; } = new ();
 

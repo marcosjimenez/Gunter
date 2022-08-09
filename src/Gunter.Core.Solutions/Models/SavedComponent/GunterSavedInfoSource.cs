@@ -1,4 +1,5 @@
 ﻿using Gunter.Core.Contracts;
+using Gunter.Core.Models;
 
 namespace Gunter.Core.Solutions.Models.SavedComponent
 {
@@ -11,7 +12,7 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
                 Id = source.Id,
                 Name = source.Name,
                 SystemType = GunterEnvironmentHelper.GetSystemTypeName(source.GetType()),
-                SpecialProperties = source.SpecialProperties
+                SpecialProperties = (SpecialProperties)source.SpecialProperties
             };
            
             return retVal;
@@ -19,9 +20,9 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
 
         public static IGunterInfoSource ToInfoSource(GunterSavedInfoSource infoSource)
         {
-            var retVal = GunterEnvironmentHelper.Instance.GetInstance<IGunterInfoSource>(infoSource.SystemType, infoSource.Id);
+            var retVal = GunterEnvironmentHelper.Instance.CreateInstance<IGunterInfoSource>(infoSource.SystemType, infoSource.Id);
             retVal.Name = infoSource.Name;
-            retVal.SetSpecialProperties(infoSource.SpecialProperties);
+            retVal.SetSpecialProperties((SpecialProperties)infoSource.SpecialProperties);
 
             return retVal;
         }

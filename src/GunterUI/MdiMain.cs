@@ -1,41 +1,31 @@
 ﻿using Gunter.Core.Solutions;
 using Gunter.Core.Solutions.Models;
 using GunterUI.Extensions;
-using Krypton.Toolkit;
 using Krypton.Docking;
 using Krypton.Navigator;
 using Controls;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Log;
-using Gunter.Core.Models;
-using System.Diagnostics;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Gunter.UI;
+using Krypton.Workspace;
 
 namespace GunterUI
 {
     public partial class MdiMain : Form
     {
-        private int windowCounter = 1;
-
         private GunterSolution currentSolution;
         private GunterProject currentProject;
 
         private SolutionTreeView solutionTreeview;
         private LogViewer mainLogText;
 
+        private KryptonDockableNavigator kryptonDockableNavigator = new();
+
         public MdiMain()
         {
             InitializeComponent();
             WindowManager.Instance.MainForm = this;
         }
-
 
         public void ShowLogText(GunterLogItem logItem, IGunterComponent component)
         {
@@ -89,16 +79,23 @@ namespace GunterUI
             GunterSolutionHelper.Instance.SaveSolutionAs(currentSolution, currentSolution.FilePath);
         }
 
-        private void NewProject()
-        {
-            currentProject = currentSolution.AddProject(new GunterProject());
-        }
-
+        private KryptonDockingWorkspace documentWorkSpace;
         private void ShowDocument(Control control, string uniqueId, string title)
         {
+            KryptonWorkspaceCell cell;
+            if (kryptonDockingManager.PagesWorkspace.Any(x => x.UniqueName == uniqueId))
+            {
+                var pageWorkSpace = kryptonDockingManager.PagesWorkspace.FirstOrDefault(x => x.UniqueName == uniqueId);
+                cell = kryptonDockingManager.DockingCellForPage(uniqueId);
+                cell.SelectedPage = pageWorkSpace;
+                return;
+            }
+
             var page = NewDocument(control, title);
             page.UniqueName = uniqueId;
-            var workspace = kryptonDockingManager.AddToWorkspace("Workspace", new KryptonPage[] { page });
+            documentWorkSpace = kryptonDockingManager.AddToWorkspace("Workspace", new KryptonPage[] { page });
+            cell = kryptonDockingManager.DockingCellForPage(uniqueId);
+            cell.SelectedPage = page;
         }
 
         public void ShowDocument(string uniqueId, GunterSolutionItemType itemType, IGunterComponent component)
@@ -106,7 +103,8 @@ namespace GunterUI
             var page = kryptonDockingManager.PagesWorkspace.FirstOrDefault(x => x.UniqueName == uniqueId);
             if (page is not null)
             {
-                kryptonDockingManager.MakeNavigatorRequest(page.UniqueName);
+                var cell = kryptonDockingManager.DockingCellForPage(uniqueId);
+                cell.SelectedPage = page;
                 return;
             }
 
@@ -119,7 +117,20 @@ namespace GunterUI
                     var processorViewer = new ProcessorViewer((IGunterProcessor)component);
                     processorViewer.OnGunterItemShow += (sender, e) =>
                     {
-                        ShowDocument(new InfoItemViewer((IGunterInfoItem)e.Component), e.Id, e.Component.Name);
+                        var component = new InfoItemViewer((IGunterInfoItem)e.Component);
+
+                        component.OnGunterInfoSourceShow += (sender, e) =>
+                        {
+                            var component = new InfoSourceViewer((IGunterInfoSource)e.Component);
+                            ShowDocument(component, e.Id, e.Component.Name);
+                        };
+
+                        component.OnGunterVisualizationHandlerShow += (sender, e) =>
+                        {
+                            var webViewer = string.IsNullOrWhiteSpace(e.HTML) ? new WebViewer(e.Uri) : new WebViewer(e.HTML);
+                            ShowDocument(webViewer, e.Id, e.Name);
+                        };
+                        ShowDocument(component, e.Id, e.Component.Name);
                     };
                     id = component.Id;
                     name = component.Name;
@@ -133,24 +144,25 @@ namespace GunterUI
 
         }
 
-        
-
         private void ConfigureDocks()
         {
             // Setup docking functionality
             KryptonDockingWorkspace w = kryptonDockingManager.ManageWorkspace(kryptonDockableWorkspace);
             kryptonDockingManager.ManageControl(kryptonPanel, w);
             kryptonDockingManager.ManageFloating(this);
+            kryptonDockingManager.ManageNavigator(kryptonDockableNavigator);
 
             // Add docking pages
             var leftDock = kryptonDockingManager.AddDockspace("Control", DockingEdge.Right, new KryptonPage[] { CreateSolutionTreeView() });
             kryptonDockingManager.AddAutoHiddenGroup("Control", DockingEdge.Right, new KryptonPage[] { NewPropertyGrid() });
-            kryptonDockingManager.AddDockspace("Control", DockingEdge.Bottom, new KryptonPage[] { CreateMainLog() });
+            kryptonDockingManager.AddDockspace("Control", DockingEdge.Bottom, new KryptonPage[] { CreateMainLog(), CreateConsoleView() }); ;
 
-            GunterLogHelper.Instance.OnLog += (sender, e) => {
+            GunterLog.Instance.OnLog += (sender, e) => {
                 ShowLogText(e.GunterLogItem, sender as IGunterComponent);
             };
-
+            var file = Path.Combine(Directory.GetCurrentDirectory(), Constants.DockingConfigurationFile);
+            if (File.Exists(file))
+                kryptonDockingManager.LoadConfigFromFile(file);
         }
 
         private KryptonPage CreateSolutionTreeView()
@@ -162,7 +174,7 @@ namespace GunterUI
             };
             solutionTreeview.OnGunterItemRemoved += (sender, e) =>
             {
-                GunterLogHelper.Instance.Log(sender, $"Removed {e.SolutionItemType.ToString()} with Id {e.Id}", GunterLogItem.GunterLogItemSeverity.Warning);
+                GunterLog.Instance.Log(sender, $"Removed {e.SolutionItemType.ToString()} with Id {e.Id}", GunterLogItem.GunterLogItemSeverity.Warning);
             };
             solutionTreeview.OnGunterItemShow += (sender, e) =>
             {
@@ -176,7 +188,6 @@ namespace GunterUI
 
         private KryptonPage NewDocument(Control control, string name)
         {
-            windowCounter++;
             KryptonPage page = NewPage(name, 0, control);
 
             // Document pages cannot be docked or auto hidden
@@ -185,18 +196,18 @@ namespace GunterUI
             return page;
         }
 
+        private KryptonPage CreateConsoleView()
+        {
+            return NewPage("Console", 1, new ConsoleViewer());
+        }
+
         private KryptonPage CreateMainLog()
         {
             mainLogText = new LogViewer();
             mainLogText.AppendText($"Log initialized. at {DateTime.Now}{Environment.NewLine}");
             return NewPage("System Log", 1, mainLogText);
         }
-
-        private KryptonPage NewInput()
-        {
-            return NewPage("Input ", 1, new RichTextBox());
-        }
-
+       
         private KryptonPage NewPropertyGrid()
         {
             return NewPage("Properties ", 2, new PropertyGrid());
@@ -241,6 +252,16 @@ namespace GunterUI
         private void guardarToolStripButton_Click(object sender, EventArgs e)
         {
             SaveSolution();
+        }
+
+        private void MdiMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            kryptonDockingManager.SaveConfigToFile(Path.Combine(Directory.GetCurrentDirectory(), Constants.DockingConfigurationFile));
+        }
+
+        private void cerrarActualToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            kryptonDockableNavigator.PerformCloseAction(kryptonDockableNavigator.SelectedPage);
         }
     }
 }

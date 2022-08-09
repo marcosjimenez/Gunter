@@ -65,11 +65,11 @@
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAEQSURBVDhPY0AG8g3y/6FM8sDAGADShAtDlRAPMDSVz+Rn
-        KJ/fwFA6/xRD2YK3DDEL/oJpEB8kDpJHBhgGlC24ylAxfzZD1QJPhpIFygxViyUhNJBfvmAOWB4ZYLpg
+        KJ/fwFA6/xRD2YK3DIEL/oJpEB8kDpJHBhgGlC24ylAxfzZD1QJPhpIFygxViyUhNJBfvmAOWB4ZYLpg
         wX+gojUMlYsigJqNGEoXq4PpisWRQLm1YHm8AKSgfEEVQ9n8Q0CDnjKUzfoIpkvnHQSLE2UAyNm4MFEG
         lC2WwaoZJE6cAXMvAukmoNMTGSoXhzGUL0xiKFvYDAzMS8QZUL4gEKh5OkP5vG3gsADTID5QnCgDsDkf
-        hmlvQMmCC8BUtxSoMBCYFnTAAQeiwd6avwzolfNQlThA/SoeYIDVAhWfAOLXDOWtf8A0mA8UL17EDQDO
-        MMGuagCmcwAAAABJRU5ErkJggg==
+        hmlvQMmCC8BUtxSoMBCYFnTAAQeiwd6avwzolfNQlThA/SoeYIDVAhWfAOLXDOX1f8A0mA8UL17EDQCu
+        OsGdDesA8gAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="cmdEditSource.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -5740,12 +5740,19 @@
   <data name="cmdAddVisualization.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAEESURBVDhPY0AG8g3y/6FM8sDAGADShAuD5BUVFf/jwQ/A
-        hsAATBMykJOTk8SFQYZAlUEAzABsinvTGSdNy2P42pfOOBEmRpIB03MZvszMZ/g/I4/hM0wMwwAYQNYI
-        wyCbQYb0pjFOgImhGADigASllE1kGcPXzWANmp8MU4gLYxgA1hyxeTNj5JZDDDHbX7AGLUhD1sDr3mjJ
-        GjgrGqcBYM1Rm3dJalnLsbu2OyEbwuPRbMMQs+MZQ9S2lyxhyyqxGwDVDLMBZghz2MpGkGaWkMX5fG5V
-        ZkBDHoIMwTAAWTOyIYwxO24ANRfAxGCGYBiArJEQBhlCkQEgjG7AA5AAaVjxAQBawrNtoUbvEgAAAABJ
-        RU5ErkJggg==
+        YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAEFSURBVDhPY0AG8g3y/6FM8sDAGADShAuD5BUVFf/jwQ/A
+        hsAATBMykJOTk8SFQYZAlUEAzABsinvTGSf15TF87UtnnAgTI8mAaRkMX2bmM/yfkcfwGSaGYQAMIGuE
+        YZDNIEN60xgnwMRQDABxQIJSyiayjOHrZrAGzU+GKcSFMQwAa47YvJkxcsshhphtL1iDFqQha+B1b7Rk
+        DZwVjdMAsOaozbsktazl2F3bnZAN4fFotmGI2fGMIWzzS5awZZXYDYBqhtkAM4Q5bEUjSDNLyOJ8Prcq
+        M4bIbQ9BhmAYgKwZ2RDGmB03gJoLYGIwQzAMQNZICIMMocgAEEY34AFIgDSs+AAAGnmzTH9Kr3AAAAAA
+        SUVORK5CYII=
+</value>
+  </data>
+  <data name="cmdRemoveVisualization.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAAEnQAABJ0Ad5mH3gAAAAiSURBVDhPYxgFwwoc5Rb/TwqGakMAbIrwYai2UTAcAAMD
+        AI08LZE2dst4AAAAAElFTkSuQmCC
 </value>
   </data>
 </root>

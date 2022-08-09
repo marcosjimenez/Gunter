@@ -35,8 +35,7 @@
             this.cmdRemoveSource = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.cmdRefreshSources = new System.Windows.Forms.ToolStripButton();
-            this.label3 = new System.Windows.Forms.Label();
-            this.specialPropertiesViewer1 = new GunterUI.SpecialPropertiesViewer();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.lvSources = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
@@ -57,13 +56,14 @@
             this.txtId = new System.Windows.Forms.TextBox();
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.greenLed = new System.Windows.Forms.PictureBox();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.picPreview = new System.Windows.Forms.PictureBox();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.cmdAddVisualization = new System.Windows.Forms.ToolStripButton();
+            this.cmdRemoveVisualization = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.lvVisualizations = new System.Windows.Forms.ListView();
+            this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.toolStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.redLed)).BeginInit();
             this.grpActualizar.SuspendLayout();
@@ -72,15 +72,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtHoras)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtDias)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.greenLed)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picPreview)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -97,7 +92,7 @@
             this.toolStripLabel1});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(368, 27);
+            this.toolStrip2.Size = new System.Drawing.Size(637, 27);
             this.toolStrip2.TabIndex = 56;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -142,26 +137,14 @@
             this.cmdRefreshSources.Name = "cmdRefreshSources";
             this.cmdRefreshSources.Size = new System.Drawing.Size(29, 24);
             this.cmdRefreshSources.Text = "toolStripButton4";
+            this.cmdRefreshSources.Click += new System.EventHandler(this.cmdRefreshSources_Click);
             // 
-            // label3
+            // toolStripLabel1
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(128, 20);
-            this.label3.TabIndex = 52;
-            this.label3.Text = "Special Properties";
-            // 
-            // specialPropertiesViewer1
-            // 
-            this.specialPropertiesViewer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.specialPropertiesViewer1.CanEdit = false;
-            this.specialPropertiesViewer1.Location = new System.Drawing.Point(3, 23);
-            this.specialPropertiesViewer1.Name = "specialPropertiesViewer1";
-            this.specialPropertiesViewer1.Size = new System.Drawing.Size(359, 253);
-            this.specialPropertiesViewer1.TabIndex = 48;
+            this.toolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(60, 24);
+            this.toolStripLabel1.Text = "Sources";
             // 
             // lvSources
             // 
@@ -177,7 +160,7 @@
             this.lvSources.MultiSelect = false;
             this.lvSources.Name = "lvSources";
             this.lvSources.ShowGroups = false;
-            this.lvSources.Size = new System.Drawing.Size(365, 241);
+            this.lvSources.Size = new System.Drawing.Size(634, 336);
             this.lvSources.TabIndex = 43;
             this.lvSources.UseCompatibleStateImageBehavior = false;
             this.lvSources.View = System.Windows.Forms.View.Details;
@@ -186,12 +169,12 @@
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "ID";
+            this.columnHeader1.Text = "Name";
             this.columnHeader1.Width = 120;
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "Type";
+            this.columnHeader2.Text = "Id";
             this.columnHeader2.Width = 200;
             // 
             // redLed
@@ -209,7 +192,7 @@
             // 
             this.cmdUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdUpdate.Image = ((System.Drawing.Image)(resources.GetObject("cmdUpdate.Image")));
-            this.cmdUpdate.Location = new System.Drawing.Point(744, 83);
+            this.cmdUpdate.Location = new System.Drawing.Point(281, 83);
             this.cmdUpdate.Name = "cmdUpdate";
             this.cmdUpdate.Size = new System.Drawing.Size(105, 29);
             this.cmdUpdate.TabIndex = 46;
@@ -241,7 +224,7 @@
             this.grpActualizar.Controls.Add(this.txtHoras);
             this.grpActualizar.Controls.Add(this.chkActualizar);
             this.grpActualizar.Controls.Add(this.txtDias);
-            this.grpActualizar.Location = new System.Drawing.Point(855, 6);
+            this.grpActualizar.Location = new System.Drawing.Point(392, 6);
             this.grpActualizar.Name = "grpActualizar";
             this.grpActualizar.Size = new System.Drawing.Size(252, 106);
             this.grpActualizar.TabIndex = 47;
@@ -331,8 +314,6 @@
             // chkActualizar
             // 
             this.chkActualizar.AutoSize = true;
-            this.chkActualizar.Checked = true;
-            this.chkActualizar.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkActualizar.Location = new System.Drawing.Point(18, 4);
             this.chkActualizar.Name = "chkActualizar";
             this.chkActualizar.Size = new System.Drawing.Size(101, 24);
@@ -358,7 +339,7 @@
             this.txtId.Location = new System.Drawing.Point(105, 13);
             this.txtId.Name = "txtId";
             this.txtId.ReadOnly = true;
-            this.txtId.Size = new System.Drawing.Size(744, 27);
+            this.txtId.Size = new System.Drawing.Size(281, 27);
             this.txtId.TabIndex = 45;
             // 
             // txtNombre
@@ -367,7 +348,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtNombre.Location = new System.Drawing.Point(105, 50);
             this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(744, 27);
+            this.txtNombre.Size = new System.Drawing.Size(281, 27);
             this.txtNombre.TabIndex = 44;
             this.txtNombre.TextChanged += new System.EventHandler(this.txtNombre_TextChanged);
             // 
@@ -381,30 +362,12 @@
             this.greenLed.TabIndex = 50;
             this.greenLed.TabStop = false;
             // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(3, 115);
-            this.splitContainer1.Name = "splitContainer1";
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.toolStrip1);
-            this.splitContainer1.Panel2.Controls.Add(this.picPreview);
-            this.splitContainer1.Size = new System.Drawing.Size(1104, 554);
-            this.splitContainer1.SplitterDistance = 368;
-            this.splitContainer1.TabIndex = 57;
-            // 
             // splitContainer2
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer2.Location = new System.Drawing.Point(3, 115);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -415,40 +378,23 @@
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.label3);
-            this.splitContainer2.Panel2.Controls.Add(this.specialPropertiesViewer1);
-            this.splitContainer2.Size = new System.Drawing.Size(368, 554);
-            this.splitContainer2.SplitterDistance = 274;
+            this.splitContainer2.Panel2.Controls.Add(this.toolStrip1);
+            this.splitContainer2.Panel2.Controls.Add(this.lvVisualizations);
+            this.splitContainer2.Size = new System.Drawing.Size(637, 748);
+            this.splitContainer2.SplitterDistance = 369;
             this.splitContainer2.TabIndex = 0;
-            // 
-            // picPreview
-            // 
-            this.picPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.picPreview.Location = new System.Drawing.Point(3, 147);
-            this.picPreview.Name = "picPreview";
-            this.picPreview.Size = new System.Drawing.Size(726, 404);
-            this.picPreview.TabIndex = 0;
-            this.picPreview.TabStop = false;
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(60, 24);
-            this.toolStripLabel1.Text = "Sources";
             // 
             // toolStrip1
             // 
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cmdAddVisualization,
+            this.cmdRemoveVisualization,
             this.toolStripSeparator1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(732, 27);
-            this.toolStrip1.TabIndex = 53;
+            this.toolStrip1.Size = new System.Drawing.Size(637, 27);
+            this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // cmdAddVisualization
@@ -458,20 +404,52 @@
             this.cmdAddVisualization.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.cmdAddVisualization.Name = "cmdAddVisualization";
             this.cmdAddVisualization.Size = new System.Drawing.Size(29, 24);
-            this.cmdAddVisualization.ToolTipText = "Add Visualization";
             this.cmdAddVisualization.Click += new System.EventHandler(this.cmdAddVisualization_Click);
+            // 
+            // cmdRemoveVisualization
+            // 
+            this.cmdRemoveVisualization.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdRemoveVisualization.Image = ((System.Drawing.Image)(resources.GetObject("cmdRemoveVisualization.Image")));
+            this.cmdRemoveVisualization.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdRemoveVisualization.Name = "cmdRemoveVisualization";
+            this.cmdRemoveVisualization.Size = new System.Drawing.Size(29, 24);
+            this.cmdRemoveVisualization.Text = "toolStripButton2";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
+            // lvVisualizations
+            // 
+            this.lvVisualizations.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader5,
+            this.columnHeader3});
+            this.lvVisualizations.Location = new System.Drawing.Point(3, 30);
+            this.lvVisualizations.Name = "lvVisualizations";
+            this.lvVisualizations.ShowGroups = false;
+            this.lvVisualizations.Size = new System.Drawing.Size(634, 345);
+            this.lvVisualizations.TabIndex = 0;
+            this.lvVisualizations.UseCompatibleStateImageBehavior = false;
+            this.lvVisualizations.View = System.Windows.Forms.View.Details;
+            this.lvVisualizations.DoubleClick += new System.EventHandler(this.lvVisualizations_DoubleClick);
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Name";
+            this.columnHeader5.Width = 150;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Id";
+            this.columnHeader3.Width = 300;
+            // 
             // InfoItemViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.splitContainer2);
             this.Controls.Add(this.redLed);
             this.Controls.Add(this.cmdUpdate);
             this.Controls.Add(this.lblUltimaActualizacion);
@@ -480,7 +458,7 @@
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.greenLed);
             this.Name = "InfoItemViewer";
-            this.Size = new System.Drawing.Size(1110, 672);
+            this.Size = new System.Drawing.Size(647, 866);
             this.Load += new System.EventHandler(this.InfoItemViewer_Load);
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
@@ -492,18 +470,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtHoras)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtDias)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.greenLed)).EndInit();
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picPreview)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -519,8 +491,6 @@
         private ToolStripButton cmdRemoveSource;
         private ToolStripSeparator toolStripSeparator3;
         private ToolStripButton cmdRefreshSources;
-        private Label label3;
-        private GunterUI.SpecialPropertiesViewer specialPropertiesViewer1;
         private ListView lvSources;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
@@ -541,12 +511,14 @@
         private TextBox txtId;
         private TextBox txtNombre;
         private PictureBox greenLed;
-        private SplitContainer splitContainer1;
         private SplitContainer splitContainer2;
-        private PictureBox picPreview;
         private ToolStripLabel toolStripLabel1;
         private ToolStrip toolStrip1;
         private ToolStripButton cmdAddVisualization;
+        private ToolStripButton cmdRemoveVisualization;
         private ToolStripSeparator toolStripSeparator1;
+        private ListView lvVisualizations;
+        private ColumnHeader columnHeader5;
+        private ColumnHeader columnHeader3;
     }
 }

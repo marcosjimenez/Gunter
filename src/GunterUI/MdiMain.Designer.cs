@@ -47,12 +47,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ayudaToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.kryptonDockingManager = new Krypton.Docking.KryptonDockingManager();
-            this.kryptonDockableWorkspace = new Krypton.Docking.KryptonDockableWorkspace();
-            this.kryptonPanel = new Krypton.Toolkit.KryptonPanel();
-            this.kryptonStatusStrip1 = new Krypton.Toolkit.KryptonStatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.kryptonManager = new Krypton.Toolkit.KryptonManager(this.components);
             this.archivoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nuevoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.abrirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,24 +58,24 @@
             this.vistapreviadeimpresiónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.salirToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deshacerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rehacerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.cortarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copiarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pegarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.seleccionartodoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.herramientasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.personalizarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.opcionesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ventanaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cerrarActualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.ayudaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contenidoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.índiceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buscarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.acercadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.kryptonDockingManager = new Krypton.Docking.KryptonDockingManager();
+            this.kryptonDockableWorkspace = new Krypton.Docking.KryptonDockableWorkspace();
+            this.kryptonPanel = new Krypton.Toolkit.KryptonPanel();
+            this.kryptonStatusStrip1 = new Krypton.Toolkit.KryptonStatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.kryptonManager = new Krypton.Toolkit.KryptonManager(this.components);
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.kryptonDockableWorkspace)).BeginInit();
@@ -239,72 +233,14 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.archivoToolStripMenuItem,
-            this.editarToolStripMenuItem,
             this.herramientasToolStripMenuItem,
+            this.ventanaToolStripMenuItem,
             this.ayudaToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1248, 28);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
-            // 
-            // kryptonDockableWorkspace
-            // 
-            this.kryptonDockableWorkspace.ActivePage = null;
-            this.kryptonDockableWorkspace.AutoHiddenHost = false;
-            this.kryptonDockableWorkspace.CompactFlags = ((Krypton.Workspace.CompactFlags)(((Krypton.Workspace.CompactFlags.RemoveEmptyCells | Krypton.Workspace.CompactFlags.RemoveEmptySequences) 
-            | Krypton.Workspace.CompactFlags.PromoteLeafs)));
-            this.kryptonDockableWorkspace.ContainerBackStyle = Krypton.Toolkit.PaletteBackStyle.PanelClient;
-            this.kryptonDockableWorkspace.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.kryptonDockableWorkspace.Location = new System.Drawing.Point(4, 4);
-            this.kryptonDockableWorkspace.Name = "kryptonDockableWorkspace";
-            // 
-            // 
-            // 
-            this.kryptonDockableWorkspace.Root.UniqueName = "d1097ccc93964fdab728b757bddda1b2";
-            this.kryptonDockableWorkspace.Root.WorkspaceControl = this.kryptonDockableWorkspace;
-            this.kryptonDockableWorkspace.SeparatorStyle = Krypton.Toolkit.SeparatorStyle.LowProfile;
-            this.kryptonDockableWorkspace.ShowMaximizeButton = false;
-            this.kryptonDockableWorkspace.Size = new System.Drawing.Size(1240, 662);
-            this.kryptonDockableWorkspace.SplitterWidth = 5;
-            this.kryptonDockableWorkspace.TabIndex = 9;
-            this.kryptonDockableWorkspace.TabStop = true;
-            // 
-            // kryptonPanel
-            // 
-            this.kryptonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.kryptonPanel.Controls.Add(this.kryptonDockableWorkspace);
-            this.kryptonPanel.Location = new System.Drawing.Point(0, 55);
-            this.kryptonPanel.Name = "kryptonPanel";
-            this.kryptonPanel.Padding = new System.Windows.Forms.Padding(4);
-            this.kryptonPanel.Size = new System.Drawing.Size(1248, 670);
-            this.kryptonPanel.TabIndex = 11;
-            // 
-            // kryptonStatusStrip1
-            // 
-            this.kryptonStatusStrip1.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World);
-            this.kryptonStatusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.kryptonStatusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-            this.kryptonStatusStrip1.Location = new System.Drawing.Point(0, 725);
-            this.kryptonStatusStrip1.Name = "kryptonStatusStrip1";
-            this.kryptonStatusStrip1.ProgressBars = null;
-            this.kryptonStatusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
-            this.kryptonStatusStrip1.Size = new System.Drawing.Size(1248, 26);
-            this.kryptonStatusStrip1.TabIndex = 13;
-            this.kryptonStatusStrip1.Text = "kryptonStatusStrip1";
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(151, 20);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
-            // 
-            // kryptonManager
-            // 
-            this.kryptonManager.GlobalPaletteMode = Krypton.Toolkit.PaletteModeManager.ProfessionalSystem;
             // 
             // archivoToolStripMenuItem
             // 
@@ -394,78 +330,6 @@
             this.salirToolStripMenuItem.Size = new System.Drawing.Size(260, 26);
             this.salirToolStripMenuItem.Text = "&Salir";
             // 
-            // editarToolStripMenuItem
-            // 
-            this.editarToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.deshacerToolStripMenuItem,
-            this.rehacerToolStripMenuItem,
-            this.toolStripSeparator5,
-            this.cortarToolStripMenuItem,
-            this.copiarToolStripMenuItem,
-            this.pegarToolStripMenuItem,
-            this.toolStripSeparator6,
-            this.seleccionartodoToolStripMenuItem});
-            this.editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            this.editarToolStripMenuItem.Size = new System.Drawing.Size(62, 24);
-            this.editarToolStripMenuItem.Text = "&Editar";
-            // 
-            // deshacerToolStripMenuItem
-            // 
-            this.deshacerToolStripMenuItem.Name = "deshacerToolStripMenuItem";
-            this.deshacerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.deshacerToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.deshacerToolStripMenuItem.Text = "&Deshacer";
-            // 
-            // rehacerToolStripMenuItem
-            // 
-            this.rehacerToolStripMenuItem.Name = "rehacerToolStripMenuItem";
-            this.rehacerToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.rehacerToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.rehacerToolStripMenuItem.Text = "&Rehacer";
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(221, 6);
-            // 
-            // cortarToolStripMenuItem
-            // 
-            this.cortarToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("cortarToolStripMenuItem.Image")));
-            this.cortarToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.cortarToolStripMenuItem.Name = "cortarToolStripMenuItem";
-            this.cortarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.cortarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.cortarToolStripMenuItem.Text = "&Cortar";
-            // 
-            // copiarToolStripMenuItem
-            // 
-            this.copiarToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copiarToolStripMenuItem.Image")));
-            this.copiarToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.copiarToolStripMenuItem.Name = "copiarToolStripMenuItem";
-            this.copiarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copiarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.copiarToolStripMenuItem.Text = "&Copiar";
-            // 
-            // pegarToolStripMenuItem
-            // 
-            this.pegarToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pegarToolStripMenuItem.Image")));
-            this.pegarToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.pegarToolStripMenuItem.Name = "pegarToolStripMenuItem";
-            this.pegarToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.pegarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.pegarToolStripMenuItem.Text = "&Pegar";
-            // 
-            // toolStripSeparator6
-            // 
-            this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(221, 6);
-            // 
-            // seleccionartodoToolStripMenuItem
-            // 
-            this.seleccionartodoToolStripMenuItem.Name = "seleccionartodoToolStripMenuItem";
-            this.seleccionartodoToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            this.seleccionartodoToolStripMenuItem.Text = "&Seleccionar todo";
-            // 
             // herramientasToolStripMenuItem
             // 
             this.herramientasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -487,6 +351,28 @@
             this.opcionesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.opcionesToolStripMenuItem.Text = "&Opciones";
             // 
+            // ventanaToolStripMenuItem
+            // 
+            this.ventanaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cerrarActualToolStripMenuItem,
+            this.toolStripMenuItem1});
+            this.ventanaToolStripMenuItem.Name = "ventanaToolStripMenuItem";
+            this.ventanaToolStripMenuItem.Size = new System.Drawing.Size(76, 24);
+            this.ventanaToolStripMenuItem.Text = "Ventana";
+            // 
+            // cerrarActualToolStripMenuItem
+            // 
+            this.cerrarActualToolStripMenuItem.Name = "cerrarActualToolStripMenuItem";
+            this.cerrarActualToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.W)));
+            this.cerrarActualToolStripMenuItem.Size = new System.Drawing.Size(232, 26);
+            this.cerrarActualToolStripMenuItem.Text = "Cerrar actual";
+            this.cerrarActualToolStripMenuItem.Click += new System.EventHandler(this.cerrarActualToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(229, 6);
+            // 
             // ayudaToolStripMenuItem
             // 
             this.ayudaToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -502,31 +388,89 @@
             // contenidoToolStripMenuItem
             // 
             this.contenidoToolStripMenuItem.Name = "contenidoToolStripMenuItem";
-            this.contenidoToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.contenidoToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
             this.contenidoToolStripMenuItem.Text = "&Contenido";
             // 
             // índiceToolStripMenuItem
             // 
             this.índiceToolStripMenuItem.Name = "índiceToolStripMenuItem";
-            this.índiceToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.índiceToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
             this.índiceToolStripMenuItem.Text = "Índ&ice";
             // 
             // buscarToolStripMenuItem
             // 
             this.buscarToolStripMenuItem.Name = "buscarToolStripMenuItem";
-            this.buscarToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.buscarToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
             this.buscarToolStripMenuItem.Text = "&Buscar";
             // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(221, 6);
+            this.toolStripSeparator7.Size = new System.Drawing.Size(164, 6);
             // 
             // acercadeToolStripMenuItem
             // 
             this.acercadeToolStripMenuItem.Name = "acercadeToolStripMenuItem";
-            this.acercadeToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.acercadeToolStripMenuItem.Size = new System.Drawing.Size(167, 26);
             this.acercadeToolStripMenuItem.Text = "&Acerca de...";
+            // 
+            // kryptonDockableWorkspace
+            // 
+            this.kryptonDockableWorkspace.ActivePage = null;
+            this.kryptonDockableWorkspace.AutoHiddenHost = false;
+            this.kryptonDockableWorkspace.CompactFlags = ((Krypton.Workspace.CompactFlags)(((Krypton.Workspace.CompactFlags.RemoveEmptyCells | Krypton.Workspace.CompactFlags.RemoveEmptySequences) 
+            | Krypton.Workspace.CompactFlags.PromoteLeafs)));
+            this.kryptonDockableWorkspace.ContainerBackStyle = Krypton.Toolkit.PaletteBackStyle.PanelClient;
+            this.kryptonDockableWorkspace.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.kryptonDockableWorkspace.Location = new System.Drawing.Point(4, 4);
+            this.kryptonDockableWorkspace.Name = "kryptonDockableWorkspace";
+            // 
+            // 
+            // 
+            this.kryptonDockableWorkspace.Root.UniqueName = "d1097ccc93964fdab728b757bddda1b2";
+            this.kryptonDockableWorkspace.Root.WorkspaceControl = this.kryptonDockableWorkspace;
+            this.kryptonDockableWorkspace.SeparatorStyle = Krypton.Toolkit.SeparatorStyle.LowProfile;
+            this.kryptonDockableWorkspace.ShowMaximizeButton = false;
+            this.kryptonDockableWorkspace.Size = new System.Drawing.Size(1240, 662);
+            this.kryptonDockableWorkspace.SplitterWidth = 5;
+            this.kryptonDockableWorkspace.TabIndex = 9;
+            this.kryptonDockableWorkspace.TabStop = true;
+            // 
+            // kryptonPanel
+            // 
+            this.kryptonPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.kryptonPanel.Controls.Add(this.kryptonDockableWorkspace);
+            this.kryptonPanel.Location = new System.Drawing.Point(0, 55);
+            this.kryptonPanel.Name = "kryptonPanel";
+            this.kryptonPanel.Padding = new System.Windows.Forms.Padding(4);
+            this.kryptonPanel.Size = new System.Drawing.Size(1248, 670);
+            this.kryptonPanel.TabIndex = 11;
+            // 
+            // kryptonStatusStrip1
+            // 
+            this.kryptonStatusStrip1.Font = new System.Drawing.Font("Segoe UI", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.World);
+            this.kryptonStatusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.kryptonStatusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
+            this.kryptonStatusStrip1.Location = new System.Drawing.Point(0, 725);
+            this.kryptonStatusStrip1.Name = "kryptonStatusStrip1";
+            this.kryptonStatusStrip1.ProgressBars = null;
+            this.kryptonStatusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.ManagerRenderMode;
+            this.kryptonStatusStrip1.Size = new System.Drawing.Size(1248, 26);
+            this.kryptonStatusStrip1.TabIndex = 13;
+            this.kryptonStatusStrip1.Text = "kryptonStatusStrip1";
+            // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(151, 20);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
+            // kryptonManager
+            // 
+            this.kryptonManager.GlobalPaletteMode = Krypton.Toolkit.PaletteModeManager.ProfessionalSystem;
             // 
             // MdiMain
             // 
@@ -538,9 +482,11 @@
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
             this.IsMdiContainer = true;
+            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MdiMain";
             this.Text = "Manager";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MdiMain_FormClosing);
             this.Load += new System.EventHandler(this.MdiMain_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -592,15 +538,6 @@
         private ToolStripMenuItem vistapreviadeimpresiónToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripMenuItem salirToolStripMenuItem;
-        private ToolStripMenuItem editarToolStripMenuItem;
-        private ToolStripMenuItem deshacerToolStripMenuItem;
-        private ToolStripMenuItem rehacerToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator5;
-        private ToolStripMenuItem cortarToolStripMenuItem;
-        private ToolStripMenuItem copiarToolStripMenuItem;
-        private ToolStripMenuItem pegarToolStripMenuItem;
-        private ToolStripSeparator toolStripSeparator6;
-        private ToolStripMenuItem seleccionartodoToolStripMenuItem;
         private ToolStripMenuItem herramientasToolStripMenuItem;
         private ToolStripMenuItem personalizarToolStripMenuItem;
         private ToolStripMenuItem opcionesToolStripMenuItem;
@@ -610,5 +547,8 @@
         private ToolStripMenuItem buscarToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripMenuItem acercadeToolStripMenuItem;
+        private ToolStripMenuItem ventanaToolStripMenuItem;
+        private ToolStripMenuItem cerrarActualToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem1;
     }
 }

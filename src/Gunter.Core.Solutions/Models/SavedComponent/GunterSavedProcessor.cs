@@ -1,4 +1,5 @@
-﻿using Gunter.Core.Contracts;
+﻿using Gunter.Core.BaseComponents;
+using Gunter.Core.Contracts;
 
 namespace Gunter.Core.Solutions.Models.SavedComponent
 {
@@ -22,7 +23,7 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
 
         public static GunterProcessor ToProcessor(GunterSavedProcessor processor)
         {
-            var retVal = GunterEnvironmentHelper.Instance.GetInstance<IGunterProcessor>(processor.SystemType, processor.Id);
+            var retVal = GunterEnvironmentHelper.Instance.CreateInstance<IGunterProcessor>(processor.SystemType, processor.Id);
             retVal.Name = processor.Name;
 
             foreach (var infoItem in processor.InfoItems)

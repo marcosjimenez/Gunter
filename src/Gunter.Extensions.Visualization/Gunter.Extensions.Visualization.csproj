@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gunter.Core.Contracts\Gunter.Core.Contracts.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.InfoSources.Specialized\Gunter.Extensions.InfoSources.Specialized.csproj" />
   </ItemGroup>
 

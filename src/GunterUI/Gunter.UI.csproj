@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="Krypton.Docking" Version="65.22.6.152" />
     <PackageReference Include="Krypton.Navigator" Version="65.22.6.152" />
     <PackageReference Include="Krypton.Ribbon" Version="65.22.6.152" />
@@ -30,6 +31,7 @@
     <ProjectReference Include="..\Gunter.Extensions.Common\Gunter.Extensions.Common.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.InfoSources.Specialized\Gunter.Extensions.InfoSources.Specialized.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.Models\Gunter.Extensions.Models.csproj" />
+    <ProjectReference Include="..\Gunter.Extensions.Plugins.MarketStack\Gunter.Extensions.Plugins.MarketStack.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.Visualization\Gunter.Extensions.Visualization.csproj" />
     <ProjectReference Include="..\Gunter.Infrastructure\Gunter.Core.Infrastructure.csproj" />
   </ItemGroup>

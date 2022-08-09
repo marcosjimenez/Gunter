@@ -1,4 +1,5 @@
-﻿using Gunter.Core.Contracts;
+﻿using Gunter.Core.BaseComponents;
+using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Exceptions;
 using Gunter.Core.Solutions.Models.SavedComponent;
 using System;

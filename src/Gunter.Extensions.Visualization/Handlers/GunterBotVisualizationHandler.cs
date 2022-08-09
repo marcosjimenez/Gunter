@@ -12,6 +12,9 @@ namespace Gunter.Extensions.Visualization.Handlers
 {
     public class GunterBotVisualizationHandler : VisualizationHandlerBase<GunterBotInfoSource>, IGunterVisualizationHandler
     {
+
+        public new string Name { get; set; } = "Visor de GunterBot";
+
         private GunterBotInfoSource objectToDraw;
 
         protected string HTML_Body = @"

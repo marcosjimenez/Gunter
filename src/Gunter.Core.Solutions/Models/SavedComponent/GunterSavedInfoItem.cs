@@ -1,4 +1,5 @@
-﻿using Gunter.Core.Contracts;
+﻿using Gunter.Core.BaseComponents;
+using Gunter.Core.Contracts;
 
 namespace Gunter.Core.Solutions.Models.SavedComponent
 {
@@ -28,7 +29,7 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
 
         public static GunterInfoItem ToInfoItem(GunterSavedInfoItem infoItem)
         {
-            var retVal = GunterEnvironmentHelper.Instance.GetInstance<IGunterInfoItem>(infoItem.SystemType, infoItem.Id);
+            var retVal = GunterEnvironmentHelper.Instance.CreateInstance<IGunterInfoItem>(infoItem.SystemType, infoItem.Id);
             retVal.Name = infoItem.Name;
 
             foreach (var infoSource in infoItem.InfoSources)

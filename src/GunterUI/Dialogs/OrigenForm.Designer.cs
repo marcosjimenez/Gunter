@@ -29,8 +29,6 @@
         private void InitializeComponent()
         {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.txtID = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cboTipo = new System.Windows.Forms.ComboBox();
             this.cmdCancel = new System.Windows.Forms.Button();
@@ -49,28 +47,10 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(218, 12);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(27, 20);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "ID:";
-            // 
-            // txtID
-            // 
-            this.txtID.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtID.Location = new System.Drawing.Point(218, 35);
-            this.txtID.Name = "txtID";
-            this.txtID.Size = new System.Drawing.Size(553, 27);
-            this.txtID.TabIndex = 2;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(218, 65);
+            this.label2.Location = new System.Drawing.Point(218, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(42, 20);
             this.label2.TabIndex = 3;
@@ -82,7 +62,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboTipo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTipo.FormattingEnabled = true;
-            this.cboTipo.Location = new System.Drawing.Point(218, 88);
+            this.cboTipo.Location = new System.Drawing.Point(218, 35);
             this.cboTipo.Name = "cboTipo";
             this.cboTipo.Size = new System.Drawing.Size(553, 28);
             this.cboTipo.TabIndex = 4;
@@ -91,7 +71,8 @@
             // cmdCancel
             // 
             this.cmdCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdCancel.Location = new System.Drawing.Point(666, 307);
+            this.cmdCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cmdCancel.Location = new System.Drawing.Point(666, 224);
             this.cmdCancel.Name = "cmdCancel";
             this.cmdCancel.Size = new System.Drawing.Size(105, 33);
             this.cmdCancel.TabIndex = 13;
@@ -101,7 +82,8 @@
             // cmdOk
             // 
             this.cmdOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdOk.Location = new System.Drawing.Point(555, 307);
+            this.cmdOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.cmdOk.Location = new System.Drawing.Point(555, 224);
             this.cmdOk.Name = "cmdOk";
             this.cmdOk.Size = new System.Drawing.Size(105, 33);
             this.cmdOk.TabIndex = 12;
@@ -112,15 +94,15 @@
             // specialPropertiesViewer1
             // 
             this.specialPropertiesViewer1.CanEdit = true;
-            this.specialPropertiesViewer1.Location = new System.Drawing.Point(218, 151);
+            this.specialPropertiesViewer1.Location = new System.Drawing.Point(218, 89);
             this.specialPropertiesViewer1.Name = "specialPropertiesViewer1";
-            this.specialPropertiesViewer1.Size = new System.Drawing.Size(553, 136);
+            this.specialPropertiesViewer1.Size = new System.Drawing.Size(553, 123);
             this.specialPropertiesViewer1.TabIndex = 14;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(218, 128);
+            this.label3.Location = new System.Drawing.Point(218, 66);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(133, 20);
             this.label3.TabIndex = 15;
@@ -128,24 +110,24 @@
             // 
             // OrigenForm
             // 
+            this.AcceptButton = this.cmdOk;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(783, 352);
+            this.CancelButton = this.cmdCancel;
+            this.ClientSize = new System.Drawing.Size(783, 269);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.specialPropertiesViewer1);
             this.Controls.Add(this.cmdCancel);
             this.Controls.Add(this.cmdOk);
             this.Controls.Add(this.cboTipo);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.txtID);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "OrigenForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "OrigenForm";
+            this.Text = "InfoSource";
             this.Load += new System.EventHandler(this.OrigenForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
@@ -156,8 +138,6 @@
         #endregion
 
         private PictureBox pictureBox1;
-        private Label label1;
-        private TextBox txtID;
         private Label label2;
         private ComboBox cboTipo;
         private Button cmdCancel;

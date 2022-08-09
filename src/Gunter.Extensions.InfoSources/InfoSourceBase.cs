@@ -1,26 +1,40 @@
 ﻿using Gunter.Core.Constants;
+using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Exceptions;
-using Gunter.Extensions.Common;
+using Gunter.Core.Infrastructure.Helpers;
+using Gunter.Core.Infrastructure.Log;
+using Gunter.Core.Messaging;
+using Gunter.Core.Messaging.Models;
+using Gunter.Core.Models;
 
 namespace Gunter.Extensions.InfoSources
 {
-    public abstract class InfoSourceBase<T>
+    public abstract class InfoSourceBase<T> : IMessagingComponent
     {
         public string ClassId { get => IdentificationConstants.CLASSID.GunterInfoSource; }
 
-        public string Id { get; protected set; }
-        public string Name { get; set; }
-
+        public string Id { get; protected set; } = Guid.NewGuid().ToString();
+        public string Name { get; set; } = string.Empty;
+        public SpecialProperties SpecialProperties { get; set; } = new();
+        
         protected SpecialProperties _mandatoryInputs = new();
+
+        private MessagingClient? messagingClient;
+        public string MessagingClientId { get => messagingClient?.Id ?? string.Empty; }
 
         public InfoSourceBase()
         {
-
+            GetClient();
         }
-
         public InfoSourceBase(string id)
         {
             Id = id;
+            GetClient();
+        }
+
+        public void SetSpecialProperties(SpecialProperties specialProperties)
+        {
+            SpecialProperties = specialProperties;
         }
 
         public SpecialProperties GetMandatoryParams()
@@ -40,9 +54,6 @@ namespace Gunter.Extensions.InfoSources
 
         public abstract Dictionary<string, T> GetLastData();
 
-        //public SpecialProperties GetMandatoryParams()
-        //    => _mandatoryInputs;
-
         protected void AddMandatoryParam(string key, string value)
         {
             if (!_mandatoryInputs.TryGetProperty(key, out var input))
@@ -53,37 +64,21 @@ namespace Gunter.Extensions.InfoSources
         }
 
         public bool IsReady()
+            => !_mandatoryInputs.Properties.Any(x => string.IsNullOrWhiteSpace(x.Value.ToString()));
+
+        public void GetClient()
         {
-            foreach (var item in _mandatoryInputs.Properties)
+            messagingClient = MessagingHelper.Instance.CreateClient(Id);
+            messagingClient.MessageReceived += (sender, e) =>
             {
-                if (string.IsNullOrWhiteSpace(item.Value.ToString()))
-                {
-                    return false;
-                }
-            }
-            return true;
+                GunterLog.Instance.Log(this, e.Message);
+            };
+            messagingClient.ConnectAsync();
         }
 
-        public virtual void CreateComponentsFromIdentification()
+        public void SendMessage(string message, string componentId)
         {
-            //lock (lockObject)
-            //{
-            //    foreach (var item in ComponentIdentification.CreateComponentFromIdentification<IGunterInfoSource>(Identifications))
-            //    {
-            //        AddInfoSource(item);
-            //        item.CreateComponentsFromIdentification();
-            //    }
-            //}
-        }
-
-        public virtual void CreateIdentification()
-        {
-            //lock (lockObject)
-            //{
-            //    Identifications.Clear();
-            //    foreach (var item in InfoSources)
-            //        Identifications.Add(new ComponentIdentification { Id = item.Id, SystemType = item.GetType().ToString() });
-            //}
+            AsyncHelper.RunSync(() => messagingClient.SendToComponent(message, componentId));
         }
     }
 }

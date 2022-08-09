@@ -13,13 +13,18 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Contracts;
+using Dialogs;
 
 namespace Controls
 {
     public partial class InfoItemViewer : UserControl
     {
+        public IGunterInfoItem InfoItem { get; set; }
 
-        public event Delegates.GunterItemShowDelegate OnGunterItemShow;
+        public event Delegates.GunterItemShowDelegate OnGunterInfoSourceShow;
+        public event Delegates.WebViewControlDelegate OnGunterVisualizationHandlerShow;
+
+        private IGunterInfoSource? selectedInfoSource;
 
         private System.Windows.Forms.Timer timer = new();
 
@@ -28,9 +33,6 @@ namespace Controls
 
         private DateTimeOffset nextUpdate;
 
-        private IGunterInfoItem _infoItem;
-        public IGunterInfoItem Target { get => _infoItem; set { _infoItem = value; } }
-
         public InfoItemViewer()
         {
             InitializeComponent();
@@ -38,31 +40,32 @@ namespace Controls
 
         public InfoItemViewer(IGunterInfoItem target)
         {
-            _infoItem = target;
+            InfoItem = target;
             InitializeComponent();
 
             ShowData();
             CalculateNextUpdate();
             timer.Tick += timer_Tick;
             timer.Interval = 1000;
-            timer.Enabled = true;
+            timer.Enabled = chkActualizar.Checked;
 
         }
 
         public void ShowData()
         {
-            txtNombre.Text = _infoItem.Name;
-            txtId.Text = _infoItem.Id.ToString();
+            txtNombre.Text = InfoItem.Name;
+            txtId.Text = InfoItem.Id.ToString();
             LoadSources();
+            LoadVisualizations();
 
-            if (_infoItem.VisualizationHandlers.Count > 0)
+            if (InfoItem.VisualizationHandlers.Count > 0)
             {
-                var handler = _infoItem.VisualizationHandlers[0];
+                var handler = InfoItem.VisualizationHandlers[0];
                 var html = handler.GetHTML();
-                if (!string.IsNullOrWhiteSpace(html))   
+                if (!string.IsNullOrWhiteSpace(html))
                     try
                     {
-                        WindowManager.Instance.ShowForm(WindowManager.AvailableForm.WebViewer, "HTML", html);
+                        //WindowManager.Instance.ShowForm(WindowManager.AvailableForm.WebViewer, "HTML", html);
                     }
                     catch { }
                 else
@@ -90,7 +93,16 @@ namespace Controls
         {
             var item = lvSources.Items.Add(key, value, imageKey);
             item.Group = group;
+            foreach (var subitem in subitems)
+                item.SubItems.Add(subitem);
 
+            return item;
+        }
+
+        private ListViewItem CreateVisualizationListViewItem(string key, string value, string imageKey = "", ListViewGroup? group = null, params string[] subitems)
+        {
+            var item = lvVisualizations.Items.Add(key, value, imageKey);
+            item.Group = group;
             foreach (var subitem in subitems)
                 item.SubItems.Add(subitem);
 
@@ -102,9 +114,26 @@ namespace Controls
             lvSources.BeginUpdate();
             lvSources.Items.Clear();
 
-            foreach (var item in _infoItem.InfoSources)
+            foreach (var item in InfoItem.InfoSources)
             {
-                CreateSourceListViewItem(item.Id, item.Id, "DataSource", null, item.Name);
+                try
+                {
+                    CreateSourceListViewItem(item.Id, item.Name, "DataSource", null, item.Id);
+                }
+                catch { }
+            }
+
+            lvSources.EndUpdate();
+        }
+
+        private void LoadVisualizations()
+        {
+            lvVisualizations.BeginUpdate();
+            lvVisualizations.Items.Clear();
+
+            foreach (var item in InfoItem.VisualizationHandlers)
+            {
+                CreateVisualizationListViewItem(item.Id, item.Name);
             }
 
             lvSources.EndUpdate();
@@ -116,7 +145,8 @@ namespace Controls
             redLed.Visible = true;
             var enableTimer = timer.Enabled;
             timer.Enabled = false;
-            _infoItem?.Update();
+            InfoItem?.Update();
+            lblUltimaActualizacion.Text = $"Updated {DateTime.Now.ToString()}";
             ShowData();
             CalculateNextUpdate();
             greenLed.Visible = true;
@@ -126,12 +156,18 @@ namespace Controls
 
         private void CalculateNextUpdate()
         {
+            
+            if (!chkActualizar.Checked)
+            {
+                lblSiguienteActualizacion.Text = "Nunca (Manual)";
+                return;
+            }
+
             var enableTimer = timer.Enabled;
             timer.Enabled = false;
             txtSegundos.Minimum = (txtDias.Value == 0 && txtHoras.Value == 0 && txtMinutos.Value == 0) ? 10 : 0;
-            lblUltimaActualizacion.Text = $"Updated {nextUpdate.ToString()}";
             var nextTimeSpan = GetUITimeSpan();
-            nextUpdate = _infoItem.LastUpdate.Add(nextTimeSpan);
+            nextUpdate = InfoItem.LastUpdate.Add(nextTimeSpan);
 
             MaxTimerCounter = (int)nextTimeSpan.TotalSeconds;
             timerCounter = 0;
@@ -165,7 +201,7 @@ namespace Controls
                     UpdateAll();
                 timerCounter = 0;
             }
-            lblUltimaActualizacion.Text = $"Updated {DateTimeManipulationHelper.GetRelativeDateTime(_infoItem.LastUpdate)}";
+            lblUltimaActualizacion.Text = $"Updated {DateTimeManipulationHelper.GetRelativeDateTime(InfoItem.LastUpdate)}";
             timer.Enabled = true;
         }
 
@@ -185,14 +221,13 @@ namespace Controls
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (_infoItem is null || lvSources.SelectedItems.Count == 0)
+            if (InfoItem is null || lvSources.SelectedItems.Count == 0)
             {
-                specialPropertiesViewer1.SetProperties(new Gunter.Extensions.Common.SpecialProperties());
+                selectedInfoSource = null;
                 return;
             }
 
-            var source = _infoItem.InfoSources.Where(x => x.Id == lvSources.SelectedItems[0].Name).Single();
-            specialPropertiesViewer1.SetProperties(source.SpecialProperties);
+            selectedInfoSource = InfoItem.InfoSources.Where(x => x.Id == lvSources.SelectedItems[0].Name).Single();
         }
 
         private void InfoItemViewer_Load(object sender, EventArgs e)
@@ -202,46 +237,32 @@ namespace Controls
 
         private void cmdAddSource_Click(object sender, EventArgs e)
         {
-            if (_infoItem is null)
+            if (InfoItem is null)
                 return;
 
-            using var frm = new OrigenForm(_infoItem.GetProcessor());
+            using var frm = new OrigenForm(InfoItem.GetProcessor());
             if (frm.ShowDialog() == DialogResult.OK)
             {
-                var source = frm.GetSelectedSource(_infoItem);
+                var source = frm.GetSelectedSource(InfoItem);
 
-                // TEMP: TESTING Visualizations
-                switch (frm.SelectedType)
-                {
-                    case SpecializedInfoSources.Wikipedia:
-                        source.Container.VisualizationHandlers.Add(new WikipediaVisualizationHandler((WikipediaInfoSource)source));
-                        break;
-                    case SpecializedInfoSources.OpenWeather:
-                        source.Container.VisualizationHandlers.Add(new OpenWeatherVisualizationHandler((OpenWeatherInfoSource)source));
-                        break;
-                    case SpecializedInfoSources.AEMET:
-                        source.Container.VisualizationHandlers.Add(new AEMETVisualizationHandler((AEMETInfoSource)source));
-                        break;
-                    case SpecializedInfoSources.GunterBot:
-                        source.Container.VisualizationHandlers.Add(new GunterBotVisualizationHandler((GunterBotInfoSource)source));
-                        break;
-                }
+                if (source is null)
+                    return;
 
-                _infoItem.InfoSources.Add(source);
-                LoadSources();
+                InfoItem.InfoSources.Add(source);
+                CreateSourceListViewItem(source.Id, source.Name, "", null);
             }
         }
 
         private void lvSources_DoubleClick(object sender, EventArgs e)
         {
-            if (_infoItem is null || lvSources.SelectedItems.Count == 0)
+            if (InfoItem is null || lvSources.SelectedItems.Count == 0)
                 return;
 
-            var source = _infoItem.InfoSources.SingleOrDefault(x => x.Id == lvSources.SelectedItems[0].Name);
+            var source = InfoItem.InfoSources.SingleOrDefault(x => x.Id == lvSources.SelectedItems[0].Name);
             if (source is null)
                 return;
 
-            OnGunterItemShow?.Invoke(this, new Infrastructure.EvengArgs.GunterSolutionItemEventArgs
+            OnGunterInfoSourceShow?.Invoke(this, new Infrastructure.EvengArgs.GunterSolutionItemEventArgs
             {
                 Id = source.Id,
                 Component = source,
@@ -253,9 +274,41 @@ namespace Controls
 
         private void cmdAddVisualization_Click(object sender, EventArgs e)
         {
+            if (selectedInfoSource is null)
+                return;
 
+            using var dlg = new VisualizationForm();
+            dlg.Destination = selectedInfoSource;
+            
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                var visualization = dlg.Visualization;
+                InfoItem.VisualizationHandlers.Add(visualization);
+                CreateVisualizationListViewItem(visualization.Id, visualization.Name);
+            }
+        }
 
+        private void cmdRefreshSources_Click(object sender, EventArgs e)
+        {
+            LoadSources();
+            LoadVisualizations();
+        }
 
+        private void lvVisualizations_DoubleClick(object sender, EventArgs e)
+        {
+            if (lvVisualizations.SelectedItems.Count == 0)
+                return;
+
+            var item = lvVisualizations.SelectedItems[0];
+            var visualization = InfoItem.VisualizationHandlers.Where(x => x.Id == item.Name).SingleOrDefault();
+            if (visualization is not null)
+                OnGunterVisualizationHandlerShow?.Invoke(this, new Infrastructure.EvengArgs.WebViewControlEventArgs
+                {
+                    Id = visualization.Id,
+                    HTML = visualization.GetHTML(),
+                    SolutionItemType = Gunter.Core.Solutions.GunterSolutionItemType.VisualizationHandler,
+                    Name = visualization.Name
+                });
 
         }
     }

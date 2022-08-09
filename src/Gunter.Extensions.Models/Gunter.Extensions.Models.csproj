@@ -6,8 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Gunter.Core.Contracts\Gunter.Core.Contracts.csproj" />
-  </ItemGroup>
-
 </Project>

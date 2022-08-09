@@ -1,23 +1,16 @@
-﻿using Gunter.Extensions.Common;
-using Gunter.Core.Contracts;
+﻿using Gunter.Core.Contracts;
 using Gunter.Extensions.InfoSources;
 using Gunter.Extensions.InfoSources.Specialized;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Gunter.Core;
+using System.Runtime.CompilerServices;
+using Gunter.Core.Models;
 
 namespace GunterUI.Dialogs
 {
     public partial class OrigenForm : Form
     {
 
-        public string SelectedType { get; set; }
+        public IGunterInfoSource? SelectedType { get; set; }
         public SpecialProperties SpecialProperties { get; set; }
 
         private readonly IGunterProcessor _processor;
@@ -25,98 +18,101 @@ namespace GunterUI.Dialogs
         public OrigenForm(IGunterProcessor processor)
         {
             _processor = processor;
-            SelectedType = string.Empty;
+            SelectedType = null;
             SpecialProperties = new SpecialProperties();
             InitializeComponent();
         }
 
         public OrigenForm()
         {
-            SelectedType = string.Empty;
+            SelectedType = null;
             SpecialProperties = new SpecialProperties();
             InitializeComponent();
         }
 
-        public IGunterInfoSource GetSelectedSource(IGunterInfoItem item)
+        public IGunterInfoSource? GetSelectedSource(IGunterInfoItem item)
         {
-            IGunterInfoSource retVal;
-            var specialProperties = specialPropertiesViewer1.SpecialProperties;
+            var retVal = cboTipo.SelectedValue as IGunterInfoSource;
+            retVal?.SetSpecialProperties(specialPropertiesViewer1.SpecialProperties);
 
-            var id = Guid.NewGuid().ToString();
-            switch (cboTipo.Text)
-            {
-                case SpecializedInfoSources.Wikipedia:
-                    retVal = new WikipediaInfoSource(item, id, cboTipo.Text);
-                    break;
-                case SpecializedInfoSources.OpenWeather:
-                    retVal = new OpenWeatherInfoSource(item, id, cboTipo.Text);
-                    break;
-                case SpecializedInfoSources.AEMET:
-                    retVal = new AEMETInfoSource(item, id, cboTipo.Text);
-                    break;
-                case SpecializedInfoSources.GunterBot:
-                    retVal = new GunterBotInfoSource(item, id, cboTipo.Text);
-                    break;
-                case SpecializedInfoSources.Twitter:
-                    retVal = new TwitterInfoSource(item, id, cboTipo.Text);
-                    break;
-                default:
-                    retVal = new AEMETInfoSource(item, id, cboTipo.Text);
-                    break;
-            }
-            retVal.SetSpecialProperties(specialPropertiesViewer1.SpecialProperties);
             return retVal;
         }
 
-        private void OrigenForm_Load(object sender, EventArgs e)
+
+        private void LoadList()
         {
-            foreach(var item in SpecializedInfoSources.GetList())
+            var availableInfoSources = GunterEnvironmentHelper.Instance.GetAvailableInfoSources();
+            cboTipo.Items.Clear();
+
+            var instances = new List<InfoSourceDropDownItem>();
+            foreach (var item in availableInfoSources)
             {
-                cboTipo.Items.Add(item);
+                IGunterInfoSource? instance = null;
+                try
+                {
+                    instance = GunterEnvironmentHelper.Instance
+                        .CreateInstance<IGunterInfoSource>(GunterEnvironmentHelper.GetSystemTypeName(item), null);
+                    if (instance is not null)
+                        instances.Add(new InfoSourceDropDownItem
+                        {
+                            Id = instance.Id,
+                            Name = instance.Name,
+                            InfoSource = instance
+                        });
+                }
+                catch
+                {
+
+                }
+
+                if (instance is null)
+                    continue;
             }
-            cboTipo.SelectedIndex = 0;
-            SelectedType = cboTipo.SelectedText;
-            specialPropertiesViewer1.SetProperties(SpecialProperties);
+
+            cboTipo.DataSource = instances; 
+            cboTipo.DisplayMember = "Name";
+            cboTipo.ValueMember = "InfoSource";
+            cboTipo.Refresh();
         }
 
-        private void cboTipo_SelectedIndexChanged(object sender, EventArgs e)
+        private void LoadProperties()
         {
             var value = cboTipo.Text;
             if (string.IsNullOrWhiteSpace(value))
                 return;
 
-            switch (value)
-            {
-                case SpecializedInfoSources.Wikipedia:
-                    specialPropertiesViewer1.SetProperties(new WikipediaInfoSource().GetMandatoryParams());
-                    break;
-                case SpecializedInfoSources.OpenWeather:
-                    specialPropertiesViewer1.SetProperties(new OpenWeatherInfoSource().GetMandatoryParams());
-                    break;
-                case SpecializedInfoSources.AEMET:
-                    specialPropertiesViewer1.SetProperties(new AEMETInfoSource().GetMandatoryParams());
-                    break;
-                case SpecializedInfoSources.GunterBot:
-                    specialPropertiesViewer1.SetProperties(new GunterBotInfoSource().GetMandatoryParams());
-                    break;
-                case SpecializedInfoSources.Twitter:
-                    specialPropertiesViewer1.SetProperties(new TwitterInfoSource().GetMandatoryParams());
-                    break;
-                default:
-                    specialPropertiesViewer1.SetProperties(new SpecialProperties());
-                    break;
-            }
+            var infoSource = cboTipo.SelectedValue as IGunterInfoSource;
+            if (infoSource is not null)
+                specialPropertiesViewer1.SetProperties(infoSource.GetMandatoryParams());
+        }
+
+        private void OrigenForm_Load(object sender, EventArgs e)
+        {
+            LoadList();
+            LoadProperties();
+        }
+
+        private void cboTipo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadProperties();
         }
 
         private void cmdOk_Click(object sender, EventArgs e)
         {
-            SelectedType = cboTipo.Text;
-            if (string.IsNullOrWhiteSpace(SelectedType))
+            SelectedType = cboTipo.SelectedValue as IGunterInfoSource;
+            if (SelectedType is null)
                 return; 
 
-            SpecialProperties = specialPropertiesViewer1.SpecialProperties;
+            SpecialProperties = (SpecialProperties)specialPropertiesViewer1.SpecialProperties;
             this.DialogResult = DialogResult.OK;
             this.Close();
         }
     }
+    public class InfoSourceDropDownItem
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public IGunterInfoSource? InfoSource { get; set; } = null;
+    }
+
 }

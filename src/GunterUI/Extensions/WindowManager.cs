@@ -1,13 +1,5 @@
 ﻿using Contracts;
 using Gunter.Core.Contracts;
-using Gunter.Infrastructure.Cache;
-using GunterUI.ToolBox;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GunterUI.Extensions
 {
@@ -38,55 +30,6 @@ namespace GunterUI.Extensions
         private WindowManager()
         {
             _forms = new();
-        }
-
-
-        // TEMP
-        public Form GetForm(AvailableForm availableForm, string id, object data = null)
-        {
-            if (data is null)
-                return null;
-
-            if (_forms.TryGetValue(id, out Form? form))
-            {
-
-                form.BringToFront();
-                form.Update();
-
-                var withExtraData = form as IDataWindow;
-                withExtraData?.SetExtraData(data);
-            }
-            else
-            {
-                switch (availableForm)
-                {
-                    case AvailableForm.InfoItemForm:
-                        form = new InfoItemViewer((IGunterInfoItem)data);
-                        break;
-                    case AvailableForm.ProcessForm:
-                        form = new ProcessorForm((IGunterProcessor)data);
-                        break;
-                    case AvailableForm.InfoSourceForm:
-                        form = new InfoSourceViewer((IGunterInfoSource)data);
-                        break;
-                    case AvailableForm.WebViewer:
-                        form = new WebViewForm(data.ToString() ?? string.Empty);
-                        break;
-                    default:
-                        form = new Form();
-                        break;
-                }
-                _forms.Add(id, form);
-                form.FormClosing += (obj, e) => { _forms.Remove(id); };
-            }
-                return form;
-        }
-
-        public void ShowForm(AvailableForm availableForm, string id, object data = null)
-        {
-            var form = GetForm(availableForm, id, data);
-            form.MdiParent = MainForm;
-            form.Show();
         }
     }
 }

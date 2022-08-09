@@ -8,8 +8,9 @@ namespace Gunter.Extensions.Visualization.Handlers
 {
 	public class AEMETVisualizationHandler : VisualizationHandlerBase<AEMETInfoSource>, IGunterVisualizationHandler
     {
-
         private AEMETInfoSource objectToDraw;
+
+		public new string Name { get; set; } = "Visor de AEMET (Agencia Estatal de Meteorología)";
 
         protected string HTML_Template = @"
 <!DOCTYPE html>
@@ -64,6 +65,11 @@ namespace Gunter.Extensions.Visualization.Handlers
 </body>
 </html>
 ";
+		public AEMETVisualizationHandler()
+		{
+
+		}
+
         public AEMETVisualizationHandler(string id)
 		{
 			Id = id;
@@ -76,7 +82,9 @@ namespace Gunter.Extensions.Visualization.Handlers
 
 		public string GetHTML()
 		{
-			var data = objectToDraw.LastItem;
+			var data = objectToDraw?.LastItem;
+			if (data is null)
+				return String.Empty;
             var prediccion = GetPrediction(data);
 
 			var html = HTML_Template

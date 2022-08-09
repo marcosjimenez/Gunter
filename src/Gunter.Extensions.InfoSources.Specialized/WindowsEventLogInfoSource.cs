@@ -1,12 +1,4 @@
-﻿using Gunter.Extensions.Common;
-using Gunter.Core.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Gunter.Extensions.InfoSources.Specialized
+﻿namespace Gunter.Extensions.InfoSources.Specialized
 {
     public class WindowsEventLogInfoSource { }
     //: InfoSourceBase<WindowsEventLogInfoItem>, IInfoSource
@@ -34,7 +26,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
     //    public void Update()
     //    {
-            
+
     //    }
 
     //    public WindowsEventLogInfoSource()

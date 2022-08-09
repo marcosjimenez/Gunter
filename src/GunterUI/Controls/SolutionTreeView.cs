@@ -4,6 +4,12 @@ using Gunter.Core.Solutions.Models;
 using Infrastructure.EvengArgs;
 using Contracts;
 using static Gunter.Core.Solutions.GunterSolutionConstants;
+using Dialogs;
+using AngleSharp.Dom;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using System.Diagnostics;
+using Gunter.Core.BaseComponents;
+using System.Xml.Linq;
 
 namespace Controls
 {
@@ -89,14 +95,12 @@ namespace Controls
             {
                 case GunterSolutionItemType.Folder:
                     icon = "FolderClosed";
-                    selectedIcon = icon;
+                    selectedIcon = "FolderOpened";
                     break;
-                case GunterSolutionItemType.Solution:
-                    icon = "Solution";
+                default:
+                    icon = itemType.ToString();
                     break;
-                case GunterSolutionItemType.Project:
-                    icon = "Project";
-                    break;
+
             }
             if (string.IsNullOrWhiteSpace(selectedIcon))
                 selectedIcon = icon;
@@ -109,16 +113,52 @@ namespace Controls
 
         private TreeNode CreateProjectNode(TreeNode parent, GunterProject project)
         {
-
             TreeNode destinationNode = parent;
             if (!string.IsNullOrWhiteSpace(project.FolderId))
                 if (!TryGetNode(project.FolderId, out destinationNode))
                     destinationNode = parent;
 
-            var retVal = CreateNode(GunterSolutionItemType.Project, parent, project.Id, project.Name);
+            var retVal = CreateNode(GunterSolutionItemType.Project, destinationNode, project.Id, project.Name);
 
             foreach (var processor in project.Processors)
-                CreateNode(GunterSolutionItemType.Processor, retVal, processor.Id.ToString(), processor.Name);
+                CreateProcessorNode(retVal, processor);
+
+            return retVal;
+        }
+
+        private TreeNode CreateProcessorNode(TreeNode parent, IGunterProcessor processor)
+        {
+            var retVal = CreateNode(GunterSolutionItemType.Processor, parent, processor.Id, processor.Name);
+
+            foreach (var item in processor.InfoItems)
+                CreateInfoItemNode(retVal, item);
+
+            return retVal;
+        }
+
+        private TreeNode CreateInfoItemNode(TreeNode parent, IGunterInfoItem infoItem)
+        {
+            var retVal = CreateNode(GunterSolutionItemType.InfoItem, parent, infoItem.Id, infoItem.Name);
+
+            foreach (var item in infoItem.InfoSources)
+                CreateInfoSourceNode(retVal, item);
+
+            foreach(var item in infoItem.VisualizationHandlers)
+                CreateVisualizationHandlerNode(retVal, item);
+
+            return retVal;
+        }
+
+        private TreeNode CreateInfoSourceNode(TreeNode parent, IGunterInfoSource infoSource)
+        {
+            var retVal = CreateNode(GunterSolutionItemType.InfoSource, parent, infoSource.Id, infoSource.Name);
+
+            return retVal;
+        }
+
+        private TreeNode CreateVisualizationHandlerNode(TreeNode parent, IGunterVisualizationHandler handler)
+        {
+            var retVal = CreateNode(GunterSolutionItemType.VisualizationHandler, parent, handler.Id, handler.Name);
 
             return retVal;
         }
@@ -146,13 +186,13 @@ namespace Controls
         public void LoadSolution(GunterSolution solution)
         {
             currentSolution = solution;
+            processorCounter = solution.Projects.SelectMany(x => x.Processors).Count() + 1;
             Reload();
         }
 
         private void NewProject()
         {
             string currentNodeId = CurrentNodeId();
-
 
             var folderId = currentSolution.Folders.Any(x => x.Id == currentNodeId) ?
                 selectedNode?.Name ?? string.Empty :
@@ -161,12 +201,23 @@ namespace Controls
             if (!TryGetNode(folderId, out var parentNode))
                 parentNode = tv.Nodes[0];
 
-            var project = currentSolution.AddProject(new GunterProject { FolderId = folderId });
+            using var dlg = new ProjectDialog
+            {
+                ProjectFolderId = folderId
+            };
+            if (dlg.ShowDialog() != DialogResult.OK)
+                return;
+
+            var project = new GunterProject 
+            { 
+                FolderId = dlg.ProjectFolderId,  
+                Name = dlg.ProjectName,
+                Description = dlg.ProjectDescription
+            };
+            project = currentSolution.AddProject(project);
             var node = CreateProjectNode(parentNode, project);
             node.EnsureVisible();
             tv.SelectedNode = node;
-
-            //Reload();
         }
 
         private void NewFolder()
@@ -177,19 +228,80 @@ namespace Controls
 
             var folder = new GunterSolutionFolder(folderId);
             currentSolution.Folders.Add(folder);
-            Reload();
+
+            var node = CreateNode(GunterSolutionItemType.Folder, selectedNode, folder.Id, folder.Name);
+            tv.SelectedNode = node;
+            node.EnsureVisible();
+            //Reload();
         }
 
-        public IGunterProcessor NewProcessor(GunterProject project)
+        public IGunterProcessor? NewProcessor()
         {
+            var project = currentSolution.Projects.FirstOrDefault(x => x.Id == selectedNode.Name);
             if (project is null)
-                throw new ArgumentNullException(nameof(project));
+                return null;
 
-            var processor = new Gunter.Core.GunterProcessor();
+            var processor = new GunterProcessor();
             processor.Name = $"Processor {processorCounter++}";
             project.AddProcessor(processor);
+            var args = new GunterSolutionItemEventArgs
+            {
+                Id = processor.Id,
+                Component = processor,
+                SolutionItemType = GunterSolutionItemType.Processor
+            };
+
+            OnGunterItemAdded?.Invoke(this, args);
+            OnGunterItemShow?.Invoke(this, args);
+
+            var node = CreateNode(GunterSolutionItemType.Processor, selectedNode, processor.Id, processor.Name);
+            tv.SelectedNode = node;
+            node.EnsureVisible();
             return processor;
         }
+
+        private GunterProject? GetProject(string id)
+            => currentSolution.Projects.FirstOrDefault(x => x.Id == id);
+
+        private GunterProcessor? GetProcessor(GunterProject project, string id)
+        => project.Processors.Where(x => x.Id == selectedNode.Name).SingleOrDefault();
+
+        public IGunterInfoItem? NewInfoItem(GunterProcessor? processor = null)
+        {
+            if (processor is null)
+            {
+                var type = GetSolutionItemType(selectedNode);
+                if (type != GunterSolutionItemType.InfoSource)
+                    return null;
+
+                var project = GetProject(selectedNode.Parent.Name);
+                if (project is null)
+                    return null;
+
+                processor = GetProcessor(project, selectedNode.Name);
+            }
+
+            var target = processor.CreateInfoItem(string.Empty);
+            target.Name = $"New InfoItem";
+            processor.AddInfoItem(target.Id, target);
+            
+            var args = new GunterSolutionItemEventArgs
+            {
+                Id = processor.Id,
+                Component = processor,
+                SolutionItemType = GunterSolutionItemType.Processor
+            };
+
+            OnGunterItemAdded?.Invoke(this, args);
+            OnGunterItemShow?.Invoke(this, args);
+
+            var node = CreateNode(GunterSolutionItemType.Processor, selectedNode, processor.Id, processor.Name);
+            tv.SelectedNode = node;
+            node.EnsureVisible();
+
+            return target;
+        }
+
 
         private IGunterComponent? GetComponentFromNode(TreeNode node)
         {
@@ -227,6 +339,7 @@ namespace Controls
                 return GunterSolutionItemType.OtherItem;
         }
 
+        
         //
 
         private void nuevoToolStripButton_Click(object sender, EventArgs e)
@@ -262,7 +375,14 @@ namespace Controls
             var node = tv.GetNodeAt(new Point(e.X, e.Y));
             if (node is not null)
             {
-                eliminarToolStripMenuItem.Enabled = node.Tag.ToString() != GunterSolutionItemType.Solution.ToString();
+                var nodeType = node.Tag.ToString();
+                procesadorToolStripMenuItem.Enabled = nodeType == GunterSolutionItemType.Project.ToString();
+                infoItemToolStripMenuItem.Enabled = nodeType == GunterSolutionItemType.Processor.ToString();
+                infoSourceToolStripMenuItem.Enabled = nodeType == GunterSolutionItemType.InfoItem.ToString();
+                visualizationHandlerToolStripMenuItem.Enabled = nodeType == GunterSolutionItemType.InfoItem.ToString();
+
+                eliminarToolStripMenuItem.Enabled = nodeType != GunterSolutionItemType.Solution.ToString();
+
                 tv.SelectedNode = node;
                 selectedNode = node;
                 mnuProject.Show(tv, new Point(e.X, e.Y));
@@ -271,22 +391,7 @@ namespace Controls
 
         private void procesadorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var project = currentSolution.Projects.FirstOrDefault(x => x.Id == selectedNode.Name);
-            if (project is null)
-                return;
-
-            var processor = NewProcessor(project);
-            var args = new GunterSolutionItemEventArgs
-            {
-                Id = processor.Id,
-                Component = processor,
-                SolutionItemType = GunterSolutionItemType.Processor
-            };
-
-            OnGunterItemAdded?.Invoke(this, args);
-            OnGunterItemShow?.Invoke(this, args);
-
-            CreateNode(GunterSolutionItemType.Processor, selectedNode, processor.Id, processor.Name);
+            NewProcessor();
         }
 
         private void tv_DoubleClick(object sender, EventArgs e)
@@ -350,6 +455,16 @@ namespace Controls
 
             selectedNode.Remove();
             selectedNode = null;
+        }
+
+        private void propiedadesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void infoItemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NewInfoItem();
         }
     }
 }

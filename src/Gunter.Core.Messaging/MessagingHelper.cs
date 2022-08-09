@@ -1,104 +1,81 @@
 ﻿using Gunter.Core.Messaging.Models;
+using MQTTnet.Server;
 using MQTTnet;
+using Gunter.Core.Infrastructure.Helpers;
+using Gunter.Core.Infrastructure.Log;
 using MQTTnet.Client;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gunter.Core.Messaging
 {
     public class MessagingHelper
     {
-        //private const string brokerIp = "127.0.0.1";
-        //private const string clientId = "MessagingHelper";
+        public const string BrokerIp = "127.0.0.1";
 
-        //private readonly MqttClientOptions options;
-        //private readonly IMqttClient mqttClient;
 
         private static readonly Lazy<MessagingHelper> lazy = new(() => new MessagingHelper());
 
         public delegate void MessageReceivedEventHandler(object sender, MessageReceivedEventArgs e);
-        public event MessageReceivedEventHandler MessageReceived;
 
-        public static MessagingHelper Instance
-        {
-            get
-            {
-                return lazy.Value;
-            }
-        }
+        private MessagingClient messagingClient;
+        private MqttServer mqttServer;
 
-        public void ReceiveMessage(MessageReceivedEventArgs e)
-        {
-
-        }
+        public static MessagingHelper Instance { get { return lazy.Value; } }
 
         private MessagingHelper()
         {
-            //var factory = new MqttFactory();
-            //mqttClient = factory.CreateMqttClient();
-            //options = new MqttClientOptionsBuilder()
-            //    .WithTcpServer(brokerIp)
-            //    .WithClientId(clientId)
-            //    .Build();
+            AsyncHelper.RunSync(() => CreateServer());
+            messagingClient = CreateClient("Manager");
+            messagingClient.MessageReceived += (sender, e) =>
+            {
+                var a = e.Message;
+            };
         }
 
-        //public async Task Start(string brokerIp, string clientId, Action<string> callback = null)
-        //{
+        ~MessagingHelper()
+        {
+            AsyncHelper.RunSync(() => mqttServer.StopAsync());
+        }
 
-        //    mqttClient.ApplicationMessageReceivedAsync += MqttClient_ApplicationMessageReceivedAsync;
-        //    mqttClient.ConnectedAsync += MqttClient_ConnectedAsync;
-        //    mqttClient.ConnectingAsync += MqttClient_ConnectingAsync;
-        //    mqttClient.DisconnectedAsync += MqttClient_DisconnectedAsync;
-        //    mqttClient.InspectPackage += MqttClient_InspectPackage;
+        private async Task CreateServer()
+        {
+            var mqttFactory = new MqttFactory();
 
-        //    await mqttClient.ConnectAsync(options, CancellationToken.None);
-        //}
+            // The port for the default endpoint is 1883.
+            // The default endpoint is NOT encrypted!
+            // Use the builder classes where possible.
+            var mqttServerOptions = new MqttServerOptionsBuilder()
+                .WithDefaultEndpoint()
+                .Build();
 
-        //private async Task MqttClient_InspectPackage(MQTTnet.Diagnostics.InspectMqttPacketEventArgs arg)
-        //{
-        //    //
-        //}
+            // The port can be changed using the following API (not used in this example).
+            // new MqttServerOptionsBuilder()
+            //     .WithDefaultEndpoint()
+            //     .WithDefaultEndpointPort(1234)
+            //     .Build();
 
-        //private async Task MqttClient_DisconnectedAsync(MqttClientDisconnectedEventArgs arg)
-        //{
+            mqttServer = mqttFactory.CreateMqttServer(mqttServerOptions);
+            mqttServer.ClientConnectedAsync += (ClientConnectedEventArgs e) =>
+            {
+                GunterLog.Instance.Log(this, $"{e.ClientId} connected");
+                return Task.CompletedTask;
+            };
 
-        //    Console.WriteLine("MQTT Reconnecting");
-        //    await Task.Delay(TimeSpan.FromSeconds(5));
-        //    await mqttClient.ConnectAsync(options, CancellationToken.None);
-        //}
+            mqttServer.ApplicationMessageNotConsumedAsync += (ApplicationMessageNotConsumedEventArgs e) =>
+            {
+                return Task.CompletedTask;
+            };
 
-        //private async Task MqttClient_ConnectedAsync(MqttClientConnectedEventArgs arg)
-        //{
-        //    Debug.WriteLine("MQTT Connected");
-        //    await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder().WithTopic("MyTopic/test").Build());
-        //}
+            await mqttServer.StartAsync();
+        }
 
-        //private async Task MqttClient_ConnectingAsync(MqttClientConnectingEventArgs arg)
-        //{
-        //    //
-        //}
+        public MessagingClient CreateClient(string ownerId)
+            => new MessagingClient(ownerId);
 
-        //private async Task MqttClient_ApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs arg)
-        //{
-        //    var sb = new StringBuilder();
-        //    sb.AppendLine("### RECEIVED APPLICATION MESSAGE ###");
-        //    sb.AppendLine($"+ Topic = {arg.ApplicationMessage.Topic}");
-        //    sb.AppendLine($"+ Retain = {arg.ApplicationMessage.Retain}");
-        //    sb.AppendLine($"+ QoS = {arg.ApplicationMessage.QualityOfServiceLevel}");
-        //    sb.AppendLine();
-        //    sb.AppendLine($"+ Payload = {Encoding.UTF8.GetString(arg.ApplicationMessage.Payload)}");
-        //    sb.AppendLine();
 
-        //    MessageReceived?.Invoke(this, new MessageReceivedEventArgs(message));
-        //}
-
-        //public async Task SendCode(string message)
-        //{
-        //    await mqttClient.PublishAsync("MyTopic/test", message);
-        //}
+        public List<string> GetClientIds()
+        {
+            var clients = AsyncHelper.RunSync(() => mqttServer.GetClientsAsync());
+            return clients.Select(x => x.Id).ToList();
+        }
     }
 }

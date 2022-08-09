@@ -1,31 +1,21 @@
-﻿using AngleSharp;
-using Gunter.Core.Contracts;
-using Gunter.Extensions.Common;
+﻿using Gunter.Core.Contracts;
 using Gunter.Extensions.InfoSources.Specialized.Models;
 using Gunter.Infrastructure.Cache;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
-using System.Net;
 using Gunter.Core.Infrastructure.Helpers;
+using Gunter.Core.Models;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
     public class OpenWeatherInfoSource : InfoSourceBase<string>, IGunterInfoSource
     {
-        private OpenWeatherInfoItem.RootObject lastItem { get; set; }
+        private OpenWeatherInfoItem lastItem { get; set; }
         private readonly IGunterInfoItem _container;
         private readonly TimeSpan MinInterval = new TimeSpan();
 
         private Dictionary<string, string> data = new();
 
-        public OpenWeatherInfoItem.RootObject LastItem { get => lastItem; }
-
-        public SpecialProperties SpecialProperties { get; set; }
+        public OpenWeatherInfoItem LastItem { get => lastItem; }
 
         public bool IsOnline => true;
 
@@ -34,15 +24,15 @@ namespace Gunter.Extensions.InfoSources.Specialized
         private const string BaseUrl = "http://api.openweathermap.org/data/2.5";
         private const string APPID = "3ad3bbc4ae8ad572fc1b8252553aeb26"; // NEED NEW ONE
 
-        public string Category { get => InfoSourceConstants.CAT_WEATHER; }
-        public string SubCategry { get => InfoSourceConstants.SUB_NONOFFICIAL; }
+        public string Category { get => InfoSourceConstants.CAT_INFORMATION; }
+        public string SubCategory { get => InfoSourceConstants.SUB_WEATHER; }
 
 
         public OpenWeatherInfoSource() : base()
         {
-            Id = string.Empty;
-            Name = string.Empty;
+            Name = "OpenWeather InfoSource";
             SpecialProperties = new SpecialProperties();
+            _mandatoryInputs.AddOrUpdate("APPID", APPID);
             _mandatoryInputs.AddOrUpdate("city", "Chiloeches");
             lastItem = new();
         }
@@ -50,6 +40,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public OpenWeatherInfoSource(string id)
         {
             Id = id;
+            Name = "OpenWeather InfoSource";
         }
 
         public OpenWeatherInfoSource(IGunterInfoItem container, string id, string name)
@@ -57,6 +48,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             Id = id;
             Name = name;
             SpecialProperties = new SpecialProperties();
+            _mandatoryInputs.AddOrUpdate("APPID", APPID);
             _mandatoryInputs.AddOrUpdate("city", "Chiloeches");
             lastItem = new();
             _container = container;
@@ -66,28 +58,22 @@ namespace Gunter.Extensions.InfoSources.Specialized
             return lastItem;
         }
 
-        public void SetSpecialProperties(SpecialProperties specialProperties)
-        {
-            SpecialProperties = specialProperties;
-        }
-
         public override Dictionary<string, string> GetLastData()
         {
-            var config = Configuration.Default.WithDefaultLoader();
-            var context = BrowsingContext.New(config);
-            _mandatoryInputs.TryGetProperty("city", out string? city);
+            SpecialProperties.TryGetProperty("city", out string? city);
+            SpecialProperties.TryGetProperty("APPID", out string? appid);
 
             var fileUrl = ExternalDataCache.GenerateCacheFileName("OPENWEATHER", city, "weather");
-            OpenWeatherInfoItem.RootObject weather = null;
+            OpenWeatherInfoItem weather = null;
             if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
             {
                 var json = Encoding.UTF8.GetString(content);
-                weather = System.Text.Json.JsonSerializer.Deserialize<OpenWeatherInfoItem.RootObject>(json);
+                weather = System.Text.Json.JsonSerializer.Deserialize<OpenWeatherInfoItem>(json);
             }
             else
             {
-                weather = WeatherApi.getOneDayWeather(city);
-                var json = System.Text.Json.JsonSerializer.Serialize(weather, typeof(OpenWeatherInfoItem.RootObject));
+                weather = WeatherApi.getOneDayWeather(city, appid);
+                var json = System.Text.Json.JsonSerializer.Serialize(weather, typeof(OpenWeatherInfoItem));
                 ExternalDataCache.Instance.TryAddFile(json, fileUrl, DateTimeManipulationHelper.QuarterDayTimeSpan);
             }
 
@@ -107,9 +93,8 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         class WeatherApi
         {
-            public static OpenWeatherInfoItem.RootObject getOneDayWeather(string cityName)
+            public static OpenWeatherInfoItem getOneDayWeather(string cityName, string appid)
             {
-
                 var parameters = new Dictionary<string, string>
                 {
                     { "APPID", APPID },
@@ -117,8 +102,8 @@ namespace Gunter.Extensions.InfoSources.Specialized
                     { "units", "metric" }
                 };
 
-                var result = AsyncHelper.RunSync(() => WebManipulationHelper.Get<OpenWeatherInfoItem.RootObject>($"{BaseUrl}/weather", parameters));
-                return result;
+                var result = AsyncHelper.RunSync(() => WebManipulationHelper.Get<OpenWeatherResponseModel.RootObject>($"{BaseUrl}/weather", parameters));
+                return OpenWeatherInfoItem.FromOpenWeatherResponseModel(result);
 
                 //string url = string.Format("http://api.openweathermap.org/data/2.5/weather?q={0}&APPID={1}&units=metric", cityName, APPID);
                 //WebClient client = new WebClient();

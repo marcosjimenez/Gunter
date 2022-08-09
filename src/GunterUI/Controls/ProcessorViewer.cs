@@ -1,20 +1,7 @@
-﻿using Gunter.Core;
-using Gunter.Core.Contracts;
+﻿using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Helpers;
-using Gunter.Extensions.InfoSources.Specialized;
-using Gunter.Extensions.InfoSources;
-using Gunter.Extensions.Visualization.Handlers;
-using GunterUI.Extensions;
-using GunterUI;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.Xml.Linq;
 using Contracts;
+using Gunter.Core.BaseComponents;
 
 namespace Controls
 {
@@ -31,7 +18,6 @@ namespace Controls
         {
             InitializeComponent();
             _processor = new GunterProcessor();
-
         }
 
         public ProcessorViewer(IGunterProcessor processor)
@@ -140,5 +126,6 @@ namespace Controls
             lvInfoItems.View = View.Details;
             LoadListView();
         }
+
     }
 }

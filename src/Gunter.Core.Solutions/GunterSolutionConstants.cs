@@ -14,7 +14,7 @@ namespace Gunter.Core.Solutions
         Processor = 40,
         InfoItem = 50,
         InfoSource = 60,
-        Visualization = 70,
+        VisualizationHandler = 70,
         OtherItem = 100
     }
 

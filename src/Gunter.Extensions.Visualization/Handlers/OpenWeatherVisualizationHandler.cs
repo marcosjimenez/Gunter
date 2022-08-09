@@ -12,6 +12,8 @@ namespace Gunter.Extensions.Visualization.Handlers
 {
 	public class OpenWeatherVisualizationHandler : VisualizationHandlerBase<OpenWeatherInfoSource>, IGunterVisualizationHandler
     {
+        public new string Name { get; set; } = "Visor de OpenWeather";
+
         private OpenWeatherInfoSource objectToDraw;
 
         protected string HTML_Template = @"
@@ -81,18 +83,18 @@ namespace Gunter.Extensions.Visualization.Handlers
 				return string.Empty;
 
             var prediccion = objectToDraw.LastItem;
-			if (prediccion.main is null)
+			if (prediccion is null)
 				return String.Empty;
 
 			var html = HTML_Template
 			.ReplaceVariable("LOCALIDAD", objectToDraw.GetMandatoryParam("city")?.ToString() ?? string.Empty)
 			.ReplaceVariable("FECHAACTUALIZACION", string.Empty)
 			.ReplaceVariable("DIA1", DateTime.Now.ToLongDateString())
-			.ReplaceVariable("PROB_PRECIPITACION1", prediccion.rain?.rain.ToString() ?? "0")
-			.ReplaceVariable("MINIMA_TEMP", prediccion.main.temp_min.ToString())
-            .ReplaceVariable("MAXIMA_TEMP", prediccion.main.temp_max.ToString())
+			.ReplaceVariable("PROB_PRECIPITACION1", prediccion.RainProbability.ToString() ?? "0")
+			.ReplaceVariable("MINIMA_TEMP", prediccion.MinTemp.ToString())
+            .ReplaceVariable("MAXIMA_TEMP", prediccion.MaxTemp.ToString())
             .ReplaceVariable($"HORA_TEMPERATURA1", DateTime.Now.TimeOfDay.Hours.ToString("00"))
-            .ReplaceVariable($"TEMPERATURA1", prediccion.main.temp.ToString());
+            .ReplaceVariable($"TEMPERATURA1", prediccion.Temperature.ToString());
 
             return html;
         }

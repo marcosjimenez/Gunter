@@ -1,22 +1,13 @@
 ﻿using Gunter.Core.Contracts;
-using Gunter.Extensions.Common;
 using Gunter.Extensions.InfoSources.Specialized.Models;
-using Gunter.Infrastructure.Cache;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Gunter.Core.Infrastructure.Helpers;
-using System.Threading;
 using System.Collections.Concurrent;
-using Gunter.Core.Constants;
+using Gunter.Core.Models;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
@@ -26,14 +17,12 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public string LastItem { get => lastItem; }
 
-        public SpecialProperties SpecialProperties { get; set; }
-
         public bool IsOnline => true;
 
         public IGunterInfoItem Container { get => _container; }
 
         public string Category { get => InfoSourceConstants.CAT_COMMUNICATION; }
-        public string SubCategry { get => InfoSourceConstants.SUB_BOTS; }
+        public string SubCategory { get => InfoSourceConstants.SUB_BOTS; }
 
         private string lastItem { get; set; }
         private readonly IGunterInfoItem _container;
@@ -41,15 +30,15 @@ namespace Gunter.Extensions.InfoSources.Specialized
         private Dictionary<string, GunterBotInfoItem> data = new();
 
         private TelegramBotClient botClient;
-        private Telegram.Bot.Types.User botUser;
+        private User botUser;
         private CancellationTokenSource receivingCancelToken = new CancellationTokenSource();
 
         public GunterBotInfoSource()
         {
-            Id = string.Empty;
-            Name = string.Empty;
+            Name = "GunterBot InfoSource";
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate("token", "{YOUR_ACCESS_TOKEN_HERE}");
+            _mandatoryInputs.AddOrUpdate("command", "/start");
             _container = null;
             lastItem = string.Empty;
         }
@@ -65,6 +54,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             Name = name;
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate("token", "{YOUR_ACCESS_TOKEN_HERE}");
+            _mandatoryInputs.AddOrUpdate("command", "/start");
             lastItem = string.Empty;
             _container = container;
         }
@@ -82,16 +72,8 @@ namespace Gunter.Extensions.InfoSources.Specialized
             return lastItem;
         }
 
-        public void SetSpecialProperties(SpecialProperties specialProperties)
-        {
-            specialProperties.AddOrUpdate("command", string.Empty);
-            SpecialProperties = specialProperties;
-            InitBot();
-        }
-
         public override Dictionary<string, GunterBotInfoItem> GetLastData()
         {
-
             _mandatoryInputs.TryGetProperty("command", out string? command);
 
             while(!_messages.IsEmpty)

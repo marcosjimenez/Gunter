@@ -23,7 +23,18 @@ namespace Gunter.Core
         {
             LoadKnowTypes();
         }
-        
+
+        public List<Type> GetAvailableInfoSources()
+        {
+            List<Type> retVal = new();
+            var handlers = KnowTypes[typeof(IGunterInfoSource)];
+
+            retVal.AddRange(handlers.ToList());
+
+            return retVal;
+        }
+
+
         public List<Type> GetAvailableVisualizationHandlers()
         {
             List<Type> retVal = new();
@@ -34,11 +45,29 @@ namespace Gunter.Core
             return retVal;
         }
 
+        public static bool TrySetProperty<T>(T target, string propertyName, object value)
+        {
+            if (target is null)
+                return false;
+
+            var type = target?.GetType();
+            var prop = type?.GetProperty("propertyName");
+            try
+            {
+                prop.SetValue(target, value, null);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         public static string GetSystemTypeName(Type type)
             => $"{type}, {type.Namespace}";
 
-        public T? GetInstance<T>(string typeName, params object?[] args)
+        public T? CreateInstance<T>(string typeName, params object?[] args)
         {
             var type = GetAllTypes().Where(x => GetSystemTypeName(x) == typeName)
                 .FirstOrDefault();

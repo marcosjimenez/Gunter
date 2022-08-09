@@ -22,7 +22,7 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
 
         public static IGunterVisualizationHandler ToVisualizationHandler(GunterSavedVisualizationHandler infoItem)
         {
-            var retVal = GunterEnvironmentHelper.Instance.GetInstance<IGunterVisualizationHandler>(infoItem.SystemType, infoItem.Id);
+            var retVal = GunterEnvironmentHelper.Instance.CreateInstance<IGunterVisualizationHandler>(infoItem.SystemType, infoItem.Id);
             retVal.Name = infoItem.Name;
 
             return retVal;

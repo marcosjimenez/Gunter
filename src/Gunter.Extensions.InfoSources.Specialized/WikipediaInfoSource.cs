@@ -1,11 +1,11 @@
 ﻿using Gunter.Core.Contracts;
-using Gunter.Extensions.Common;
 using Gunter.Extensions.InfoSources.Specialized.Models;
 using Gunter.Infrastructure.Cache;
 using System.Text;
 using System.Text.Json;
 using WikiDotNet;
 using Gunter.Core.Infrastructure.Helpers;
+using Gunter.Core.Models;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
@@ -19,17 +19,15 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public bool IsOnline => true;
 
-        public SpecialProperties SpecialProperties { get; set; }
         public IGunterInfoItem Container { get => _container; }
 
         public string Category { get => InfoSourceConstants.CAT_COMMUNICATION; }
-        public string SubCategry { get => InfoSourceConstants.SUB_ENCYCLOPAEDIA; }
+        public string SubCategory { get => InfoSourceConstants.SUB_ENCYCLOPAEDIA; }
 
 
         public WikipediaInfoSource()
         {
-            Id = string.Empty;
-            Name = string.Empty;
+            Name = "Wikipedia InfoSource";
             _container = null;
             InitializeProperties();
         }
@@ -37,6 +35,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public WikipediaInfoSource(string id)
         {
             Id = id;
+            Name = "Wikipedia InfoSource";
         }
 
         public WikipediaInfoSource(IGunterInfoItem container, string id, string name)
@@ -115,11 +114,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
             }
 
             return data;
-        }
-
-        public void SetSpecialProperties(SpecialProperties specialProperties)
-        {
-            SpecialProperties = specialProperties;
         }
 
         public void Update()

@@ -1,12 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Gunter.Extensions.InfoSources.Specialized.Models
+﻿namespace Gunter.Extensions.InfoSources.Specialized.Models
 {
     public class OpenWeatherInfoItem
+    {
+        public double Temperature { get; set; } = 0;
+        public double Pressure { get; set; } = 0;
+        public int Humidity { get; set; } = 0;
+
+        public double MinTemp { get; set; } = 0;
+        public double MaxTemp { get; set; } = 0;
+
+        public double SeaLevel { get; set; } = 0;
+        public double GroundLevel { get; set; } = 0;
+
+        public double RainProbability { get; set; } = 0;
+
+        public static OpenWeatherInfoItem? FromOpenWeatherResponseModel(OpenWeatherResponseModel.RootObject model)
+        => model  is null ? null : new OpenWeatherInfoItem {
+            Temperature = model.main.temp,
+            GroundLevel = model.main.grnd_level,
+            Humidity = model.main.humidity,
+            MaxTemp = model.main.temp_max,
+            MinTemp = model.main.temp_min,
+            Pressure = model.main.pressure,
+            SeaLevel = model.main.sea_level,
+            RainProbability = model.rain.rain
+        };
+    }
+
+    public class OpenWeatherResponseModel
     {
         public class Coord
         {
@@ -17,7 +38,7 @@ namespace Gunter.Extensions.InfoSources.Specialized.Models
         public class Weather
         {
             public int id { get; set; }
-            public string main { get; set; }
+            public Main main { get; set; }
             public string description { get; set; }
             public string icon { get; set; }
         }

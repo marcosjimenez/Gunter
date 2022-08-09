@@ -14,25 +14,10 @@ namespace Gunter.Extensions.InfoSources
         public const string CAT_INFORMATION = "Servicios de Información";
         public const string SUB_ENCYCLOPAEDIA = "Encyclopaedia";
         public const string SUB_SOCIALNETWORKS = "Redes sociales";
+        public const string SUB_WEATHER = "Meteorología";
 
-        public const string CAT_WEATHER = "Meteorología";
-        public const string SUB_OFFICIAL = "Predicciones Oficiales";
-        public const string SUB_NONOFFICIAL = "Predicciones No Oficiales";
-
-
-        private static string[] Gategories = { 
-            CAT_COMMUNICATION, 
-            CAT_INFORMATION, 
-            CAT_WEATHER 
-        };
-
-        private static string[] SubCategories =
-        {
-            SUB_OFFICIAL,
-            SUB_NONOFFICIAL,
-            SUB_ENCYCLOPAEDIA,
-            SUB_BOTS
-        };
+        public const string CAT_MEASURED_VALUES = "Valores medidos";
+        public const string SUB_PERFORMANCE_COUNTERS = "Contadores de rendimiento";
 
     }
 }

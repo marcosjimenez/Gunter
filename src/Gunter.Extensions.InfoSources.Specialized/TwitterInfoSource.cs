@@ -1,22 +1,9 @@
-﻿using Gunter.Extensions.Common;
-using Gunter.Core.Contracts;
-using Gunter.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Helpers;
+using Gunter.Core.Models;
 using Gunter.Extensions.InfoSources.Specialized.Models;
 using System.Collections.Concurrent;
-using Telegram.Bot.Exceptions;
-using Telegram.Bot.Polling;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types;
-using Telegram.Bot;
 using Tweetinvi;
-using Gunter.Infrastructure.Cache;
-using Tweetinvi.Parameters;
 using Tweetinvi.Models;
 
 namespace Gunter.Extensions.InfoSources.Specialized
@@ -28,14 +15,12 @@ namespace Gunter.Extensions.InfoSources.Specialized
         private TwitterClient twitterClient;
         public TwitterInfoItem LastItem { get => lastItem; }
 
-        public SpecialProperties SpecialProperties { get; set; }
-
         public bool IsOnline => true;
 
         public IGunterInfoItem Container { get => _container; }
 
         public string Category { get => InfoSourceConstants.CAT_COMMUNICATION; }
-        public string SubCategry { get => InfoSourceConstants.SUB_SOCIALNETWORKS; }
+        public string SubCategory { get => InfoSourceConstants.SUB_SOCIALNETWORKS; }
 
         private TwitterInfoItem lastItem { get; set; }
         private readonly IGunterInfoItem _container;
@@ -43,8 +28,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
         private Dictionary<string, TwitterInfoItem> data = new();
         public TwitterInfoSource()
         {
-            Id = string.Empty;
-            Name = string.Empty;
+            Name = "Twitter InfoSource";
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate("CONSUMER_KEY", "{YOUR_ACCESS_TOKEN_HERE}");
             _mandatoryInputs.AddOrUpdate("CONSUMER_SECRET", "{YOUR_ACCESS_TOKEN_HERE}");
@@ -85,11 +69,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public object GetData()
         {
             return lastItem;
-        }
-
-        public void SetSpecialProperties(SpecialProperties specialProperties)
-        {
-            SpecialProperties = specialProperties;
         }
 
         public override Dictionary<string, TwitterInfoItem> GetLastData()

@@ -1,15 +1,5 @@
-﻿using AngleSharp.Io;
-using Gunter.Core.Infrastructure.Log;
-using GunterUI.Extensions;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using static Gunter.Core.Models.GunterLogItem;
-using static System.Net.Mime.MediaTypeNames;
+﻿using GunterUI.Extensions;
+using static Gunter.Core.Infrastructure.Log.GunterLogItem;
 
 namespace Controls
 {

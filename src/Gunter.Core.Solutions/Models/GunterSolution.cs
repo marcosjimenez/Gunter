@@ -1,16 +1,22 @@
-﻿namespace Gunter.Core.Solutions.Models
+﻿using Gunter.Core.Constants;
+using Gunter.Core.Contracts;
+
+namespace Gunter.Core.Solutions.Models
 {
-    public class GunterSolution
+    public class GunterSolution : IGunterComponent
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
         public string Name { get; set; } = "New Solution";
+
+        public string ClassId => IdentificationConstants.CLASSID.GunterSolution;
 
         public string FileName { get; set; } = string.Empty;
         public string FilePath { get; set; } = string.Empty;
 
         public IList<GunterSolutionFolder> Folders { get; set; }
         public virtual IList<GunterProject> Projects { get; set; }
+
 
         public GunterSolution()
         {
