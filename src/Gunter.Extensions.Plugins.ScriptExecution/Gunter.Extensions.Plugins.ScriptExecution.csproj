@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
+    <ProjectReference Include="..\Gunter.Extensions.InfoSources\Gunter.Extensions.InfoSources.csproj" />
+    <ProjectReference Include="..\Gunter.Infrastructure\Gunter.Core.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="peliculas_scrip.py">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

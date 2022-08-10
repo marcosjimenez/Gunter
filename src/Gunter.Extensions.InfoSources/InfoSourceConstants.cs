@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Gunter.Extensions.InfoSources
+﻿namespace Gunter.Extensions.InfoSources
 {
     public static class InfoSourceConstants
     {
@@ -19,5 +13,7 @@ namespace Gunter.Extensions.InfoSources
         public const string CAT_MEASURED_VALUES = "Valores medidos";
         public const string SUB_PERFORMANCE_COUNTERS = "Contadores de rendimiento";
 
+        public const string CAT_EXECUTION = "Ejecución de comandos";
+        public const string SUB_SCRIPT = "Script";
     }
 }
