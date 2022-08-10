@@ -200,7 +200,24 @@ namespace Controls
 
         private void aboutJsonEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+
+            using var dlg = new Form
+            {
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = "About",
+                BackgroundImage = pictureBox1.Image,
+                StartPosition = FormStartPosition.CenterParent,
+                MaximizeBox = false,
+                MinimizeBox = false,
+                Size = new Size(pictureBox1.Image.Size.Width + 20, pictureBox1.Image.Size.Height + 20)
+            };
+            dlg.MouseDown += (sender, e) =>
+            {
+                (sender as Form).Close();
+            };
+
+            dlg.ShowDialog();
+
         }
 
         private void jsonValueTextBox_TextChanged(object sender, EventArgs e)

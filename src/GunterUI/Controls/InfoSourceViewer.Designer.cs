@@ -38,15 +38,11 @@
             this.specialPropertiesViewer1 = new GunterUI.SpecialPropertiesViewer();
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.treeView1 = new System.Windows.Forms.TreeView();
-            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.jsonViewer = new Controls.JsonViewer();
             ((System.ComponentModel.ISupportInitialize)(this.redLed)).BeginInit();
             this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
@@ -131,7 +127,6 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Location = new System.Drawing.Point(3, 105);
@@ -139,40 +134,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(755, 405);
             this.tabControl1.TabIndex = 58;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.treeView1);
-            this.tabPage1.Controls.Add(this.propertyGrid1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 29);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(747, 372);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Data";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // treeView1
-            // 
-            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.treeView1.Location = new System.Drawing.Point(6, 6);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(407, 360);
-            this.treeView1.TabIndex = 1;
-            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
-            this.treeView1.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView1_NodeMouseClick);
-            // 
-            // propertyGrid1
-            // 
-            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid1.Location = new System.Drawing.Point(419, 6);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-            this.propertyGrid1.Size = new System.Drawing.Size(325, 363);
-            this.propertyGrid1.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -198,10 +159,11 @@
             // 
             // jsonViewer
             // 
-            this.jsonViewer.Location = new System.Drawing.Point(7, 8);
+            this.jsonViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.jsonViewer.Location = new System.Drawing.Point(3, 3);
             this.jsonViewer.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.jsonViewer.Name = "jsonViewer";
-            this.jsonViewer.Size = new System.Drawing.Size(733, 356);
+            this.jsonViewer.Size = new System.Drawing.Size(741, 366);
             this.jsonViewer.TabIndex = 0;
             // 
             // InfoSourceViewer
@@ -220,7 +182,6 @@
             this.Size = new System.Drawing.Size(758, 513);
             ((System.ComponentModel.ISupportInitialize)(this.redLed)).EndInit();
             this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -239,10 +200,7 @@
         private GunterUI.SpecialPropertiesViewer specialPropertiesViewer1;
         private Label label1;
         private TabControl tabControl1;
-        private TabPage tabPage1;
         private TabPage tabPage2;
-        private PropertyGrid propertyGrid1;
-        private TreeView treeView1;
         private TabPage tabPage3;
         private JsonViewer jsonViewer;
     }

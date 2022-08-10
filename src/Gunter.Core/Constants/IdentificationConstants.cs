@@ -19,13 +19,13 @@
 
             private static Dictionary<string, string> ClassIds = new Dictionary<string, string>
             {
-                    { "GunterSolution", GunterSolution},
-                    { "GunterSolutionFolder", GunterSolutionFolder},
-                    { "GunterProject", GunterProject},
-                    { "Processor", GunterProcessor},
-                    { "InfoItem", GunterInfoItem    },
-                    { "InfoSource", GunterInfoSource},
-                    { "VisualizationHandler", GunterVisualizationHandler },
+                    { GunterSolution, "GunterSolution" },
+                    { GunterSolutionFolder, "GunterSolutionFolder" },
+                    { GunterProject, "GunterProject" },
+                    { GunterProcessor, "Processor" },
+                    { GunterInfoItem, "InfoItem" },
+                    { GunterInfoSource, "InfoSource" },
+                    { GunterVisualizationHandler , "VisualizationHandler"}
             };
 
             public static Dictionary<string, string> GetClassIds() => ClassIds;

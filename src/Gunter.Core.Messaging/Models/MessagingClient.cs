@@ -9,7 +9,7 @@ namespace Gunter.Core.Messaging.Models
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        public event MessagingHelper.MessageReceivedEventHandler MessageReceived;
+        public event MessagingHelper.MessageReceivedEventHandler TextMessageReceived;
         private IMqttClient? mqttClient;
 
         public MessagingClient(string ownerId)
@@ -63,14 +63,12 @@ namespace Gunter.Core.Messaging.Models
             if (arg.Reason == MqttClientDisconnectReason.NormalDisconnection)
                 return;
 
-            //Console.WriteLine("MQTT Reconnecting");
             await Task.Delay(TimeSpan.FromSeconds(5));
             await ConnectAsync();
         }
 
         private async Task MqttClient_ConnectedAsync(MqttClientConnectedEventArgs arg)
         {
-            //Debug.WriteLine("MQTT Connected");
             var mqttSubscribeOptions = new MqttFactory().CreateSubscribeOptionsBuilder()
                 .WithTopicFilter(f => { f.WithTopic($"Components/{Id}"); })
                 .Build();
@@ -94,7 +92,7 @@ namespace Gunter.Core.Messaging.Models
             sb.AppendLine($"+ Payload = {Encoding.UTF8.GetString(arg.ApplicationMessage.Payload)}");
             sb.AppendLine();
 
-            MessageReceived?.Invoke(this, new MessageReceivedEventArgs(sb.ToString()));
+            TextMessageReceived?.Invoke(this, new TextMessageReceivedEventArgs(sb.ToString()));
 
             return Task.CompletedTask;
         }
@@ -103,12 +101,12 @@ namespace Gunter.Core.Messaging.Models
         {
             await ConnectAsync();
 
-            var appMessage = new MqttApplicationMessage
-            {
-                Payload = Encoding.UTF8.GetBytes(message),
-                Topic = $"Components/{componentId}"
-            };
-            await mqttClient.PublishAsync(appMessage);
+            var appMessage = new MqttApplicationMessageBuilder()
+                .WithTopic($"Components/{componentId}")
+                .WithPayload(Encoding.UTF8.GetBytes(message))
+                .Build();
+
+            await mqttClient.PublishAsync(appMessage, CancellationToken.None);
         }
     }
 }

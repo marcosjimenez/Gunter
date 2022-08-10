@@ -6,6 +6,7 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
 {
     internal class WindowsPerformanceCounters
     {
+        private const string InstanceName = "WPCountersInfoSource";
 
         private static readonly Lazy<WindowsPerformanceCounters> lazy = new (() => new WindowsPerformanceCounters());
 
@@ -44,9 +45,35 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
         public List<string> GetCounters(string categoryName)
         {
             ThrowIfNoWindows();
-            var category = new PerformanceCounterCategory(categoryName);
-            var counters = category.GetCounters();
-            return counters.Select(x => x.CounterName).ToList();
+            PerformanceCounterCategory category = PerformanceCounterCategory.GetCategories().First(c => c.CategoryName == categoryName);
+            Console.WriteLine("{0} [{1}]", category.CategoryName, category.CategoryType);
+
+            string[] instanceNames = category.GetInstanceNames();
+
+            var retVal = new List<string>();
+            if (instanceNames.Length == 0)
+            {
+                // SingleInstance categories
+                retVal = ListInstances(category, string.Empty);
+            }
+            else
+            {
+                // MultiInstance categories
+                foreach (string instanceName in instanceNames)
+                    retVal.AddRange(ListInstances(category, instanceName));
+            }
+
+            return retVal;
+        }
+
+        private static List<string> ListInstances(PerformanceCounterCategory category, string instanceName)
+        {
+            PerformanceCounter[] counters = category.GetCounters(instanceName);
+            var retVal = new List<string>();
+            foreach (PerformanceCounter counter in counters)
+                retVal.Add(counter.CounterName);
+
+            return retVal;
         }
 
         public void AddCounter(string counterName, string categoryName)
@@ -65,23 +92,24 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
             counter = null;
         }
 
-        public List<WPCountersInfoSourceItem> GetCurrentData()
+        public WPCountersInfoSourceItem GetCurrentData()
         {
             ThrowIfNoWindows();
             
-            var retval = new List<WPCountersInfoSourceItem>();
+            var retVal = new List<WPCountersInfoSourceItemData>();
 
             foreach(var counter in counters)
             {
                 var sample = counter.NextSample();
-                retval.Add(new WPCountersInfoSourceItem
+                retVal.Add(new WPCountersInfoSourceItemData
                 {
                     Name = $"{counter.CounterName} [{counter.InstanceName}]",
                     BaseValue = sample.BaseValue,
                     RawValue = sample.RawValue
                 });
             }
-            return retval;
+
+            return new WPCountersInfoSourceItem { CounterData = retVal };
         }
 
     }

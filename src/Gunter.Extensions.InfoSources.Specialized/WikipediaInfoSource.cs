@@ -46,7 +46,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             InitializeProperties();
         }
 
-        public object GetData()
+        public object GetLastItem()
         {
             GetLastData();
             return lastItem;

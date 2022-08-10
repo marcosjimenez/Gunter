@@ -73,5 +73,28 @@ namespace GunterUI
             OnPropertyChanged?.Invoke(this, new PropertyUpdatedEventArgs { Property = (SpecialProperty)property });
 
         }
+
+        private void addToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var newValue = Prompt.ShowDialog("Nueva variable", "Añadir", string.Empty);
+            if (string.IsNullOrWhiteSpace(newValue))
+                return;
+
+            SpecialProperties.AddOrUpdate(newValue, string.Empty, out var property);
+            OnPropertyChanged?.Invoke(this, new PropertyUpdatedEventArgs { Property = (SpecialProperty)property });
+        }
+
+        private void listView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+
+            var bEnable = listView1.HitTest(e.X, e.Y) is not null;
+            editToolStripMenuItem.Enabled = bEnable;
+            removeToolStripMenuItem.Enabled = bEnable;
+
+            mnuProperty.Show(listView1, e.X, e.Y);
+
+        }
     }
 }

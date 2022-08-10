@@ -76,6 +76,7 @@ namespace Gunter.Infrastructure.Cache
             else
             {
                 _files.Add(name, cachedItem);
+                ToFileSystem();
             }
         }
 

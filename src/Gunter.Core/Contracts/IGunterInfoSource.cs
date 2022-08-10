@@ -11,7 +11,7 @@ namespace Gunter.Core.Contracts
         IGunterInfoItem Container { get; }
         void SetSpecialProperties(SpecialProperties specialProperties);
         void Update();
-        object GetData();
+        dynamic GetLastItem();
         SpecialProperties GetMandatoryParams();
     }
 }

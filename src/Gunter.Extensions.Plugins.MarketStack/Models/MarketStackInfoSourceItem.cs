@@ -9,5 +9,7 @@ namespace Gunter.Extensions.Plugins.MarketStack.Models
 
         [JsonProperty("Currencies")]
         public MarketStackCurrenciesResponse Currencies { get; set; } = new();
+
+        public List<MarketStackMarketIndicesResponse> MarketIndices { get; set; } = new();
     }
 }

@@ -66,7 +66,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
         //    //AsyncHelper.RunSync(() => twitterClient.CloseAsync());
         //}
 
-        public object GetData()
+        public object GetLastItem()
         {
             return lastItem;
         }
@@ -124,7 +124,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public void Update()
         {
             GetLastData();
-            _container?.InfoSourceUpdated(this);
         }
     }
 }

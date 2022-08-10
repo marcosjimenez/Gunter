@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Gunter.Extensions.InfoSources.Specialized\Gunter.Extensions.InfoSources.Specialized.csproj" />
+    <ProjectReference Include="..\Gunter.Extensions.Plugins.WindowsPerformanceCounters\Gunter.Extensions.Plugins.WindowsPerformanceCounters.csproj" />
   </ItemGroup>
 
 </Project>

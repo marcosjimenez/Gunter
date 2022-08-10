@@ -15,8 +15,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
     {
         private ConcurrentBag<GunterBotInfoItem> _messages = new();
 
-        public string LastItem { get => lastItem; }
-
         public bool IsOnline => true;
 
         public IGunterInfoItem Container { get => _container; }
@@ -24,7 +22,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public string Category { get => InfoSourceConstants.CAT_COMMUNICATION; }
         public string SubCategory { get => InfoSourceConstants.SUB_BOTS; }
 
-        private string lastItem { get; set; }
         private readonly IGunterInfoItem _container;
 
         private Dictionary<string, GunterBotInfoItem> data = new();
@@ -40,7 +37,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
             _mandatoryInputs.AddOrUpdate("token", "{YOUR_ACCESS_TOKEN_HERE}");
             _mandatoryInputs.AddOrUpdate("command", "/start");
             _container = null;
-            lastItem = string.Empty;
         }
 
         public GunterBotInfoSource(string id)
@@ -55,7 +51,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate("token", "{YOUR_ACCESS_TOKEN_HERE}");
             _mandatoryInputs.AddOrUpdate("command", "/start");
-            lastItem = string.Empty;
             _container = container;
         }
 
@@ -65,11 +60,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
                 receivingCancelToken.Cancel();
 
             //AsyncHelper.RunSync(() => botClient.CloseAsync());
-        }
-
-        public object GetData()
-        {
-            return lastItem;
         }
 
         public override Dictionary<string, GunterBotInfoItem> GetLastData()
@@ -179,7 +169,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public void Update()
         {
             GetLastData();
-            _container?.InfoSourceUpdated(this);
         }
     }
 }

@@ -99,7 +99,7 @@ namespace Controls
         public void GetClient()
         {
             messagingClient = MessagingHelper.Instance.CreateClient("ConsoleViewer");
-            messagingClient.MessageReceived += (sender, e) =>
+            messagingClient.TextMessageReceived += (sender, e) =>
             {
                 AddText($"Received mqtt message: {e.Message}");
             };

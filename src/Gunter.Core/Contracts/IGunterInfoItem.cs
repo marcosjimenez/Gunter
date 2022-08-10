@@ -21,8 +21,6 @@ namespace Gunter.Core.Contracts
 
         void Update();
 
-        void InfoSourceUpdated(IGunterInfoSource source);
-
         IGunterProcessor GetProcessor();
 
     }

@@ -53,7 +53,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             return _mandatoryInputs;
         }
 
-        public object GetData()
+        public object GetLastItem()
         {
             return lastItem;
         }
@@ -107,7 +107,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public void Update()
         {
             GetLastData();
-            _container?.InfoSourceUpdated(this);
         }
     }
 }

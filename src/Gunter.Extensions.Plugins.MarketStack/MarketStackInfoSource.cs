@@ -1,4 +1,5 @@
-﻿using Gunter.Core.Contracts;
+﻿using AngleSharp.Text;
+using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
 using Gunter.Extensions.InfoSources;
@@ -30,6 +31,7 @@ namespace Gunter.Extensions.Plugins.MarketStack
         public IGunterInfoItem Container { get => _container; }
 
         private const string APIKEY = "{ YOUR APIKEY HERE }";
+        private const string SELECTED_EXCHANGE = "Selected Exchange (Mic)";
 
         public string Category { get => InfoSourceConstants.CAT_INFORMATION; }
         public string SubCategory { get => InfoSourceConstants.SUB_WEATHER; }
@@ -39,6 +41,7 @@ namespace Gunter.Extensions.Plugins.MarketStack
         {
             Name = "MarketStack InfoSource";
             SpecialProperties = new SpecialProperties();
+            SpecialProperties.AddOrUpdate(SELECTED_EXCHANGE, string.Empty);
             _mandatoryInputs.AddOrUpdate("APIKEY", APIKEY);
             lastItem = new();
         }
@@ -57,7 +60,7 @@ namespace Gunter.Extensions.Plugins.MarketStack
             lastItem = new();
             _container = container;
         }
-        public object GetData()
+        public object GetLastItem()
         {
 
             if (lastItem is null ||
@@ -71,19 +74,37 @@ namespace Gunter.Extensions.Plugins.MarketStack
         public override Dictionary<string, MarketStackInfoSourceItem> GetLastData()
         {
             SpecialProperties.TryGetProperty("APIKEY", out string? apiKey);
+            SpecialProperties.TryGetProperty(SELECTED_EXCHANGE, out string? mic);
 
-            var exchanges = TryGetFromMarketStack<MarketStackExchangeResponse>(apiKey, MarketStackAPI.Endpoint_Exchanges);
-            if (exchanges is not null)
-            {
-                lastItem.Exchanges = exchanges;
-            }
-
-            var currencies = TryGetFromMarketStack<MarketStackCurrenciesResponse>(apiKey, MarketStackAPI.Endpoint_Currencies);
+            var currencies = TryGetFromMarketStack<MarketStackCurrenciesResponse>(
+                apiKey, 
+                MarketStackAPI.Endpoint_Currencies, 
+                DateTimeManipulationHelper.OneMonth);
             if (currencies is not null)
             {
                 lastItem.Currencies = currencies;
             }
 
+            var exchanges = TryGetFromMarketStack<MarketStackExchangeResponse>(
+                apiKey,
+                MarketStackAPI.Endpoint_Exchanges,
+                DateTimeManipulationHelper.OneMonth);
+            if (exchanges is not null)
+            {
+                lastItem.Exchanges = exchanges;
+            }
+
+            foreach(var item in exchanges.Exchanges.Where(x => x.Mic == mic))
+            {
+                var marketIndices = TryGetFromMarketStack<MarketStackMarketIndicesResponse>(
+                    apiKey, 
+                    MarketStackAPI.Endpoint_MarketIndices, 
+                    DateTimeManipulationHelper.OneDayTimeSpan,
+                    $"Exchange_{item.Mic}",
+                    new Dictionary<string, string> { { "symbols", item.Mic } });
+
+                lastItem.MarketIndices.Add(marketIndices);
+            }
 
             if (data.ContainsKey(apiKey))
                 data[apiKey] = lastItem;
@@ -93,9 +114,14 @@ namespace Gunter.Extensions.Plugins.MarketStack
             return data;
         }
 
-        private T? TryGetFromMarketStack<T>(string apiKey, string endpoint)
+        private T? TryGetFromMarketStack<T>(
+            string apiKey, 
+            string endpoint, 
+            TimeSpan expirationIfCached,
+            string? cachedFilePrefix = "MARKETSTACK",
+            Dictionary<string, string> parameters = null)
         {
-            var fileUrl = ExternalDataCache.GenerateCacheFileName("MARKETSTACK", apiKey, endpoint);
+            var fileUrl = ExternalDataCache.GenerateCacheFileName(cachedFilePrefix, apiKey, endpoint);
             T? marketData;
             if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
             {
@@ -104,9 +130,9 @@ namespace Gunter.Extensions.Plugins.MarketStack
             }
             else
             {
-                marketData = MarketStackAPI.GetFromEndPoint<T>(apiKey, endpoint);
+                marketData = MarketStackAPI.GetFromEndPoint<T>(apiKey, endpoint, parameters);
                 var json = System.Text.Json.JsonSerializer.Serialize(marketData, typeof(T));
-                ExternalDataCache.Instance.TryAddFile(json, fileUrl, DateTimeManipulationHelper.QuarterDayTimeSpan);
+                ExternalDataCache.Instance.TryAddFile(json, fileUrl, expirationIfCached);
             }
 
             return marketData;
@@ -115,7 +141,6 @@ namespace Gunter.Extensions.Plugins.MarketStack
         public void Update()
         {
             GetLastData();
-            _container?.InfoSourceUpdated(this);
         }
     }
 }

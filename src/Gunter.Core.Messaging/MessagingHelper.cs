@@ -14,7 +14,7 @@ namespace Gunter.Core.Messaging
 
         private static readonly Lazy<MessagingHelper> lazy = new(() => new MessagingHelper());
 
-        public delegate void MessageReceivedEventHandler(object sender, MessageReceivedEventArgs e);
+        public delegate void MessageReceivedEventHandler(object sender, TextMessageReceivedEventArgs e);
 
         private MessagingClient messagingClient;
         private MqttServer mqttServer;
@@ -25,7 +25,7 @@ namespace Gunter.Core.Messaging
         {
             AsyncHelper.RunSync(() => CreateServer());
             messagingClient = CreateClient(ManagerID);
-            messagingClient.MessageReceived += (sender, e) =>
+            messagingClient.TextMessageReceived += (sender, e) =>
             {
                 var a = e.Message;
             };
@@ -70,7 +70,6 @@ namespace Gunter.Core.Messaging
 
         public MessagingClient CreateClient(string ownerId)
             => new MessagingClient(ownerId);
-
 
         public List<string> GetClientIds()
         {

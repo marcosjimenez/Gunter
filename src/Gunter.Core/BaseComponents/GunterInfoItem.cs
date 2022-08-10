@@ -63,7 +63,7 @@ namespace Gunter.Core.BaseComponents
         public void UpdateSources()
         {
             var tasks = InfoSources
-                .Select(i => Task.Factory.StartNew(() => i.GetData()))
+                .Select(i => Task.Factory.StartNew(() => i.GetLastItem()))
                 .ToArray();
 
             Task.WaitAll(tasks);

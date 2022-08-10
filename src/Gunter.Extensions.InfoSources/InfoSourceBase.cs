@@ -11,6 +11,8 @@ namespace Gunter.Extensions.InfoSources
 {
     public abstract class InfoSourceBase<T> : IMessagingComponent
     {
+        public T LastItem { get; protected set; }
+
         public string ClassId { get => IdentificationConstants.CLASSID.GunterInfoSource; }
 
         public string Id { get; protected set; } = Guid.NewGuid().ToString();
@@ -30,6 +32,12 @@ namespace Gunter.Extensions.InfoSources
         {
             Id = id;
             GetClient();
+        }
+        public abstract Dictionary<string, T> GetLastData();
+
+        public object GetLastItem()
+        {
+            return LastItem;
         }
 
         public void SetSpecialProperties(SpecialProperties specialProperties)
@@ -52,8 +60,6 @@ namespace Gunter.Extensions.InfoSources
             return null;
         }
 
-        public abstract Dictionary<string, T> GetLastData();
-
         protected void AddMandatoryParam(string key, string value)
         {
             if (!_mandatoryInputs.TryGetProperty(key, out var input))
@@ -69,7 +75,7 @@ namespace Gunter.Extensions.InfoSources
         public void GetClient()
         {
             messagingClient = MessagingHelper.Instance.CreateClient(Id);
-            messagingClient.MessageReceived += (sender, e) =>
+            messagingClient.TextMessageReceived += (sender, e) =>
             {
                 GunterLog.Instance.Log(this, e.Message);
             };

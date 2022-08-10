@@ -2,6 +2,7 @@
 using Gunter.Core.Models;
 using Gunter.Extensions.InfoSources;
 using Gunter.Extensions.Plugins.WindowsPerformanceCounters.Models;
+using System.Diagnostics;
 using System.Text;
 
 namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
@@ -29,10 +30,11 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
 
         public WPCountersInfoSource() : base()
         {
-            Name = "MarketStack InfoSource";
+            Name = "Windows Performance Counters InfoSource";
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate(MachineName, Environment.MachineName);
             _mandatoryInputs.AddOrUpdate(Priority, 1);
+            AddAllCounters();
             lastItem = new();
         }
 
@@ -48,10 +50,29 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate(MachineName, Environment.MachineName);
             _mandatoryInputs.AddOrUpdate(Priority, 1);
+            AddAllCounters();
             lastItem = new();
             _container = container;
         }
-        public object GetData()
+
+        private void AddAllCounters()
+        {
+            //var categories = WindowsPerformanceCounters.Instance.GetCategories();
+
+            //foreach(var cat in categories)
+            //{ 
+            //    var counters = WindowsPerformanceCounters.Instance.GetCounters(cat);
+            //    foreach(var counter in counters)
+            //        _mandatoryInputs.AddOrUpdate(counter, false);
+            //}
+        }
+
+        public void CreateCounter(string counterName, string categoryName)
+        {
+            WindowsPerformanceCounters.Instance.AddCounter(counterName, categoryName);
+        }
+
+        public object GetLastItem()
         {
 
             if (lastItem is null)
@@ -64,15 +85,12 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
         {
             SpecialProperties.TryGetProperty(MachineName, out string? machineName);
 
-            ////var exchanges = TryGetFromMarketStack<WPCountersInfoSourceItem>(apiKey, MarketStackAPI.Endpoint_Exchanges);
-            //if (exchanges is not null)
-            //{
-            //    lastItem.Exchanges = exchanges;
-            //}
+            var countersData = WindowsPerformanceCounters.Instance.GetCurrentData();
+            if (countersData.CounterData.Count == 0)
+                return data;
 
-            //WindowsPerformanceCounters.Instance.
-
-
+            lastItem = countersData;
+                
             if (data.ContainsKey(machineName))
                 data[machineName] = lastItem;
             else
@@ -84,7 +102,6 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
         public void Update()
         {
             GetLastData();
-            _container?.InfoSourceUpdated(this);
         }
     }
 }

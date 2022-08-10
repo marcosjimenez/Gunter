@@ -21,10 +21,9 @@ namespace Gunter.Core.Infrastructure.Helpers
 
         public static TimeSpan DEFAULT_EXPIRATION = new TimeSpan(0, 0, 30);
         public static TimeSpan OneDayTimeSpan => new TimeSpan(1, 0, 0, 0);
-
         public static TimeSpan HalfDayTimeSpan => new TimeSpan(0, 12, 0, 0);
-
         public static TimeSpan QuarterDayTimeSpan => new TimeSpan(0, 6, 0, 0);
+        public static TimeSpan OneMonth => new TimeSpan(30, 0, 0, 0);
 
         public static string GetRelativeDateTime(DateTime date)
         {

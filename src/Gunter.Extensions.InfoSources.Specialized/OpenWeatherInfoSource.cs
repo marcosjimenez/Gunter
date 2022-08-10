@@ -53,7 +53,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             lastItem = new();
             _container = container;
         }
-        public object GetData()
+        public object GetLastItem()
         {
             return lastItem;
         }
@@ -88,7 +88,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public void Update()
         {
             GetLastData();
-            _container?.InfoSourceUpdated(this);
         }
 
         class WeatherApi

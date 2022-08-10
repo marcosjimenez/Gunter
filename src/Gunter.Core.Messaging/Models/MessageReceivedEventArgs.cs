@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Gunter.Core.Messaging.Models
 {
-    public class MessageReceivedEventArgs : EventArgs
+    public class TextMessageReceivedEventArgs : EventArgs
     {
         public string Message { get; set; }
 
-        public MessageReceivedEventArgs(string message)
+        public TextMessageReceivedEventArgs(string message)
         {
             Message = message;
         }
