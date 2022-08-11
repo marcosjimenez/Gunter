@@ -1,5 +1,5 @@
 ﻿using Gunter.Core.Contracts;
-using Gunter.Infrastructure.Cache;
+using Gunter.Core.Infrastructure.Cache;
 using System.Text;
 using System.Xml.Serialization;
 using Gunter.Extensions.InfoSources.Specialized.Models;
@@ -63,7 +63,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             SpecialProperties.TryGetProperty("file", out string? file);
 
             string xml = string.Empty;
-            var fileUrl = ExternalDataCache.GenerateCacheFileName("AEMET", file, "weather");
+            var fileUrl = ExternalDataCache.GenerateCacheFileID("AEMET", file, "weather");
             if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
             {
                 xml = Encoding.UTF8.GetString(content);

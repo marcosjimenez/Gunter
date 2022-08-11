@@ -1,6 +1,6 @@
 ﻿using Gunter.Core.Contracts;
 using Gunter.Extensions.InfoSources.Specialized.Models;
-using Gunter.Infrastructure.Cache;
+using Gunter.Core.Infrastructure.Cache;
 using System.Text;
 using System.Text.Json;
 using WikiDotNet;
@@ -78,7 +78,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             try
             {
 
-                var fileUrl = ExternalDataCache.GenerateCacheFileName("OPENWEATHER", searchString, "weather");
+                var fileUrl = ExternalDataCache.GenerateCacheFileID("OPENWEATHER", searchString, "weather");
                 if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
                 {
                     var json = Encoding.UTF8.GetString(content);

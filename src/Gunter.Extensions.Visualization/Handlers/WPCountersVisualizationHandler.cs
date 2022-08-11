@@ -1,6 +1,5 @@
 ﻿using CoreHtmlToImage;
 using Gunter.Core.Contracts;
-using Gunter.Extensions.InfoSources.Specialized;
 using Gunter.Extensions.Plugins.WindowsPerformanceCounters;
 using System.Text;
 

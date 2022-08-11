@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using Gunter.Core.Infrastructure.Helpers;
+﻿using Gunter.Core.Infrastructure.Helpers;
 
-namespace Gunter.Infrastructure.Cache
+namespace Gunter.Core.Infrastructure.Cache
 {
+
     public class ExternalDataCacheItem
     {
         public string Id { get; set; }
         public string FileWithPath { get; set; }
         public DateTimeOffset Expiration { get; set; }
+        public string MD5 { get; set; }
 
         public ExternalDataCacheItem()
         {
-            Id = String.Empty;
-            FileWithPath = String.Empty;
+            Id = string.Empty;
+            FileWithPath = string.Empty;
             Expiration = DateTimeOffset.Now.Add(DateTimeManipulationHelper.DEFAULT_EXPIRATION);
         }
 

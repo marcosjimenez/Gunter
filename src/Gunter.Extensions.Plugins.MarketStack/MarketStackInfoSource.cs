@@ -4,7 +4,7 @@ using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
 using Gunter.Extensions.InfoSources;
 using Gunter.Extensions.Plugins.MarketStack.Models;
-using Gunter.Infrastructure.Cache;
+using Gunter.Core.Infrastructure.Cache;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -121,7 +121,7 @@ namespace Gunter.Extensions.Plugins.MarketStack
             string? cachedFilePrefix = "MARKETSTACK",
             Dictionary<string, string> parameters = null)
         {
-            var fileUrl = ExternalDataCache.GenerateCacheFileName(cachedFilePrefix, apiKey, endpoint);
+            var fileUrl = ExternalDataCache.GenerateCacheFileID(cachedFilePrefix, apiKey, endpoint);
             T? marketData;
             if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
             {

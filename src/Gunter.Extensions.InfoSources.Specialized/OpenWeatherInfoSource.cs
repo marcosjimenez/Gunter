@@ -1,6 +1,6 @@
 ﻿using Gunter.Core.Contracts;
 using Gunter.Extensions.InfoSources.Specialized.Models;
-using Gunter.Infrastructure.Cache;
+using Gunter.Core.Infrastructure.Cache;
 using System.Text;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
@@ -63,7 +63,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             SpecialProperties.TryGetProperty("city", out string? city);
             SpecialProperties.TryGetProperty("APPID", out string? appid);
 
-            var fileUrl = ExternalDataCache.GenerateCacheFileName("OPENWEATHER", city, "weather");
+            var fileUrl = ExternalDataCache.GenerateCacheFileID("OPENWEATHER", city, "weather");
             OpenWeatherInfoItem weather = null;
             if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
             {
