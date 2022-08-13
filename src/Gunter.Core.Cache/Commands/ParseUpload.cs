@@ -12,7 +12,7 @@ namespace Gunter.Core.Cache.Commands
 
 
             var source = parameters[1];
-            var destination =Path.GetFileName((parameters.Length == 2) ? source : parameters[2]);
+            var destination = Path.GetFileName((parameters.Length == 2) ? source : parameters[2]);
 
 
             if (!ExternalDataCache.Instance.TryUploadFile(source, destination, CurrentFolder))

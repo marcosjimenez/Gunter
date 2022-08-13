@@ -1,22 +1,17 @@
 ﻿using CoreHtmlToImage;
 using Gunter.Core.Contracts;
+using Gunter.Core.Visualizations;
 using Gunter.Extensions.InfoSources.Specialized;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Gunter.Extensions.Visualization.Handlers
+namespace Gunter.Extensions.Visualizations.Specialized
 {
 	public class OpenWeatherVisualizationHandler : VisualizationHandlerBase<OpenWeatherInfoSource>, IGunterVisualizationHandler
-    {
-        public new string Name { get; set; } = "Visor de OpenWeather";
+	{
+		public new string Name { get; set; } = "Visor de OpenWeather";
 
-        private OpenWeatherInfoSource objectToDraw;
+		private OpenWeatherInfoSource objectToDraw;
 
-        protected string HTML_Template = @"
+		protected string HTML_Template = @"
 <!DOCTYPE html>
 <html>
 <body>
@@ -72,17 +67,17 @@ namespace Gunter.Extensions.Visualization.Handlers
 			Id = id;
 		}
 
-        public OpenWeatherVisualizationHandler(OpenWeatherInfoSource infoSource)
+		public OpenWeatherVisualizationHandler(OpenWeatherInfoSource infoSource)
 		{
 			objectToDraw = infoSource;
-        }
+		}
 
-        public string GetHTML()
-        {
+		public string GetHTML()
+		{
 			if (objectToDraw?.LastItem is null)
 				return string.Empty;
 
-            var prediccion = objectToDraw.LastItem;
+			var prediccion = objectToDraw.LastItem;
 			if (prediccion is null)
 				return String.Empty;
 
@@ -92,19 +87,19 @@ namespace Gunter.Extensions.Visualization.Handlers
 			.ReplaceVariable("DIA1", DateTime.Now.ToLongDateString())
 			.ReplaceVariable("PROB_PRECIPITACION1", prediccion.RainProbability.ToString() ?? "0")
 			.ReplaceVariable("MINIMA_TEMP", prediccion.MinTemp.ToString())
-            .ReplaceVariable("MAXIMA_TEMP", prediccion.MaxTemp.ToString())
-            .ReplaceVariable($"HORA_TEMPERATURA1", DateTime.Now.TimeOfDay.Hours.ToString("00"))
-            .ReplaceVariable($"TEMPERATURA1", prediccion.Temperature.ToString());
+			.ReplaceVariable("MAXIMA_TEMP", prediccion.MaxTemp.ToString())
+			.ReplaceVariable($"HORA_TEMPERATURA1", DateTime.Now.TimeOfDay.Hours.ToString("00"))
+			.ReplaceVariable($"TEMPERATURA1", prediccion.Temperature.ToString());
 
-            return html;
-        }
+			return html;
+		}
 
-        public byte[] GetImage()
-        {
-            var converter = new HtmlConverter();
-            var bytes = converter.FromHtmlString(GetHTML());
+		public byte[] GetImage()
+		{
+			var converter = new HtmlConverter();
+			var bytes = converter.FromHtmlString(GetHTML());
 
-            return bytes;
-        }
-    }
+			return bytes;
+		}
+	}
 }

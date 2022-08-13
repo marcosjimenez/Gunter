@@ -8,7 +8,7 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
     {
         private const string InstanceName = "WPCountersInfoSource";
 
-        private static readonly Lazy<WindowsPerformanceCounters> lazy = new (() => new WindowsPerformanceCounters());
+        private static readonly Lazy<WindowsPerformanceCounters> lazy = new(() => new WindowsPerformanceCounters());
 
         public static WindowsPerformanceCounters Instance
         {
@@ -22,7 +22,7 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
 
         private WindowsPerformanceCounters()
         {
-            
+
         }
 
         private bool IsWindows() => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
@@ -95,10 +95,10 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
         public WPCountersInfoSourceItem GetCurrentData()
         {
             ThrowIfNoWindows();
-            
+
             var retVal = new List<WPCountersInfoSourceItemData>();
 
-            foreach(var counter in counters)
+            foreach (var counter in counters)
             {
                 var sample = counter.NextSample();
                 retVal.Add(new WPCountersInfoSourceItemData

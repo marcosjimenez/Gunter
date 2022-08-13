@@ -1,6 +1,4 @@
-﻿using Gunter.Core.Contracts;
-
-namespace Gunter.Core.Models
+﻿namespace Gunter.Core.Models
 {
     public class SpecialProperty
     {

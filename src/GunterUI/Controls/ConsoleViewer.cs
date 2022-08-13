@@ -1,9 +1,4 @@
-﻿using ColorCode;
-using ColorCode.Common;
-using ColorCode.Parsing;
-using ColorCode.Styling;
-using Console;
-using Gunter.Core.Cache.Commands;
+﻿using Gunter.Core.Cache.Commands;
 using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Cache;
 using Gunter.Core.Messaging;
@@ -29,7 +24,7 @@ namespace Controls
         }
 
         private string GetPrompt()
-        => $"{ExternalDataCache.VolumeName}:\\{ commandParser.GetCurrentPath()}>";
+        => $"{ExternalDataCache.VolumeName}:\\{commandParser.GetCurrentPath()}>";
 
 
         private void AddText(string text)
@@ -53,7 +48,7 @@ namespace Controls
 
             AddText($":> {command}");
 
-            var parameters = command.Trim().Split(' ',StringSplitOptions.RemoveEmptyEntries);
+            var parameters = command.Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (parameters.Count() == 0)
                 return string.Empty;
 
@@ -69,7 +64,7 @@ namespace Controls
                     AddText(result);
             }
 
-            return retVal;          
+            return retVal;
         }
 
         private void ConsoleView_Load(object sender, EventArgs e)
@@ -81,7 +76,7 @@ namespace Controls
 
         private void txtCommand_KeyUp(object sender, KeyEventArgs e)
         {
-            
+
         }
 
         private string GetLastCommand()
@@ -123,7 +118,7 @@ namespace Controls
         private void txtCommand_KeyDown(object sender, KeyEventArgs e)
         {
             var prompt = GetPrompt();
-            var command = txtCommand.Text.Substring(prompt.Length, txtCommand.Text.Length - prompt.Length).Replace("\r\n",string.Empty);
+            var command = txtCommand.Text.Substring(prompt.Length, txtCommand.Text.Length - prompt.Length).Replace("\r\n", string.Empty);
 
             switch (e.KeyCode)
             {

@@ -1,4 +1,5 @@
-﻿using Gunter.Core.Constants;
+﻿using Gunter.Core.BaseComponents;
+using Gunter.Core.Constants;
 using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Exceptions;
 using Gunter.Core.Infrastructure.Log;
@@ -6,9 +7,9 @@ using System.Collections.Concurrent;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Gunter.Core.BaseComponents
+namespace Gunter.Core.Components.BaseComponents
 {
-    public class GunterProcessor : IGunterProcessor
+    public class GunterProcessorBase : IGunterProcessor
     {
         public object lockObject = new();
         public StringBuilder logStringBuilder = new StringBuilder();
@@ -27,26 +28,26 @@ namespace Gunter.Core.BaseComponents
         public IEnumerable<IGunterInfoItem> GetInfoItems()
             => InfoItems;
 
-        public GunterProcessor()
+        public GunterProcessorBase()
         {
             GunterLog.Instance.Log(this, $"Created new Processor Id: {Id}");
             data = new ConcurrentDictionary<string, IGunterInfoItem>();
         }
 
-        public GunterProcessor(string id)
+        public GunterProcessorBase(string id)
         {
             Id = id;
             data = new ConcurrentDictionary<string, IGunterInfoItem>();
         }
 
-        public GunterProcessor(string id, string name)
+        public GunterProcessorBase(string id, string name)
         {
             Id = id;
             data = new ConcurrentDictionary<string, IGunterInfoItem>();
             Name = name;
         }
 
-        ~GunterProcessor()
+        ~GunterProcessorBase()
         {
             GunterLog.Instance.Log(this, $"Unloading {Name} with Id {Id}");
         }

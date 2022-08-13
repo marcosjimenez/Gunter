@@ -1,13 +1,8 @@
-﻿using Gunter.Core.Contracts;
+﻿using Gunter.Core.Components;
+using Gunter.Core.Components.BaseComponents;
+using Gunter.Core.Contracts;
 using Gunter.Core.Models;
 using Gunter.Extensions.InfoSources.Specialized.Models;
-//using IronPython.Hosting;
-//using IronPython.Runtime;
-//using IronPython;
-//using Microsoft.Scripting.Hosting;
-//using Microsoft.Scripting;
-//using static IronPython.Modules.PythonCsvModule;
-
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
@@ -44,7 +39,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
         }
 
         public ScriptInfoSource(string id)
-        { 
+        {
             Id = id;
         }
 
@@ -58,7 +53,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             lastItem = new();
             _container = container;
         }
-                
+
         public object GetLastItem()
         {
             if (lastItem is null)

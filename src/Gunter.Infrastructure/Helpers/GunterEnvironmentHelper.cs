@@ -1,20 +1,19 @@
 ﻿using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Exceptions;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Gunter.Core
 {
     public class GunterEnvironmentHelper
     {
-        private static readonly Lazy<GunterEnvironmentHelper> lazy = new (() => new GunterEnvironmentHelper());
-        public static GunterEnvironmentHelper Instance {get => lazy.Value;}
+        private static readonly Lazy<GunterEnvironmentHelper> lazy = new(() => new GunterEnvironmentHelper());
+        public static GunterEnvironmentHelper Instance { get => lazy.Value; }
 
-        private Type[] CoreTypes = new [] { 
-            typeof(IGunterProcessor), 
-            typeof(IGunterInfoItem), 
-            typeof(IGunterInfoSource), 
-            typeof(IGunterVisualizationHandler) 
+        private Type[] CoreTypes = new[] {
+            typeof(IGunterProcessor),
+            typeof(IGunterInfoItem),
+            typeof(IGunterInfoSource),
+            typeof(IGunterVisualizationHandler)
         };
 
         public Dictionary<Type, List<Type>> KnowTypes { get; private set; } = new();
@@ -120,7 +119,7 @@ namespace Gunter.Core
             var retVal = new List<Type>();
             try
             {
-                foreach(var file in files)
+                foreach (var file in files)
                 {
                     var assembly = Assembly.LoadFrom(file);
                     var items = assembly.GetTypes()

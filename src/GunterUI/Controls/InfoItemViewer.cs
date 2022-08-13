@@ -1,19 +1,9 @@
-﻿using Gunter.Core.Contracts;
-using Gunter.Core.Infrastructure.Helpers;
-using Gunter.Extensions.InfoSources.Specialized;
-using Gunter.Extensions.InfoSources;
-using Gunter.Extensions.Visualization.Handlers;
-using GunterUI.Extensions;
-using GunterUI.Dialogs;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using Contracts;
+﻿using Contracts;
 using Dialogs;
+using Gunter.Core.Contracts;
+using Gunter.Core.Infrastructure.Helpers;
+using GunterUI.Dialogs;
+using System.Data;
 
 namespace Controls
 {
@@ -156,7 +146,7 @@ namespace Controls
 
         private void CalculateNextUpdate()
         {
-            
+
             if (!chkActualizar.Checked)
             {
                 lblSiguienteActualizacion.Text = "Nunca (Manual)";
@@ -279,7 +269,7 @@ namespace Controls
 
             using var dlg = new VisualizationForm();
             dlg.Destination = selectedInfoSource;
-            
+
             if (dlg.ShowDialog() == DialogResult.OK)
             {
                 var visualization = dlg.Visualization;

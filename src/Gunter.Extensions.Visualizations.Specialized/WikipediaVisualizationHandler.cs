@@ -1,11 +1,12 @@
 ﻿using CoreHtmlToImage;
 using Gunter.Core.Contracts;
+using Gunter.Core.Visualizations;
 using Gunter.Extensions.InfoSources.Specialized;
 using System.Text;
 
-namespace Gunter.Extensions.Visualization.Handlers
+namespace Gunter.Extensions.Visualizations.Specialized
 {
-    public  class WikipediaVisualizationHandler : VisualizationHandlerBase<WikipediaInfoSource>, IGunterVisualizationHandler
+    public class WikipediaVisualizationHandler : VisualizationHandlerBase<WikipediaInfoSource>, IGunterVisualizationHandler
     {
         public new string Name { get; set; } = "Visor de Wikipedia";
         private WikipediaInfoSource objectToDraw;
@@ -46,7 +47,7 @@ namespace Gunter.Extensions.Visualization.Handlers
 
             var sb = new StringBuilder(HTML_Body);
             if (prediccion is not null)
-            { 
+            {
                 foreach (var data in objectToDraw.GetLastData())
                 {
                     sb.AppendLine(HTML_Template

@@ -1,4 +1,6 @@
-﻿using Gunter.Core.Contracts;
+﻿using Gunter.Core.Components;
+using Gunter.Core.Components.BaseComponents;
+using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
 using Gunter.Extensions.InfoSources.Specialized.Models;
@@ -13,7 +15,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         private ConcurrentBag<TwitterInfoItem> _messages = new();
 
         private TwitterClient twitterClient;
-        public TwitterInfoItem LastItem { get => lastItem; }
 
         public bool IsOnline => true;
 
@@ -95,7 +96,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
                 data.Add(mensaje.Id.ToString(), new TwitterInfoItem
                 {
-                    Id  = mensaje.Id.ToString(),
+                    Id = mensaje.Id.ToString(),
                     Date = mensaje.CreatedAt,
                     Name = mensaje.CreatedBy.Name,
                     PersonId = mensaje.CreatedBy.Id.ToString(),

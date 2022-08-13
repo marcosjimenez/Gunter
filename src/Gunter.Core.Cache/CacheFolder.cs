@@ -1,5 +1,4 @@
 ﻿using Gunter.Core.Infrastructure.Cache;
-using Newtonsoft.Json.Linq;
 
 namespace Gunter.Core.Cache
 {
@@ -9,7 +8,7 @@ namespace Gunter.Core.Cache
         public string Name { get; set; } = string.Empty;
         public string ParentId { get; set; } = string.Empty;
 
-        public Dictionary<string ,CacheFolder> Folders { get; set; } = new();
+        public Dictionary<string, CacheFolder> Folders { get; set; } = new();
         public List<ExternalDataCacheItem> Files { get; set; } = new();
 
         [Newtonsoft.Json.JsonIgnore]
@@ -23,7 +22,7 @@ namespace Gunter.Core.Cache
                 folder.Parent = this;
                 return folder;
             }
-            
+
             return null;
         }
     }

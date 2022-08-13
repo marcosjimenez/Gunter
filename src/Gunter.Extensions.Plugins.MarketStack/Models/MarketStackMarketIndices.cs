@@ -13,7 +13,7 @@ namespace Gunter.Extensions.Plugins.MarketStack.Models
 
     public class MarketStackMarketIndices
     {
-        public string Date { get; set; } 
+        public string Date { get; set; }
         public string Symbol { get; set; }
         public string Exchange { get; set; }
         public double Open { get; set; }

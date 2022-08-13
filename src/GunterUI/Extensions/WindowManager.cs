@@ -1,7 +1,4 @@
-﻿using Contracts;
-using Gunter.Core.Contracts;
-
-namespace GunterUI.Extensions
+﻿namespace GunterUI.Extensions
 {
     public class WindowManager
     {
@@ -14,7 +11,7 @@ namespace GunterUI.Extensions
         }
 
         private readonly Dictionary<string, Form> _forms;
-        
+
         public MdiMain MainForm { get; set; }
 
         private static readonly Lazy<WindowManager> lazy = new Lazy<WindowManager>(() => new WindowManager());

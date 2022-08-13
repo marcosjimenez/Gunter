@@ -15,7 +15,8 @@
         public double RainProbability { get; set; } = 0;
 
         public static OpenWeatherInfoItem? FromOpenWeatherResponseModel(OpenWeatherResponseModel.RootObject model)
-        => model  is null ? null : new OpenWeatherInfoItem {
+        => model is null ? null : new OpenWeatherInfoItem
+        {
             Temperature = model.main.temp,
             GroundLevel = model.main.grnd_level,
             Humidity = model.main.humidity,

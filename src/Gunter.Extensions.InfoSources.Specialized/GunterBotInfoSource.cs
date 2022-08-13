@@ -1,13 +1,15 @@
-﻿using Gunter.Core.Contracts;
+﻿using Gunter.Core.Components;
+using Gunter.Core.Components.BaseComponents;
+using Gunter.Core.Contracts;
+using Gunter.Core.Infrastructure.Helpers;
+using Gunter.Core.Models;
 using Gunter.Extensions.InfoSources.Specialized.Models;
+using System.Collections.Concurrent;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Gunter.Core.Infrastructure.Helpers;
-using System.Collections.Concurrent;
-using Gunter.Core.Models;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
@@ -66,7 +68,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
         {
             _mandatoryInputs.TryGetProperty("command", out string? command);
 
-            while(!_messages.IsEmpty)
+            while (!_messages.IsEmpty)
                 if (_messages.TryTake(out var result))
                     data.Add(result.MessageId, result);
 
@@ -98,7 +100,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
                 cancellationToken: new CancellationToken());
         }
 
-        private User GetBotUser ()
+        private User GetBotUser()
         {
             botClient ??= new TelegramBotClient(GetToken());
             botUser ??= AsyncHelper.RunSync(() => botClient.GetMeAsync());

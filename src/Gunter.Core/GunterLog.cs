@@ -30,9 +30,10 @@ namespace Gunter.Core.Infrastructure.Log
             //if (!typeof(IGunterComponent).IsAssignableFrom(sender.GetType()))
             //    return;
 
-            OnLog?.Invoke(sender, 
-                new GunterLogItemEventArgs { 
-                    GunterLogItem = message,                    
+            OnLog?.Invoke(sender,
+                new GunterLogItemEventArgs
+                {
+                    GunterLogItem = message,
                 });
         }
     }

@@ -1,16 +1,11 @@
-﻿using AngleSharp.Text;
+﻿using Gunter.Core.Components;
+using Gunter.Core.Components.BaseComponents;
 using Gunter.Core.Contracts;
+using Gunter.Core.Infrastructure.Cache;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
-using Gunter.Extensions.InfoSources;
 using Gunter.Extensions.Plugins.MarketStack.Models;
-using Gunter.Core.Infrastructure.Cache;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Gunter.Extensions.Plugins.MarketStack
 {
@@ -18,7 +13,7 @@ namespace Gunter.Extensions.Plugins.MarketStack
     {
 
         private MarketStackInfoSourceItem lastItem { get; set; } = new();
-        
+
         private readonly IGunterInfoItem _container;
         private readonly TimeSpan MinInterval = new TimeSpan();
 
@@ -77,8 +72,8 @@ namespace Gunter.Extensions.Plugins.MarketStack
             SpecialProperties.TryGetProperty(SELECTED_EXCHANGE, out string? mic);
 
             var currencies = TryGetFromMarketStack<MarketStackCurrenciesResponse>(
-                apiKey, 
-                MarketStackAPI.Endpoint_Currencies, 
+                apiKey,
+                MarketStackAPI.Endpoint_Currencies,
                 DateTimeManipulationHelper.OneMonth);
             if (currencies is not null)
             {
@@ -94,11 +89,11 @@ namespace Gunter.Extensions.Plugins.MarketStack
                 lastItem.Exchanges = exchanges;
             }
 
-            foreach(var item in exchanges.Exchanges.Where(x => x.Mic == mic))
+            foreach (var item in exchanges.Exchanges.Where(x => x.Mic == mic))
             {
                 var marketIndices = TryGetFromMarketStack<MarketStackMarketIndicesResponse>(
-                    apiKey, 
-                    MarketStackAPI.Endpoint_MarketIndices, 
+                    apiKey,
+                    MarketStackAPI.Endpoint_MarketIndices,
                     DateTimeManipulationHelper.OneDayTimeSpan,
                     $"Exchange_{item.Mic}",
                     new Dictionary<string, string> { { "symbols", item.Mic } });
@@ -115,8 +110,8 @@ namespace Gunter.Extensions.Plugins.MarketStack
         }
 
         private T? TryGetFromMarketStack<T>(
-            string apiKey, 
-            string endpoint, 
+            string apiKey,
+            string endpoint,
             TimeSpan expirationIfCached,
             string? cachedFilePrefix = "MARKETSTACK",
             Dictionary<string, string> parameters = null)

@@ -1,7 +1,4 @@
 ﻿using Gunter.Core.Infrastructure.Cache;
-using System.Linq.Expressions;
-using System.Reflection;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Gunter.Core.Cache.Commands
 {
@@ -19,7 +16,7 @@ namespace Gunter.Core.Cache.Commands
                 .Where(m => m.GetCustomAttributes(typeof(CacheCommandMethodAttribute), false).Length > 0)
                 .ToArray();
 
-            foreach(var method in methods)
+            foreach (var method in methods)
             {
                 var key = method.GetCustomAttributes(true).FirstOrDefault() as CacheCommandMethodAttribute;
                 commands.Add(key.Command, method.Name);
@@ -56,7 +53,7 @@ namespace Gunter.Core.Cache.Commands
             var strCommand = parameters[0].ToLower();
             if (commands.ContainsKey(strCommand))
             {
-                var method= typeof(CacheCommandParser).GetMethod(commands[strCommand]);
+                var method = typeof(CacheCommandParser).GetMethod(commands[strCommand]);
                 var result = (string)method.Invoke(this, new[] { parameters });
                 return result.ToString();
             }

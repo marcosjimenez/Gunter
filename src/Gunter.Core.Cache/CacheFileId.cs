@@ -9,12 +9,12 @@ namespace Gunter.Core.Infrastructure.Cache
         public List<string> PathSegments { get; set; } = new();
 
         public DateTimeOffset TimeStamp { get; set; } = DateTimeOffset.Now;
-        public List<CacheFileId> FileVersions {get;set;}  = new();
+        public List<CacheFileId> FileVersions { get; set; } = new();
 
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder($"{NameHash}"); 
-            foreach(var item in PathSegments)
+            StringBuilder sb = new StringBuilder($"{NameHash}");
+            foreach (var item in PathSegments)
                 sb.Append($"_{item}");
             return sb.ToString();
         }

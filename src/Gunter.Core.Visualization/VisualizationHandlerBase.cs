@@ -1,7 +1,7 @@
 ﻿using Gunter.Core.Constants;
 using Gunter.Core.Contracts;
 
-namespace Gunter.Extensions.Visualization
+namespace Gunter.Core.Visualizations
 {
     public abstract class VisualizationHandlerBase<T>
     {

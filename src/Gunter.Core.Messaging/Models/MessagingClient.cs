@@ -1,7 +1,6 @@
-﻿using MQTTnet.Client;
-using MQTTnet;
+﻿using MQTTnet;
+using MQTTnet.Client;
 using System.Text;
-using MqttClient = MQTTnet.Client.MqttClient;
 
 namespace Gunter.Core.Messaging.Models
 {
@@ -21,7 +20,7 @@ namespace Gunter.Core.Messaging.Models
         {
             if (mqttClient is null)
                 mqttClient = await CreateClient();
-            
+
             if (!mqttClient.IsConnected)
                 await mqttClient.ConnectAsync(new MqttClientOptionsBuilder()
                     .WithTcpServer(MessagingHelper.BrokerIp)
@@ -76,7 +75,7 @@ namespace Gunter.Core.Messaging.Models
             await mqttClient.SubscribeAsync(mqttSubscribeOptions, CancellationToken.None);
         }
 
-        private  Task MqttClient_ConnectingAsync(MqttClientConnectingEventArgs arg)
+        private Task MqttClient_ConnectingAsync(MqttClientConnectingEventArgs arg)
         {
             return Task.CompletedTask;
         }

@@ -7,7 +7,7 @@ using Gunter.Core.Messaging;
 using Gunter.Core.Messaging.Models;
 using Gunter.Core.Models;
 
-namespace Gunter.Extensions.InfoSources
+namespace Gunter.Core.Components.BaseComponents
 {
     public abstract class InfoSourceBase<T> : IMessagingComponent
     {
@@ -18,7 +18,7 @@ namespace Gunter.Extensions.InfoSources
         public string Id { get; protected set; } = Guid.NewGuid().ToString();
         public string Name { get; set; } = string.Empty;
         public SpecialProperties SpecialProperties { get; set; } = new();
-        
+
         protected SpecialProperties _mandatoryInputs = new();
 
         private MessagingClient? messagingClient;
@@ -33,7 +33,8 @@ namespace Gunter.Extensions.InfoSources
             Id = id;
             GetClient();
         }
-        public abstract Dictionary<string, T> GetLastData();
+        public virtual Dictionary<string, T> GetLastData()
+            => new Dictionary<string, T>();
 
         public object GetLastItem()
         {

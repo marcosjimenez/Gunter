@@ -1,14 +1,14 @@
-﻿using Gunter.Core.Solutions;
+﻿using Controls;
+using Dialogs;
+using Gunter.Core.Contracts;
+using Gunter.Core.Infrastructure.Log;
+using Gunter.Core.Solutions;
 using Gunter.Core.Solutions.Models;
+using Gunter.UI;
 using GunterUI.Extensions;
 using Krypton.Docking;
 using Krypton.Navigator;
-using Controls;
-using Gunter.Core.Contracts;
-using Gunter.Core.Infrastructure.Log;
-using Gunter.UI;
 using Krypton.Workspace;
-using Dialogs;
 
 namespace GunterUI
 {
@@ -54,8 +54,15 @@ namespace GunterUI
 
             if (dlg.ShowDialog() == DialogResult.OK)
             {
-                currentSolution = GunterSolutionHelper.Instance.OpenSolution(dlg.FileName);
-                solutionTreeview.LoadSolution(currentSolution);
+                try
+                {
+                    currentSolution = GunterSolutionHelper.Instance.OpenSolution(dlg.FileName);
+                    solutionTreeview.LoadSolution(currentSolution);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error reading {dlg.FileName}", ex.Message);
+                }
             }
         }
 
@@ -75,7 +82,7 @@ namespace GunterUI
 
                 currentSolution.FileName = Path.GetFileName(dlg.FileName);
                 currentSolution.FilePath = Path.GetFullPath(dlg.FileName);
-                        
+
             }
             GunterSolutionHelper.Instance.SaveSolutionAs(currentSolution, currentSolution.FilePath);
         }
@@ -112,7 +119,7 @@ namespace GunterUI
             Control control = null;
             var id = string.Empty;
             var name = string.Empty;
-            switch(itemType)
+            switch (itemType)
             {
                 case GunterSolutionItemType.Processor:
                     var processorViewer = new ProcessorViewer((IGunterProcessor)component);
@@ -158,7 +165,8 @@ namespace GunterUI
             kryptonDockingManager.AddAutoHiddenGroup("Control", DockingEdge.Right, new KryptonPage[] { NewPropertyGrid() });
             kryptonDockingManager.AddDockspace("Control", DockingEdge.Bottom, new KryptonPage[] { CreateMainLog(), CreateConsoleView() }); ;
 
-            GunterLog.Instance.OnLog += (sender, e) => {
+            GunterLog.Instance.OnLog += (sender, e) =>
+            {
                 ShowLogText(e.GunterLogItem, sender as IGunterComponent);
             };
             var file = Path.Combine(Directory.GetCurrentDirectory(), Constants.DockingConfigurationFile);
@@ -208,7 +216,7 @@ namespace GunterUI
             mainLogText.AppendText($"Log initialized. at {DateTime.Now}{Environment.NewLine}");
             return NewPage("System Log", 1, mainLogText);
         }
-       
+
         private KryptonPage NewPropertyGrid()
         {
             return NewPage("Properties ", 2, new PropertyGrid());

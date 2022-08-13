@@ -3,19 +3,12 @@ using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Log;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 
 namespace Controls
 {
     public partial class InfoSourceViewer : UserControl
     {
-        public IGunterInfoSource? InfoSource{ get; set; }
+        public IGunterInfoSource? InfoSource { get; set; }
 
         public InfoSourceViewer()
         {
@@ -62,6 +55,6 @@ namespace Controls
         private void specialPropertiesViewer1_OnPropertyChanged(object sender, GunterUI.SpecialPropertiesViewer.PropertyUpdatedEventArgs e)
         {
             InfoSource?.SetSpecialProperties(specialPropertiesViewer1.SpecialProperties);
-        }        
+        }
     }
 }

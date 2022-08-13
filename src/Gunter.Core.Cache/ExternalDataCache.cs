@@ -1,10 +1,8 @@
-﻿using System.Text;
-using System.Security.Cryptography;
-using Newtonsoft.Json;
-using Gunter.Core.Infrastructure.Log;
-using Gunter.Core.Cache;
-using System.Xml.Linq;
+﻿using Gunter.Core.Cache;
 using Gunter.Core.Infrastructure.Helpers;
+using Gunter.Core.Infrastructure.Log;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace Gunter.Core.Infrastructure.Cache
 {
@@ -65,7 +63,7 @@ namespace Gunter.Core.Infrastructure.Cache
                 {
                     retVal = JsonConvert.DeserializeObject<ExternalDataCache>(json);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     var sb = new StringBuilder();
                     sb.AppendLine($"Error loading FileSystem image {file}: \n{ex.Message}");
@@ -89,9 +87,9 @@ namespace Gunter.Core.Infrastructure.Cache
         {
             folder ??= RootFolder;
             var retVal = folder.Folders.ContainsKey(key) ? folder.Folders[key] : null;
-            while(retVal is null)
+            while (retVal is null)
             {
-                foreach(var subFolder in folder.Folders.Values)
+                foreach (var subFolder in folder.Folders.Values)
                     retVal ??= GetFolderByKey(key, subFolder);
             }
 
@@ -186,13 +184,13 @@ namespace Gunter.Core.Infrastructure.Cache
                     //newVersion.Versions
                 }
                 folder.Files.Remove(file);
-                folder.Files.Add (newVersion);
+                folder.Files.Add(newVersion);
             }
             else
             {
                 folder = RootFolder;
                 string fullPath = RootFolder.Name;
-                for (int i = 0; i < cacheFileId.PathSegments.Count - 1; i++) 
+                for (int i = 0; i < cacheFileId.PathSegments.Count - 1; i++)
                 {
                     var item = cacheFileId.PathSegments[i];
                     TryCreateFolder(item, folder, out var newFolder);
@@ -242,7 +240,7 @@ namespace Gunter.Core.Infrastructure.Cache
                 return parent;
 
             var retVal = default(CacheFolder);
-            foreach(var item in parent.Folders)
+            foreach (var item in parent.Folders)
             {
                 retVal = GetFolder(item.Value, hash);
                 if (retVal is not null)
@@ -332,7 +330,7 @@ namespace Gunter.Core.Infrastructure.Cache
         }
 
         public static string GenerateCacheFileIdString(params string[] values)
-            => $"{ string.Join('_', values) }"; // Gunter Cache Item
+            => $"{string.Join('_', values)}"; // Gunter Cache Item
 
     }
 }

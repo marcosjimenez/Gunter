@@ -6,7 +6,7 @@ namespace Gunter.Extensions.Plugins.MarketStack.Models
     public class MarketStackExchangeResponse
     {
         public MarketStackInfoSourcePagination Pagination { get; set; } = new();
-        
+
         [JsonProperty("data")]
         public List<MarketStackExchange> Exchanges { get; set; } = new();
     }

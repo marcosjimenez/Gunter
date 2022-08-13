@@ -1,9 +1,4 @@
 ﻿using CommandLine;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gunter.Commands
 {
@@ -14,7 +9,7 @@ namespace Gunter.Commands
 
         [Option(Group = "command", HelpText = "main command")]
         public string Command { get; set; }
-        
+
         [Option(Group = "command", HelpText = "main command")]
         public IEnumerable<string> Arguments { get; set; }
 
@@ -33,7 +28,7 @@ namespace Gunter.Commands
         public void Execute()
         {
             Console.WriteLine(Command);
-            foreach(var arg in Arguments)
+            foreach (var arg in Arguments)
                 Console.WriteLine(arg);
 
         }

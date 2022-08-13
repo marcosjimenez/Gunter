@@ -50,7 +50,7 @@ namespace Controls
                 case GunterLogItemSeverity.Critical:
                     return new(Color.Red, Color.White);
                 default:
-                    return new (txtLog.BackColor, txtLog.ForeColor);
+                    return new(txtLog.BackColor, txtLog.ForeColor);
             }
         }
 

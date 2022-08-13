@@ -1,8 +1,5 @@
-﻿using Gunter.Core.Contracts;
-using Gunter.Extensions.InfoSources;
-using Gunter.Extensions.InfoSources.Specialized;
-using Gunter.Core;
-using System.Runtime.CompilerServices;
+﻿using Gunter.Core;
+using Gunter.Core.Contracts;
 using Gunter.Core.Models;
 
 namespace GunterUI.Dialogs
@@ -69,7 +66,7 @@ namespace GunterUI.Dialogs
                     continue;
             }
 
-            cboTipo.DataSource = instances; 
+            cboTipo.DataSource = instances;
             cboTipo.DisplayMember = "Name";
             cboTipo.ValueMember = "InfoSource";
             cboTipo.Refresh();
@@ -101,7 +98,7 @@ namespace GunterUI.Dialogs
         {
             SelectedType = cboTipo.SelectedValue as IGunterInfoSource;
             if (SelectedType is null)
-                return; 
+                return;
 
             SpecialProperties = (SpecialProperties)specialPropertiesViewer1.SpecialProperties;
             this.DialogResult = DialogResult.OK;

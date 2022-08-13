@@ -17,8 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gunter.Extensions.Common\Gunter.Extensions.Common.csproj" />
-    <ProjectReference Include="..\Gunter.Extensions.InfoSources\Gunter.Extensions.InfoSources.csproj" />
     <ProjectReference Include="..\GunterAPI.Infrastructure\GunterAPI.Infrastructure.csproj" />
   </ItemGroup>
 

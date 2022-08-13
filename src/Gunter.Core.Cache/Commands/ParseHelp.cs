@@ -1,9 +1,4 @@
-﻿using Gunter.Core.Infrastructure.Cache;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace Gunter.Core.Cache.Commands
 {
@@ -28,10 +23,10 @@ namespace Gunter.Core.Cache.Commands
                 var key = method.GetCustomAttributes(true).FirstOrDefault() as CacheCommandMethodAttribute;
                 commandList.Add(new KeyValuePair<string, string>(key.Command, key.HelpText));
             }
-            
+
             var sb = new StringBuilder();
             sb.AppendLine("Available commands:");
-            foreach(var key in commandList.OrderBy(x => x.Key))
+            foreach (var key in commandList.OrderBy(x => x.Key))
                 sb.AppendLine($"{key.Key}\t\t{key.Value}");
 
             return sb.ToString();

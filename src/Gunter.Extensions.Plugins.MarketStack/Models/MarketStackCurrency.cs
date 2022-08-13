@@ -5,7 +5,7 @@ namespace Gunter.Extensions.Plugins.MarketStack.Models
     public class MarketStackCurrenciesResponse
     {
         public Pagination Pagination { get; set; } = new();
-        
+
         [JsonProperty("data")]
         public List<MarketStackCurrency> Currencies { get; set; } = new();
     }
@@ -20,9 +20,9 @@ namespace Gunter.Extensions.Plugins.MarketStack.Models
 
     public class Pagination
     {
-        public int Limit { get; set; } 
+        public int Limit { get; set; }
         public int Offset { get; set; }
-        public int Count { get; set; } 
-        public int Total { get; set; } 
+        public int Count { get; set; }
+        public int Total { get; set; }
     }
 }

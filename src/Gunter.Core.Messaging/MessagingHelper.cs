@@ -1,9 +1,8 @@
-﻿using Gunter.Core.Messaging.Models;
-using MQTTnet.Server;
-using MQTTnet;
-using Gunter.Core.Infrastructure.Helpers;
+﻿using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Infrastructure.Log;
-using MQTTnet.Client;
+using Gunter.Core.Messaging.Models;
+using MQTTnet;
+using MQTTnet.Server;
 
 namespace Gunter.Core.Messaging
 {

@@ -1,15 +1,10 @@
-﻿using Gunter.Core.Contracts;
+﻿using Contracts;
+using Dialogs;
+using Gunter.Core.Components.BaseComponents;
+using Gunter.Core.Contracts;
 using Gunter.Core.Solutions;
 using Gunter.Core.Solutions.Models;
 using Infrastructure.EvengArgs;
-using Contracts;
-using static Gunter.Core.Solutions.GunterSolutionConstants;
-using Dialogs;
-using AngleSharp.Dom;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
-using System.Diagnostics;
-using Gunter.Core.BaseComponents;
-using System.Xml.Linq;
 
 namespace Controls
 {
@@ -45,7 +40,7 @@ namespace Controls
             tv.Nodes.Clear();
             var root = CreateTopLevelNode(currentSolution.Id, currentSolution.Name);
 
-            foreach(var folder in currentSolution.Folders)
+            foreach (var folder in currentSolution.Folders)
             {
                 if (!string.IsNullOrWhiteSpace(folder.ParentFolderId) &&
                     root.Nodes.ContainsKey(folder.ParentFolderId))
@@ -57,7 +52,7 @@ namespace Controls
                     CreateNode(GunterSolutionItemType.Folder, null, folder.Id, folder.Name);
             }
 
-            foreach(var project in currentSolution.Projects)
+            foreach (var project in currentSolution.Projects)
             {
                 var node = CreateProjectNode(root, project);
                 node.Parent.Expand();
@@ -104,7 +99,7 @@ namespace Controls
             }
             if (string.IsNullOrWhiteSpace(selectedIcon))
                 selectedIcon = icon;
-                    
+
             var retVal = parent.Nodes.Add(id, name, icon, selectedIcon);
             retVal.Tag = itemType;
 
@@ -143,7 +138,7 @@ namespace Controls
             foreach (var item in infoItem.InfoSources)
                 CreateInfoSourceNode(retVal, item);
 
-            foreach(var item in infoItem.VisualizationHandlers)
+            foreach (var item in infoItem.VisualizationHandlers)
                 CreateVisualizationHandlerNode(retVal, item);
 
             return retVal;
@@ -208,9 +203,9 @@ namespace Controls
             if (dlg.ShowDialog() != DialogResult.OK)
                 return;
 
-            var project = new GunterProject 
-            { 
-                FolderId = dlg.ProjectFolderId,  
+            var project = new GunterProject
+            {
+                FolderId = dlg.ProjectFolderId,
                 Name = dlg.ProjectName,
                 Description = dlg.ProjectDescription
             };
@@ -241,7 +236,7 @@ namespace Controls
             if (project is null)
                 return null;
 
-            var processor = new GunterProcessor();
+            var processor = new GunterProcessorBase();
             processor.Name = $"Processor {processorCounter++}";
             project.AddProcessor(processor);
             var args = new GunterSolutionItemEventArgs
@@ -263,10 +258,10 @@ namespace Controls
         private GunterProject? GetProject(string id)
             => currentSolution.Projects.FirstOrDefault(x => x.Id == id);
 
-        private GunterProcessor? GetProcessor(GunterProject project, string id)
+        private GunterProcessorBase? GetProcessor(GunterProject project, string id)
         => project.Processors.Where(x => x.Id == selectedNode.Name).SingleOrDefault();
 
-        public IGunterInfoItem? NewInfoItem(GunterProcessor? processor = null)
+        public IGunterInfoItem? NewInfoItem(GunterProcessorBase? processor = null)
         {
             if (processor is null)
             {
@@ -284,7 +279,7 @@ namespace Controls
             var target = processor.CreateInfoItem(string.Empty);
             target.Name = $"New InfoItem";
             processor.AddInfoItem(target.Id, target);
-            
+
             var args = new GunterSolutionItemEventArgs
             {
                 Id = processor.Id,
@@ -339,7 +334,7 @@ namespace Controls
                 return GunterSolutionItemType.OtherItem;
         }
 
-        
+
         //
 
         private void nuevoToolStripButton_Click(object sender, EventArgs e)
@@ -403,9 +398,10 @@ namespace Controls
             if (relatedComponent is null)
                 return;
 
-            OnGunterItemShow?.Invoke(this, 
-                new GunterSolutionItemEventArgs { 
-                    Id = selectedNode.Name, 
+            OnGunterItemShow?.Invoke(this,
+                new GunterSolutionItemEventArgs
+                {
+                    Id = selectedNode.Name,
                     SolutionItemType = (GunterSolutionItemType)selectedNode.Tag,
                     Component = relatedComponent
                 });
@@ -434,7 +430,7 @@ namespace Controls
                         OnGunterItemRemoved?
                             .Invoke(this,
                                 new GunterSolutionItemEventArgs { Id = selectedNode.Name, SolutionItemType = type });
- 
+
                         //MdiMain.RemoveGunterItem(string id, GunterSolutionItemType type);
                     }
                     break;

@@ -1,5 +1,4 @@
-﻿using Gunter.Core.BaseComponents;
-using Gunter.Core.Contracts;
+﻿using Gunter.Core.Contracts;
 
 namespace Gunter.Core.Solutions.Models.SavedComponent
 {
@@ -27,7 +26,7 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
         }
 
 
-        public static GunterInfoItem ToInfoItem(GunterSavedInfoItem infoItem)
+        public static IGunterInfoItem ToInfoItem(GunterSavedInfoItem infoItem)
         {
             var retVal = GunterEnvironmentHelper.Instance.CreateInstance<IGunterInfoItem>(infoItem.SystemType, infoItem.Id);
             retVal.Name = infoItem.Name;
@@ -38,7 +37,7 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
             foreach (var visualization in infoItem.VisualizationHandlers)
                 retVal.VisualizationHandlers.Add(GunterSavedVisualizationHandler.ToVisualizationHandler(visualization));
 
-            return (GunterInfoItem)retVal;
+            return retVal;
         }
     }
 }

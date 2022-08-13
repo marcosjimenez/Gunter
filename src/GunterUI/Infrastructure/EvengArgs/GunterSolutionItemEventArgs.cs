@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Gunter.Core.Contracts;
+﻿using Gunter.Core.Contracts;
 using Gunter.Core.Solutions;
 
 namespace Infrastructure.EvengArgs

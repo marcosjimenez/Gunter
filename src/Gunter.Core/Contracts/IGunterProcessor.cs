@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Gunter.Core.Contracts
+﻿namespace Gunter.Core.Contracts
 {
     public interface IGunterProcessor : IGunterComponent
     {

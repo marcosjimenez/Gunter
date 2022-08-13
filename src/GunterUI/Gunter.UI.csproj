@@ -26,15 +26,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Json-Editor\JsonTreeView\JsonTreeView.csproj" />
-    <ProjectReference Include="..\Gunter.Core.Models\Gunter.Core.Models.csproj" />
+    <ProjectReference Include="..\Gunter.Core.Messaging\Gunter.Core.Messaging.csproj" />
     <ProjectReference Include="..\Gunter.Core.Solutions\Gunter.Core.Solutions.csproj" />
     <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
-    <ProjectReference Include="..\Gunter.Extensions.Common\Gunter.Extensions.Common.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.InfoSources.Specialized\Gunter.Extensions.InfoSources.Specialized.csproj" />
-    <ProjectReference Include="..\Gunter.Extensions.Models\Gunter.Extensions.Models.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.Plugins.MarketStack\Gunter.Extensions.Plugins.MarketStack.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.Plugins.ScriptExecution\Gunter.Extensions.Plugins.ScriptExecution.csproj" />
-    <ProjectReference Include="..\Gunter.Extensions.Visualization\Gunter.Extensions.Visualization.csproj" />
     <ProjectReference Include="..\Gunter.Infrastructure\Gunter.Core.Infrastructure.csproj" />
   </ItemGroup>
 

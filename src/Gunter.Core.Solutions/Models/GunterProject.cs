@@ -1,4 +1,4 @@
-﻿using Gunter.Core.BaseComponents;
+﻿using Gunter.Core.Components.BaseComponents;
 using Gunter.Core.Constants;
 using Gunter.Core.Contracts;
 
@@ -17,7 +17,7 @@ namespace Gunter.Core.Solutions.Models
 
         public byte[] Image { get; set; } = { };
 
-        public virtual List<GunterProcessor> Processors { get; set; } = new ();
+        public virtual List<GunterProcessorBase> Processors { get; set; } = new();
 
         public GunterProject()
         {
@@ -32,7 +32,7 @@ namespace Gunter.Core.Solutions.Models
             FolderId = folderId;
         }
 
-        public GunterProcessor AddProcessor(GunterProcessor processor)
+        public GunterProcessorBase AddProcessor(GunterProcessorBase processor)
         {
             Processors.Add(processor);
             return processor;

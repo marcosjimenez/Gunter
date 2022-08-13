@@ -1,5 +1,4 @@
-﻿using Gunter.Core.Contracts;
-using Gunter.Core.Models;
+﻿using Gunter.Core.Models;
 using GunterUI.Extensions;
 
 namespace GunterUI
@@ -44,7 +43,7 @@ namespace GunterUI
             listView1.BeginUpdate();
             listView1.Items.Clear();
 
-            foreach(var item in SpecialProperties.Properties)
+            foreach (var item in SpecialProperties.Properties)
             {
                 var lvItem = listView1.Items.Add(item.Key, item.Key);
                 lvItem.SubItems.Add(item.Value.Value.ToString());

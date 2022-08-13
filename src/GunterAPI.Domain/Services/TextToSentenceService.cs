@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GunterAPI.Domain.Services
+﻿namespace GunterAPI.Domain.Services
 {
     internal class TextToSentenceService : ITextToSentenceService
     {

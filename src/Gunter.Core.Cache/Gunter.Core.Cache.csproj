@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gunter.Console\Gunter.Console.csproj" />
     <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
     <ProjectReference Include="..\Gunter.Infrastructure\Gunter.Core.Infrastructure.csproj" />
   </ItemGroup>

@@ -1,7 +1,5 @@
 ﻿using Gunter.Core;
 using Gunter.Core.Contracts;
-using System.Drawing.Imaging;
-using System.Windows.Forms;
 
 namespace Dialogs
 {
@@ -44,7 +42,7 @@ namespace Dialogs
                     continue;
 
                 if (instance.CanHandle((IGunterInfoSource)Destination))
-                { 
+                {
                     var lvItem = lvVisualizations.Items.Add(instance.Name, instance.Name);
                     lvItem.Tag = instance;
                 }
@@ -60,7 +58,7 @@ namespace Dialogs
 
         private void cmdOk_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void lvVisualizations_SelectedIndexChanged(object sender, EventArgs e)

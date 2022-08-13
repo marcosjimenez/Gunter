@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Gunter.UI
+﻿namespace Gunter.UI
 {
     public static class Constants
     {

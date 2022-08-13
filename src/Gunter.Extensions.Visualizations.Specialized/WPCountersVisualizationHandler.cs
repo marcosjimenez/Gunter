@@ -1,9 +1,10 @@
 ﻿using CoreHtmlToImage;
 using Gunter.Core.Contracts;
+using Gunter.Core.Visualizations;
 using Gunter.Extensions.Plugins.WindowsPerformanceCounters;
 using System.Text;
 
-namespace Gunter.Extensions.Visualization.Handlers
+namespace Gunter.Extensions.Visualizations.Specialized
 {
     public class WPCountersVisualizationHandler : VisualizationHandlerBase<WPCountersInfoSource>, IGunterVisualizationHandler
     {

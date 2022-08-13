@@ -1,12 +1,7 @@
-﻿using Gunter.Core.BaseComponents;
+﻿using Gunter.Core.Components.BaseComponents;
 using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Exceptions;
 using Gunter.Core.Solutions.Models.SavedComponent;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gunter.Core.Solutions
 {
@@ -26,7 +21,7 @@ namespace Gunter.Core.Solutions
         {
 
         }
-        public GunterProcessor? GetProcessorFromSavedProcessor(GunterSavedProcessor savedProcessor)
+        public GunterProcessorBase? GetProcessorFromSavedProcessor(GunterSavedProcessor savedProcessor)
         {
             var type = Type.GetType(savedProcessor.SystemType);
             if (type is null)
@@ -34,7 +29,7 @@ namespace Gunter.Core.Solutions
 
             try
             {
-                var instance = Activator.CreateInstance(type, savedProcessor.Id, savedProcessor.Name) as GunterProcessor;
+                var instance = Activator.CreateInstance(type, savedProcessor.Id, savedProcessor.Name) as GunterProcessorBase;
                 return instance;
 
             }
@@ -46,18 +41,18 @@ namespace Gunter.Core.Solutions
 
         public static GunterSavedProcessor FromGunterProcessor(IGunterProcessor data)
         => new GunterSavedProcessor
-             {
-                 Id = data.Id,
-                 Name = data.Name,
-                 SystemType = data.GetType().ToString()
-                 //SpecialProperties = data.getspa
-             };
+        {
+            Id = data.Id,
+            Name = data.Name,
+            SystemType = data.GetType().ToString()
+            //SpecialProperties = data.getspa
+        };
 
 
         //public GunterInfoItem? GetInfoItemFromSavedInfoItem(GunterSavedInfoItem infoITem)
         //{
-                    
-        
+
+
         //}
 
     }

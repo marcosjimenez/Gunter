@@ -27,7 +27,7 @@ do
 void HandleErrors(IEnumerable<Error> errors)
 {
     Console.WriteLine("ERROR");
-    foreach(var error in errors)
+    foreach (var error in errors)
     {
         Console.WriteLine(error);
     }

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -11,6 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Gunter.Core.Visualization\Gunter.Core.Visualization.csproj" />
+    <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.InfoSources.Specialized\Gunter.Extensions.InfoSources.Specialized.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.Plugins.WindowsPerformanceCounters\Gunter.Extensions.Plugins.WindowsPerformanceCounters.csproj" />
   </ItemGroup>

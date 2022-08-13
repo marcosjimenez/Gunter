@@ -1,10 +1,4 @@
 ﻿using Gunter.Core.Infrastructure.Helpers;
-using Gunter.Extensions.Plugins.MarketStack.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gunter.Extensions.Plugins.MarketStack
 {

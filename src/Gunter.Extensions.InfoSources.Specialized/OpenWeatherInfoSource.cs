@@ -1,21 +1,21 @@
-﻿using Gunter.Core.Contracts;
-using Gunter.Extensions.InfoSources.Specialized.Models;
+﻿using Gunter.Core.Components;
+using Gunter.Core.Components.BaseComponents;
+using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Cache;
-using System.Text;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
+using Gunter.Extensions.InfoSources.Specialized.Models;
+using System.Text;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class OpenWeatherInfoSource : InfoSourceBase<string>, IGunterInfoSource
+    public class OpenWeatherInfoSource : InfoSourceBase<OpenWeatherInfoItem>, IGunterInfoSource
     {
         private OpenWeatherInfoItem lastItem { get; set; }
         private readonly IGunterInfoItem _container;
         private readonly TimeSpan MinInterval = new TimeSpan();
 
-        private Dictionary<string, string> data = new();
-
-        public OpenWeatherInfoItem LastItem { get => lastItem; }
+        private Dictionary<string, OpenWeatherInfoItem> data = new();
 
         public bool IsOnline => true;
 
@@ -58,7 +58,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             return lastItem;
         }
 
-        public override Dictionary<string, string> GetLastData()
+        public override Dictionary<string, OpenWeatherInfoItem> GetLastData()
         {
             SpecialProperties.TryGetProperty("city", out string? city);
             SpecialProperties.TryGetProperty("APPID", out string? appid);

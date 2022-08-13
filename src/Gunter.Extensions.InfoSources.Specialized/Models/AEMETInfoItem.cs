@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System.Globalization;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using static Gunter.Extensions.InfoSources.Specialized.Models.AEMETInfoItem;
 
 namespace Gunter.Extensions.InfoSources.Specialized.Models
 {

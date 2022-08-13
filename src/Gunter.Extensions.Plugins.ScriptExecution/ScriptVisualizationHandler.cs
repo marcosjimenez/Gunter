@@ -1,6 +1,6 @@
 ﻿using Gunter.Core.Contracts;
 using Gunter.Extensions.InfoSources.Specialized;
-using Gunter.Extensions.Visualization;
+using Gunter.Core.Visualizations;
 
 namespace Gunter.Extensions.Plugins.ScriptExecution
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Gunter.Extensions.InfoSources.Specialized.Models
+﻿namespace Gunter.Extensions.InfoSources.Specialized.Models
 {
     public class WikipediaInfoItem
     {
@@ -19,7 +13,7 @@ namespace Gunter.Extensions.InfoSources.Specialized.Models
         public int WordCount { get; set; }
         public string Language { set; get; } = "es";
 
-        public static WikipediaInfoItem FromSearchResult(WikiDotNet.WikiSearchResult result)
+        internal static WikipediaInfoItem FromSearchResult(WikiDotNet.WikiSearchResult result)
         => new WikipediaInfoItem
         {
             Title = result.Title,
@@ -27,7 +21,7 @@ namespace Gunter.Extensions.InfoSources.Specialized.Models
             PageId = result.PageId,
             Preview = result.Preview,
             Size = result.Size,
-            WordCount = result.WordCount            
+            WordCount = result.WordCount
         };
 
         public string ConstantUrl => new($"https://{Language}.wikipedia.org/?curid={PageId}");

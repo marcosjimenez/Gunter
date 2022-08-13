@@ -1,4 +1,4 @@
-﻿namespace Gunter.Extensions.InfoSources
+﻿namespace Gunter.Core.Components
 {
     public static class InfoSourceConstants
     {

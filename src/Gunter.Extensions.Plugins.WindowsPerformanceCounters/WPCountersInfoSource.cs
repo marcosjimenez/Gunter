@@ -1,9 +1,8 @@
-﻿using Gunter.Core.Contracts;
+﻿using Gunter.Core.Components;
+using Gunter.Core.Components.BaseComponents;
+using Gunter.Core.Contracts;
 using Gunter.Core.Models;
-using Gunter.Extensions.InfoSources;
 using Gunter.Extensions.Plugins.WindowsPerformanceCounters.Models;
-using System.Diagnostics;
-using System.Text;
 
 namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
 {
@@ -90,7 +89,7 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
                 return data;
 
             lastItem = countersData;
-                
+
             if (data.ContainsKey(machineName))
                 data[machineName] = lastItem;
             else

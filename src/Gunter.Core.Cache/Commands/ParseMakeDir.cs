@@ -14,7 +14,7 @@ namespace Gunter.Core.Cache.Commands
             {
                 ExternalDataCache.Instance.TryCreateFolder(parameters[1], CurrentFolder, out var folder);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return ex.Message;
             }

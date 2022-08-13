@@ -8,7 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Gunter.Core.Cache\Gunter.Core.Cache.csproj" />
-    <ProjectReference Include="..\Gunter.Extensions.InfoSources\Gunter.Extensions.InfoSources.csproj" />
+    <ProjectReference Include="..\Gunter.Core.Components\Gunter.Core.Components.csproj" />
+    <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
   </ItemGroup>
 
 </Project>

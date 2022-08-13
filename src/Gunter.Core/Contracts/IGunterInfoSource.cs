@@ -4,7 +4,7 @@ namespace Gunter.Core.Contracts
 {
     public interface IGunterInfoSource : IGunterComponent
     {
-        string Category { get;  }
+        string Category { get; }
         string SubCategory { get; }
         SpecialProperties SpecialProperties { get; set; }
         bool IsOnline { get; }

@@ -2,9 +2,9 @@
 using Gunter.Core.Contracts;
 using System.Text.Json.Serialization;
 
-namespace Gunter.Core.BaseComponents
+namespace Gunter.Core.Components.BaseComponents
 {
-    public partial class GunterInfoItem : IGunterInfoItem
+    public abstract class GunterInfoItemBase : IGunterInfoItem
     {
         public object lockObject = new();
 
@@ -25,28 +25,25 @@ namespace Gunter.Core.BaseComponents
 
         public IGunterProcessor GetProcessor() => _processor;
 
-        private readonly List<byte[]> _visualizations;
-        public IList<byte[]> Visualizations { get => _visualizations; }
-
         [JsonIgnore]
         public List<IGunterVisualizationHandler> VisualizationHandlers { get; } = new();
 
         private DateTime _lastUpdate = DateTime.Now;
         public DateTime LastUpdate { get => _lastUpdate; }
 
-        public GunterInfoItem()
+        public GunterInfoItemBase()
         {
 
         }
 
-        public GunterInfoItem(string id)
+        public GunterInfoItemBase(string id)
         {
             Id = id;
             events = new List<object>();
             VisualizationHandlers = new();
         }
 
-        public GunterInfoItem(string name, IGunterProcessor processor)
+        public GunterInfoItemBase(string name, IGunterProcessor processor)
         {
             Id = Guid.NewGuid().ToString();
             Name = name;
@@ -60,7 +57,7 @@ namespace Gunter.Core.BaseComponents
             InfoSources.Add(source);
         }
 
-        public void UpdateSources()
+        public Task UpdateSources()
         {
             var tasks = InfoSources
                 .Select(i => Task.Factory.StartNew(() => i.GetLastItem()))
@@ -75,7 +72,7 @@ namespace Gunter.Core.BaseComponents
 
             _lastUpdate = DateTime.Now;
 
-            //OnUpdateHandler();
+            return Task.CompletedTask;
         }
 
         public void AddVisualizationHandler(IGunterVisualizationHandler handler)
@@ -97,10 +94,10 @@ namespace Gunter.Core.BaseComponents
 
         public void VisualizationHandlerUpdated(IGunterVisualizationHandler handler)
         {
-            if (!UpdateOnComponentChange || !VisualizationHandlers.Contains(handler)) // Not removed
+            if (!VisualizationHandlers.Contains(handler)) // Not removed
                 return;
 
-            _visualizations.Add(handler.GetImage());
+            VisualizationHandlers.Add(handler);
         }
 
         private void OnUpdateHandler()

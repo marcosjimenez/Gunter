@@ -1,10 +1,5 @@
 ﻿using Gunter.Core.Infrastructure.Cache;
-using Gunter.Core.Infrastructure.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Gunter.Core.Cache.Commands
 {
@@ -36,7 +31,7 @@ namespace Gunter.Core.Cache.Commands
                 default:
                     break;
             }
-            
+
             return retVal;
         }
 
@@ -61,7 +56,7 @@ namespace Gunter.Core.Cache.Commands
                 sb.AppendLine();
                 sb.AppendLine("Consider using the complete collection name. Current folder collections:");
                 sb.AppendLine();
-                foreach(var item in CurrentFolder.Files)
+                foreach (var item in CurrentFolder.Files)
                 {
                     sb.AppendLine($"\t{item.Name}");
                 }

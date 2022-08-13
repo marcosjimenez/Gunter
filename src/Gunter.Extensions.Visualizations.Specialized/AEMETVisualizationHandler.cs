@@ -1,16 +1,16 @@
 ﻿using CoreHtmlToImage;
 using Gunter.Core.Contracts;
+using Gunter.Core.Visualizations;
 using Gunter.Extensions.InfoSources.Specialized;
 using Gunter.Extensions.InfoSources.Specialized.Models;
-using System.Text;
 
-namespace Gunter.Extensions.Visualization.Handlers
+namespace Gunter.Extensions.Visualizations.Specialized
 {
-	public class AEMETVisualizationHandler : VisualizationHandlerBase<AEMETInfoSource>, IGunterVisualizationHandler
+    public class AEMETVisualizationHandler : VisualizationHandlerBase<AEMETInfoSource>, IGunterVisualizationHandler
     {
         private AEMETInfoSource objectToDraw;
 
-		public new string Name { get; set; } = "Visor de AEMET (Agencia Estatal de Meteorología)";
+        public new string Name { get; set; } = "Visor de AEMET (Agencia Estatal de Meteorología)";
 
         protected string HTML_Template = @"
 <!DOCTYPE html>
@@ -65,65 +65,65 @@ namespace Gunter.Extensions.Visualization.Handlers
 </body>
 </html>
 ";
-		public AEMETVisualizationHandler()
-		{
+        public AEMETVisualizationHandler()
+        {
 
-		}
+        }
 
         public AEMETVisualizationHandler(string id)
-		{
-			Id = id;
-		}
+        {
+            Id = id;
+        }
 
-		public AEMETVisualizationHandler(AEMETInfoSource infoSource)
+        public AEMETVisualizationHandler(AEMETInfoSource infoSource)
         {
             objectToDraw = infoSource;
         }
 
-		public string GetHTML()
-		{
-			var data = objectToDraw?.LastItem;
-			if (data is null)
-				return String.Empty;
+        public string GetHTML()
+        {
+            var data = objectToDraw?.LastItem;
+            if (data is null)
+                return String.Empty;
             var prediccion = GetPrediction(data);
 
-			var html = HTML_Template
-			.ReplaceVariable("LOCALIDAD", $"{data.nombre} ({data.provincia})")
-			.ReplaceVariable("FECHAACTUALIZACION", data.elaborado.ToLongDateString())
-			.ReplaceVariable("DIA1", prediccion.fecha.ToShortDateString())
-			.ReplaceVariable("PROB_PRECIPITACION1", prediccion.prob_precipitacion[0].Value ?? "0")
+            var html = HTML_Template
+            .ReplaceVariable("LOCALIDAD", $"{data.nombre} ({data.provincia})")
+            .ReplaceVariable("FECHAACTUALIZACION", data.elaborado.ToLongDateString())
+            .ReplaceVariable("DIA1", prediccion.fecha.ToShortDateString())
+            .ReplaceVariable("PROB_PRECIPITACION1", prediccion.prob_precipitacion[0].Value ?? "0")
             .ReplaceVariable("MINIMA_TEMP", prediccion.temperatura.minima.ToString())
             .ReplaceVariable("MAXIMA_TEMP", prediccion.temperatura.maxima.ToString());
 
-			var counter = 1;
-			foreach (var item in prediccion.temperatura.dato.OrderBy(x => x.hora))
-			{
-				html = html
-					.ReplaceVariable($"HORA_TEMPERATURA{counter}", item.hora.ToString())
-					.ReplaceVariable( $"TEMPERATURA{counter}", item.Value.ToString());
-				counter++;
+            var counter = 1;
+            foreach (var item in prediccion.temperatura.dato.OrderBy(x => x.hora))
+            {
+                html = html
+                    .ReplaceVariable($"HORA_TEMPERATURA{counter}", item.hora.ToString())
+                    .ReplaceVariable($"TEMPERATURA{counter}", item.Value.ToString());
+                counter++;
             }
 
-			return html;
-		}
+            return html;
+        }
 
         public byte[] GetImage()
         {
             var converter = new HtmlConverter();
-			var bytes = converter.FromHtmlString(GetHTML());
+            var bytes = converter.FromHtmlString(GetHTML());
 
-            return bytes; 
+            return bytes;
         }
 
-		private rootDia GetPrediction(AEMETResponseModel model)
-			=> model.prediccion
-			.Where(x => x.fecha == DateTime.Now.Date).Single();
+        private rootDia GetPrediction(AEMETResponseModel model)
+            => model.prediccion
+            .Where(x => x.fecha == DateTime.Now.Date).Single();
 
 
     }
 
-	static class StringManipulation
-	{
+    static class StringManipulation
+    {
         public static string ReplaceVariable(this string mainString, string variable, string value)
             => mainString.Replace($"@@{variable}", value);
     }

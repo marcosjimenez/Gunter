@@ -12,12 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gunter.Core.Models\Gunter.Core.Models.csproj" />
     <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Attributes\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 
 </Project>

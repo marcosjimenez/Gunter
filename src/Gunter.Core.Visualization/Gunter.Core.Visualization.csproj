@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="BaseComponents\" />
+    <ProjectReference Include="..\Gunter.Core.Components\Gunter.Core.Components.csproj" />
+    <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
   </ItemGroup>
 
 </Project>

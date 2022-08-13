@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Gunter.Core.Solutions
+﻿namespace Gunter.Core.Solutions
 {
     public enum GunterSolutionItemType
     {

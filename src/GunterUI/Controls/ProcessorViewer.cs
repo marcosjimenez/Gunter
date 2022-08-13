@@ -1,7 +1,7 @@
-﻿using Gunter.Core.Contracts;
+﻿using Contracts;
+using Gunter.Core.Components.BaseComponents;
+using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Helpers;
-using Contracts;
-using Gunter.Core.BaseComponents;
 
 namespace Controls
 {
@@ -10,14 +10,14 @@ namespace Controls
 
         public event Delegates.GunterItemShowDelegate OnGunterItemShow;
 
-        private int infoItemCounter = 1; 
+        private int infoItemCounter = 1;
         private readonly IGunterProcessor _processor;
         private IGunterInfoItem? selectedInfoItem = null;
 
         public ProcessorViewer()
         {
             InitializeComponent();
-            _processor = new GunterProcessor();
+            _processor = new GunterProcessorBase();
         }
 
         public ProcessorViewer(IGunterProcessor processor)
@@ -42,7 +42,7 @@ namespace Controls
 
                 listviewitem.Selected = true;
             }
-            if (editName) 
+            if (editName)
                 listviewitem.BeginEdit();
 
             return listviewitem;
@@ -76,10 +76,10 @@ namespace Controls
 
         private void LoadInfoItem()
         {
-            
+
 
         }
-             
+
 
         private void lvInfoItems_SelectedIndexChanged(object sender, EventArgs e)
         {

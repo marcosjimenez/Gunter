@@ -1,9 +1,4 @@
 ﻿using Gunter.Core.Infrastructure.Cache;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gunter.Core.Cache.Commands
 {
@@ -22,7 +17,7 @@ namespace Gunter.Core.Cache.Commands
             {
                 var paramFolderName = parameters[1];
                 if (paramFolderName == "\\")
-                { 
+                {
                     CurrentFolder = ExternalDataCache.Instance.RootFolder;
                     ParentFolder = null;
                 }
@@ -42,7 +37,7 @@ namespace Gunter.Core.Cache.Commands
                     CurrentFolder = folder;
                     folder.Parent = parent;
                     ParentFolder = parent;
-                    
+
                 }
 
             }

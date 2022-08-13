@@ -4,7 +4,7 @@ using System.Text;
 namespace Gunter.Core.Cache.Commands
 {
     public partial class CacheCommandParser
-    { 
+    {
         [CacheCommandMethod(Command = "dir", HelpText = "Show files, directories and collections: dir [directoryname] [filtro]")]
         public string ParseDir(params string[] parameters)
         {

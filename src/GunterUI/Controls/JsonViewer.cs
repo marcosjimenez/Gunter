@@ -1,11 +1,5 @@
-﻿using System.Drawing;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
-using Telegram.Bot.Types;
 using System.Text;
 
 namespace Controls

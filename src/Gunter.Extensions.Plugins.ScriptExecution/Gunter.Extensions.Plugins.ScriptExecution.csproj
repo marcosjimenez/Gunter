@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Gunter.Core.Visualization\Gunter.Core.Visualization.csproj" />
     <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
-    <ProjectReference Include="..\Gunter.Extensions.InfoSources\Gunter.Extensions.InfoSources.csproj" />
-    <ProjectReference Include="..\Gunter.Extensions.Visualization\Gunter.Extensions.Visualization.csproj" />
     <ProjectReference Include="..\Gunter.Infrastructure\Gunter.Core.Infrastructure.csproj" />
   </ItemGroup>
 

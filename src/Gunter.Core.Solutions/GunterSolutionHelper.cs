@@ -1,8 +1,6 @@
 ﻿using Gunter.Core.Infrastructure.Exceptions;
-using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Solutions.Models;
 using Gunter.Core.Solutions.Models.SavedComponent;
-using System.Diagnostics;
 using System.Text.Json;
 
 namespace Gunter.Core.Solutions
@@ -45,7 +43,7 @@ namespace Gunter.Core.Solutions
         {
             if (!File.Exists(fileName))
             {
-                throw new GunterSolutionException($"Cannot find file { fileName }");
+                throw new GunterSolutionException($"Cannot find file {fileName}");
             }
 
             try

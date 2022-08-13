@@ -14,7 +14,7 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
                 SystemType = GunterEnvironmentHelper.GetSystemTypeName(source.GetType()),
                 SpecialProperties = (SpecialProperties)source.SpecialProperties
             };
-           
+
             return retVal;
         }
 

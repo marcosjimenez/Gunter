@@ -2,7 +2,7 @@
 
 namespace Gunter.Core.Infrastructure.Cache
 {
-    public abstract class ExternalDataCacheItemBase 
+    public abstract class ExternalDataCacheItemBase
     {
         public string ParentFolderId { get; set; } = string.Empty;
 
@@ -65,4 +65,4 @@ namespace Gunter.Core.Infrastructure.Cache
         public byte[] GetData()
             => File.ReadAllBytes(Path.Combine(Path.GetTempPath(), Id));
     }
-}   
+}

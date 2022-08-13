@@ -1,18 +1,18 @@
-﻿using Gunter.Core.Contracts;
-using Gunter.Extensions.InfoSources.Specialized.Models;
+﻿using Gunter.Core.Components;
+using Gunter.Core.Components.BaseComponents;
+using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Cache;
+using Gunter.Core.Infrastructure.Helpers;
+using Gunter.Core.Models;
+using Gunter.Extensions.InfoSources.Specialized.Models;
 using System.Text;
 using System.Text.Json;
 using WikiDotNet;
-using Gunter.Core.Infrastructure.Helpers;
-using Gunter.Core.Models;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
     public class WikipediaInfoSource : InfoSourceBase<WikipediaInfoItem>, IGunterInfoSource
     {
-        private WikipediaInfoItem lastItem;
-        public WikipediaInfoItem LastItem { get => lastItem; }
 
         private readonly IGunterInfoItem _container;
         private Dictionary<string, WikipediaInfoItem> data = new();
@@ -49,7 +49,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public object GetLastItem()
         {
             GetLastData();
-            return lastItem;
+            return LastItem;
         }
 
         public override Dictionary<string, WikipediaInfoItem> GetLastData()
@@ -82,14 +82,14 @@ namespace Gunter.Extensions.InfoSources.Specialized
                 if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
                 {
                     var json = Encoding.UTF8.GetString(content);
-                    lastItem = JsonSerializer.Deserialize<WikipediaInfoItem>(json) ?? lastItem;
+                    LastItem = JsonSerializer.Deserialize<WikipediaInfoItem>(json) ?? LastItem;
                 }
                 else
                 {
                     var searcher = new WikiSearcher();
                     var response = searcher.Search(searchString, searchSettings);
 
-                    foreach(var searchResult in response.Query.SearchResults)
+                    foreach (var searchResult in response.Query.SearchResults)
                     {
                         data.Add(searchResult.Title, WikipediaInfoItem.FromSearchResult(searchResult));
                     }
@@ -102,7 +102,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
                     SpecialProperties.AddOrUpdate("wikipedia_url", result.Url);
 
                     var item = WikipediaInfoItem.FromSearchResult(result);
-                    lastItem = item;
+                    LastItem = item;
 
                     var json = JsonSerializer.Serialize(item, typeof(WikipediaInfoItem));
                     ExternalDataCache.Instance.TryAddFile(json, fileUrl, DateTimeManipulationHelper.QuarterDayTimeSpan);
@@ -118,7 +118,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public void Update()
         {
-            
+
         }
 
         private void InitializeProperties()

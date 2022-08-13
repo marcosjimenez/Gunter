@@ -1,7 +1,7 @@
-﻿using ColorCode.Common;
+﻿using ColorCode;
+using ColorCode.Common;
 using ColorCode.Parsing;
 using ColorCode.Styling;
-using ColorCode;
 using System.Net;
 using System.Text;
 

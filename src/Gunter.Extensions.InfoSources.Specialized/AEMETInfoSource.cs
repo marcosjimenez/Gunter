@@ -1,14 +1,16 @@
-﻿using Gunter.Core.Contracts;
+﻿using Gunter.Core.Components;
+using Gunter.Core.Components.BaseComponents;
+using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Cache;
-using System.Text;
-using System.Xml.Serialization;
-using Gunter.Extensions.InfoSources.Specialized.Models;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
+using Gunter.Extensions.InfoSources.Specialized.Models;
+using System.Text;
+using System.Xml.Serialization;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class AEMETInfoSource : InfoSourceBase<string>, IGunterInfoSource
+    public class AEMETInfoSource : InfoSourceBase<AEMETResponseModel>, IGunterInfoSource
     {
         private AEMETResponseModel lastItem { get; set; }
         private readonly IGunterInfoItem _container;
@@ -16,9 +18,8 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         private const string BaseAddress = "https://www.aemet.es/xml/municipios/";
         private const string Chiloeches = "localidad_19105.xml";
-        private Dictionary<string, string> data = new();
+        private Dictionary<string, AEMETResponseModel> data = new();
 
-        public AEMETResponseModel LastItem { get => lastItem; }
         public bool IsOnline => true;
 
         public IGunterInfoItem Container { get => _container; }
@@ -31,7 +32,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             Id = id;
         }
 
-        public AEMETInfoSource() 
+        public AEMETInfoSource()
         {
             Name = "AEMET InfoSource";
             SpecialProperties = new SpecialProperties();
@@ -58,7 +59,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             return lastItem;
         }
 
-        public override Dictionary<string, string> GetLastData()
+        public override Dictionary<string, AEMETResponseModel> GetLastData()
         {
             SpecialProperties.TryGetProperty("file", out string? file);
 
@@ -92,11 +93,11 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
                     if (data.ContainsKey("LastData"))
                     {
-                        data["LastData"] = lastData ?? string.Empty;
+                        data["LastData"] = item;
                     }
                     else
                     {
-                        data.Add("LastData", lastData ?? string.Empty);
+                        data.Add("LastData", item);
                     }
                 }
             }

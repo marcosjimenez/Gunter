@@ -1,14 +1,11 @@
 ﻿using CoreHtmlToImage;
 using Gunter.Core.Contracts;
+using Gunter.Core.Visualizations;
 using Gunter.Extensions.InfoSources.Specialized;
 using Gunter.Extensions.InfoSources.Specialized.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Gunter.Extensions.Visualization.Handlers
+namespace Gunter.Extensions.Visualizations.Specialized
 {
     public class GunterBotVisualizationHandler : VisualizationHandlerBase<GunterBotInfoSource>, IGunterVisualizationHandler
     {
