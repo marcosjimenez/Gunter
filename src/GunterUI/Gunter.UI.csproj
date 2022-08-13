@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ColorCode.Core" Version="2.0.13" />
     <PackageReference Include="Krypton.Docking" Version="65.22.6.152" />
     <PackageReference Include="Krypton.Navigator" Version="65.22.6.152" />
     <PackageReference Include="Krypton.Ribbon" Version="65.22.6.152" />

@@ -2,40 +2,48 @@
 
 namespace Gunter.Core.Infrastructure.Cache
 {
-
-    public class ExternalDataCacheItem
+    public abstract class ExternalDataCacheItemBase 
     {
-        public string Id { get; set; }
-        public string FileWithPath { get; set; }
+        public string ParentFolderId { get; set; } = string.Empty;
+
+    }
+
+    public class ExternalDataCacheItem : ExternalDataCacheItemBase
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string LocalPath { get; set; } = string.Empty;
+        public string CachePath { get; set; } = string.Empty;
+
         public DateTimeOffset Expiration { get; set; }
-        public string MD5 { get; set; }
+        public string MD5 { get; set; } = string.Empty;
 
         public ExternalDataCacheItem()
         {
             Id = string.Empty;
-            FileWithPath = string.Empty;
+            LocalPath = string.Empty;
             Expiration = DateTimeOffset.Now.Add(DateTimeManipulationHelper.DEFAULT_EXPIRATION);
         }
 
         public ExternalDataCacheItem(string id, byte[] value, DateTime expiration)
         {
             Id = id;
-            FileWithPath = Path.Combine(Path.GetTempPath(), id);
+            LocalPath = Path.Combine(ExternalDataCache.InitialDirectory, id);
             Expiration = expiration;
-            File.WriteAllBytes(FileWithPath, value);
+            File.WriteAllBytes(LocalPath, value);
         }
 
         public ExternalDataCacheItem(byte[] value, DateTime expiration)
         {
             Id = Guid.NewGuid().ToString();
-            FileWithPath = Path.Combine(Path.GetTempPath(), Id);
+            LocalPath = Path.Combine(ExternalDataCache.InitialDirectory, Id);
             Expiration = expiration;
-            File.WriteAllBytes(FileWithPath, value);
+            File.WriteAllBytes(LocalPath, value);
         }
 
         public void Destroy()
         {
-            var file = Path.Combine(Path.GetTempPath(), Id);
+            var file = Path.Combine(ExternalDataCache.InitialDirectory, Id);
             if (File.Exists(file))
                 File.Delete(file);
         }
@@ -43,7 +51,7 @@ namespace Gunter.Core.Infrastructure.Cache
         public static bool TryGetFromFile(string id, out byte[] contents)
         {
             var retVal = false;
-            var file = Path.Combine(Path.GetTempPath(), id);
+            var file = Path.Combine(ExternalDataCache.InitialDirectory, id);
             if (File.Exists(file))
             {
                 contents = File.ReadAllBytes(file);

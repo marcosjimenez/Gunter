@@ -63,7 +63,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             SpecialProperties.TryGetProperty("file", out string? file);
 
             string xml = string.Empty;
-            var fileUrl = ExternalDataCache.GenerateCacheFileID("AEMET", file, "weather");
+            var fileUrl = ExternalDataCache.GenerateCacheFileID("Weather", "AEMET", file);
             if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
             {
                 xml = Encoding.UTF8.GetString(content);

@@ -45,7 +45,8 @@
             this.txtConsole.Multiline = true;
             this.txtConsole.Name = "txtConsole";
             this.txtConsole.ReadOnly = true;
-            this.txtConsole.Size = new System.Drawing.Size(816, 454);
+            this.txtConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtConsole.Size = new System.Drawing.Size(816, 418);
             this.txtConsole.TabIndex = 0;
             // 
             // txtCommand
@@ -59,10 +60,12 @@
             this.txtCommand.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtCommand.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.txtCommand.ForeColor = System.Drawing.Color.Green;
-            this.txtCommand.Location = new System.Drawing.Point(3, 463);
+            this.txtCommand.Location = new System.Drawing.Point(3, 427);
+            this.txtCommand.Multiline = true;
             this.txtCommand.Name = "txtCommand";
-            this.txtCommand.Size = new System.Drawing.Size(816, 18);
+            this.txtCommand.Size = new System.Drawing.Size(816, 54);
             this.txtCommand.TabIndex = 0;
+            this.txtCommand.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCommand_KeyDown);
             this.txtCommand.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtCommand_KeyUp);
             // 
             // ConsoleViewer
