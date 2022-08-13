@@ -1,6 +1,6 @@
 ﻿using Gunter.Core.Infrastructure.Helpers;
 
-namespace Gunter.Core.Infrastructure.Cache
+namespace Gunter.Core.Cache
 {
     public abstract class ExternalDataCacheItemBase
     {

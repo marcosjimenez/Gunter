@@ -10,9 +10,9 @@ using Tweetinvi.Models;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class TwitterInfoSource : InfoSourceBase<TwitterInfoItem>, IGunterInfoSource
+    public class TwitterInfoSource : InfoSourceBase<TwitterData>, IGunterInfoSource
     {
-        private ConcurrentBag<TwitterInfoItem> _messages = new();
+        private ConcurrentBag<TwitterData> _messages = new();
 
         private TwitterClient twitterClient;
 
@@ -23,10 +23,10 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public string Category { get => InfoSourceConstants.CAT_COMMUNICATION; }
         public string SubCategory { get => InfoSourceConstants.SUB_SOCIALNETWORKS; }
 
-        private TwitterInfoItem lastItem { get; set; }
+        private TwitterData lastItem { get; set; }
         private readonly IGunterInfoItem _container;
 
-        private Dictionary<string, TwitterInfoItem> data = new();
+        private Dictionary<string, TwitterData> data = new();
         public TwitterInfoSource()
         {
             Name = "Twitter InfoSource";
@@ -37,7 +37,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             //_mandatoryInputs.AddOrUpdate("ACCESS_TOKEN", "{YOUR_ACCESS_TOKEN_HERE}");
             //_mandatoryInputs.AddOrUpdate("ACCESS_TOKEN_SECRET", "{YOUR_ACCESS_TOKEN_HERE}");
             _container = null;
-            lastItem = new TwitterInfoItem();
+            lastItem = new TwitterData();
         }
 
         public TwitterInfoSource(string id)
@@ -55,7 +55,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             _mandatoryInputs.AddOrUpdate("BEARER_TOKEN", "{YOUR_ACCESS_TOKEN_HERE}");
             //_mandatoryInputs.AddOrUpdate("ACCESS_TOKEN", "{YOUR_ACCESS_TOKEN_HERE}");
             //_mandatoryInputs.AddOrUpdate("ACCESS_TOKEN_SECRET", "{YOUR_ACCESS_TOKEN_HERE}");
-            lastItem = new TwitterInfoItem();
+            lastItem = new TwitterData();
             _container = container;
         }
 
@@ -72,7 +72,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             return lastItem;
         }
 
-        public override Dictionary<string, TwitterInfoItem> GetLastData()
+        public override Dictionary<string, TwitterData> GetLastData()
         {
 
             var client = GetTwitterClient();
@@ -94,7 +94,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
                 if (data.ContainsKey(mensaje.Id.ToString()))
                     continue;
 
-                data.Add(mensaje.Id.ToString(), new TwitterInfoItem
+                data.Add(mensaje.Id.ToString(), new TwitterData
                 {
                     Id = mensaje.Id.ToString(),
                     Date = mensaje.CreatedAt,

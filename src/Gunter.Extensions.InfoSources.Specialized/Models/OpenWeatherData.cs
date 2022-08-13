@@ -1,6 +1,6 @@
 ﻿namespace Gunter.Extensions.InfoSources.Specialized.Models
 {
-    public class OpenWeatherInfoItem
+    public class OpenWeatherData
     {
         public double Temperature { get; set; } = 0;
         public double Pressure { get; set; } = 0;
@@ -14,8 +14,8 @@
 
         public double RainProbability { get; set; } = 0;
 
-        public static OpenWeatherInfoItem? FromOpenWeatherResponseModel(OpenWeatherResponseModel.RootObject model)
-        => model is null ? null : new OpenWeatherInfoItem
+        public static OpenWeatherData? FromOpenWeatherResponseModel(OpenWeatherResponseModel.RootObject model)
+        => model is null ? null : new OpenWeatherData
         {
             Temperature = model.main.temp,
             GroundLevel = model.main.grnd_level,

@@ -4,7 +4,7 @@ using Gunter.Core.Infrastructure.Log;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace Gunter.Core.Infrastructure.Cache
+namespace Gunter.Core.Cache
 {
     public class ExternalDataCache
     {

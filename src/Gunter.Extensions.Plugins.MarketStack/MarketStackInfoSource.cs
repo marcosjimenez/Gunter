@@ -1,7 +1,7 @@
 ﻿using Gunter.Core.Components;
 using Gunter.Core.Components.BaseComponents;
 using Gunter.Core.Contracts;
-using Gunter.Core.Infrastructure.Cache;
+using Gunter.Core.Cache;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
 using Gunter.Extensions.Plugins.MarketStack.Models;

@@ -1,7 +1,7 @@
 ﻿using Gunter.Core.Components;
 using Gunter.Core.Components.BaseComponents;
 using Gunter.Core.Contracts;
-using Gunter.Core.Infrastructure.Cache;
+using Gunter.Core.Cache;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
 using Gunter.Extensions.InfoSources.Specialized.Models;
@@ -10,15 +10,15 @@ using System.Xml.Serialization;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class AEMETInfoSource : InfoSourceBase<AEMETResponseModel>, IGunterInfoSource
+    public class AEMETInfoSource : InfoSourceBase<AEMETData>, IGunterInfoSource
     {
-        private AEMETResponseModel lastItem { get; set; }
+        private AEMETData lastItem { get; set; }
         private readonly IGunterInfoItem _container;
         private readonly TimeSpan MinInterval = new TimeSpan();
 
         private const string BaseAddress = "https://www.aemet.es/xml/municipios/";
         private const string Chiloeches = "localidad_19105.xml";
-        private Dictionary<string, AEMETResponseModel> data = new();
+        private Dictionary<string, AEMETData> data = new();
 
         public bool IsOnline => true;
 
@@ -59,7 +59,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             return lastItem;
         }
 
-        public override Dictionary<string, AEMETResponseModel> GetLastData()
+        public override Dictionary<string, AEMETData> GetLastData()
         {
             SpecialProperties.TryGetProperty("file", out string? file);
 
@@ -75,9 +75,9 @@ namespace Gunter.Extensions.InfoSources.Specialized
                 ExternalDataCache.Instance.TryAddFile(xml, fileUrl, DateTimeManipulationHelper.OneDayTimeSpan);
             }
 
-            var serializer = new XmlSerializer(typeof(AEMETResponseModel), new XmlRootAttribute("root"));
+            var serializer = new XmlSerializer(typeof(AEMETData), new XmlRootAttribute("root"));
             using var reader = new StringReader(xml);
-            var item = (AEMETResponseModel?)serializer.Deserialize(reader);
+            var item = (AEMETData?)serializer.Deserialize(reader);
 
             if (item is not null)
             {

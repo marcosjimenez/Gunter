@@ -1,6 +1,6 @@
 ﻿using Gunter.Core.Cache.Commands;
 using Gunter.Core.Contracts;
-using Gunter.Core.Infrastructure.Cache;
+using Gunter.Core.Cache;
 using Gunter.Core.Messaging;
 using Gunter.Core.Messaging.Models;
 

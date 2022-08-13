@@ -13,9 +13,9 @@ using Telegram.Bot.Types.Enums;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class GunterBotInfoSource : InfoSourceBase<GunterBotInfoItem>, IGunterInfoSource
+    public class GunterBotInfoSource : InfoSourceBase<GunterBotData>, IGunterInfoSource
     {
-        private ConcurrentBag<GunterBotInfoItem> _messages = new();
+        private ConcurrentBag<GunterBotData> _messages = new();
 
         public bool IsOnline => true;
 
@@ -26,7 +26,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         private readonly IGunterInfoItem _container;
 
-        private Dictionary<string, GunterBotInfoItem> data = new();
+        private Dictionary<string, GunterBotData> data = new();
 
         private TelegramBotClient botClient;
         private User botUser;
@@ -64,7 +64,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             //AsyncHelper.RunSync(() => botClient.CloseAsync());
         }
 
-        public override Dictionary<string, GunterBotInfoItem> GetLastData()
+        public override Dictionary<string, GunterBotData> GetLastData()
         {
             _mandatoryInputs.TryGetProperty("command", out string? command);
 
@@ -144,7 +144,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             if (message.Text is not { } messageText)
                 return Task.CompletedTask;
 
-            _messages.Add(new GunterBotInfoItem
+            _messages.Add(new GunterBotData
             {
                 MessageId = message.MessageId.ToString(),
                 ChatId = message.Chat.Id.ToString(),

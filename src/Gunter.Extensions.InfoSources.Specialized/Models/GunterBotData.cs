@@ -1,6 +1,6 @@
 ﻿namespace Gunter.Extensions.InfoSources.Specialized.Models
 {
-    public class GunterBotInfoItem
+    public class GunterBotData
     {
         public string MessageId { get; set; }
 

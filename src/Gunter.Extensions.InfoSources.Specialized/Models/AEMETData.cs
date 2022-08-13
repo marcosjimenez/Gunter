@@ -5,7 +5,7 @@
     [System.ComponentModel.DesignerCategory("code")]
     [System.Xml.Serialization.XmlType(AnonymousType = true)]
     [System.Xml.Serialization.XmlRoot(Namespace = "", IsNullable = false)]
-    public partial class AEMETResponseModel
+    public partial class AEMETData
     {
 
         private rootOrigen origenField;

@@ -1,4 +1,4 @@
-﻿using Gunter.Core.Infrastructure.Cache;
+﻿using Gunter.Core.Cache;
 
 namespace Gunter.Core.Cache
 {

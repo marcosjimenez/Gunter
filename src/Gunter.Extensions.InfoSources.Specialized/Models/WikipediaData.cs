@@ -1,6 +1,6 @@
 ﻿namespace Gunter.Extensions.InfoSources.Specialized.Models
 {
-    public class WikipediaInfoItem
+    public class WikipediaData
     {
 
         public readonly DateTime LastEdited;
@@ -13,8 +13,8 @@
         public int WordCount { get; set; }
         public string Language { set; get; } = "es";
 
-        internal static WikipediaInfoItem FromSearchResult(WikiDotNet.WikiSearchResult result)
-        => new WikipediaInfoItem
+        internal static WikipediaData FromSearchResult(WikiDotNet.WikiSearchResult result)
+        => new()
         {
             Title = result.Title,
             Ns = result.Ns,

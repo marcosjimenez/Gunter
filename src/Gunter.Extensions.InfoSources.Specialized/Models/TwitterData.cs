@@ -1,6 +1,6 @@
 ﻿namespace Gunter.Extensions.InfoSources.Specialized.Models
 {
-    public class TwitterInfoItem
+    public class TwitterData
     {
         public string Id { get; set; }
         public string PersonId { get; set; }

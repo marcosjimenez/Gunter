@@ -1,7 +1,7 @@
 ﻿using Gunter.Core.Components;
 using Gunter.Core.Components.BaseComponents;
 using Gunter.Core.Contracts;
-using Gunter.Core.Infrastructure.Cache;
+using Gunter.Core.Cache;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
 using Gunter.Extensions.InfoSources.Specialized.Models;
@@ -11,11 +11,11 @@ using WikiDotNet;
 
 namespace Gunter.Extensions.InfoSources.Specialized
 {
-    public class WikipediaInfoSource : InfoSourceBase<WikipediaInfoItem>, IGunterInfoSource
+    public class WikipediaInfoSource : InfoSourceBase<WikipediaData>, IGunterInfoSource
     {
 
         private readonly IGunterInfoItem _container;
-        private Dictionary<string, WikipediaInfoItem> data = new();
+        private Dictionary<string, WikipediaData> data = new();
 
         public bool IsOnline => true;
 
@@ -52,7 +52,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             return LastItem;
         }
 
-        public override Dictionary<string, WikipediaInfoItem> GetLastData()
+        public override Dictionary<string, WikipediaData> GetLastData()
         {
             SpecialProperties.TryGetProperty("expression", out string? searchString);
             SpecialProperties.TryGetProperty("resultLimit", out string? resultLimitString);
@@ -82,7 +82,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
                 if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
                 {
                     var json = Encoding.UTF8.GetString(content);
-                    LastItem = JsonSerializer.Deserialize<WikipediaInfoItem>(json) ?? LastItem;
+                    LastItem = JsonSerializer.Deserialize<WikipediaData>(json) ?? LastItem;
                 }
                 else
                 {
@@ -91,7 +91,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
                     foreach (var searchResult in response.Query.SearchResults)
                     {
-                        data.Add(searchResult.Title, WikipediaInfoItem.FromSearchResult(searchResult));
+                        data.Add(searchResult.Title, WikipediaData.FromSearchResult(searchResult));
                     }
 
                     WikiSearchResult? result = response.Query.SearchResults.OrderByDescending(x => x.PageId).FirstOrDefault();
@@ -101,10 +101,10 @@ namespace Gunter.Extensions.InfoSources.Specialized
                     SpecialProperties.AddOrUpdate("preview", result.Preview);
                     SpecialProperties.AddOrUpdate("wikipedia_url", result.Url);
 
-                    var item = WikipediaInfoItem.FromSearchResult(result);
+                    var item = WikipediaData.FromSearchResult(result);
                     LastItem = item;
 
-                    var json = JsonSerializer.Serialize(item, typeof(WikipediaInfoItem));
+                    var json = JsonSerializer.Serialize(item, typeof(WikipediaData));
                     ExternalDataCache.Instance.TryAddFile(json, fileUrl, DateTimeManipulationHelper.QuarterDayTimeSpan);
                 }
             }

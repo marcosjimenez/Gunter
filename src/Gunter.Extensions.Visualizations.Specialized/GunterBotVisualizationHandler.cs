@@ -72,7 +72,7 @@ namespace Gunter.Extensions.Visualizations.Specialized
             return bytes;
         }
 
-        private rootDia GetPrediction(AEMETResponseModel model)
+        private rootDia GetPrediction(AEMETData model)
             => model.prediccion
             .Where(x => x.fecha == DateTime.Now.Date).Single();
 
