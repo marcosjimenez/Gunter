@@ -33,7 +33,7 @@ namespace Gunter.Core.Infrastructure.Log
             OnLog?.Invoke(sender,
                 new GunterLogItemEventArgs
                 {
-                    GunterLogItem = message,
+                    GunterLogItem = message
                 });
         }
     }

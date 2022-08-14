@@ -20,5 +20,12 @@ namespace Gunter.Core.Cache.Commands
             else
                 return string.Empty;
         }
+
+        [CacheCommandMethod(Command = "hola", HelpText = "Decir hola")]
+        public string DecirHola(params string[] parameters)
+        {
+            return "Hola KAly";
+        }
+
     }
 }

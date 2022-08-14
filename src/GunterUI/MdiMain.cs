@@ -28,12 +28,12 @@ namespace GunterUI
             WindowManager.Instance.MainForm = this;
         }
 
-        public void ShowLogText(GunterLogItem logItem, IGunterComponent component)
+        public void ShowLogText(GunterLogItem logItem, object component)
         {
             if (mainLogText is null)
                 return;
 
-            mainLogText.AppendText($"{DateTime.Now.ToString("HH:MM:ss:tt")} [{component?.Name ?? string.Empty}]: {logItem.Message}");
+            mainLogText.AppendText($"{DateTime.Now.ToString("HH:MM:ss:tt")} [{component.ToString() ?? string.Empty}]: {logItem.Message}");
             mainLogText.AppendText(Environment.NewLine);
         }
 
@@ -167,7 +167,7 @@ namespace GunterUI
 
             GunterLog.Instance.OnLog += (sender, e) =>
             {
-                ShowLogText(e.GunterLogItem, sender as IGunterComponent);
+                ShowLogText(e.GunterLogItem, sender);
             };
             var file = Path.Combine(Directory.GetCurrentDirectory(), Constants.DockingConfigurationFile);
             if (File.Exists(file))

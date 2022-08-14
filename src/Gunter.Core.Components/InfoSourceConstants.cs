@@ -2,6 +2,10 @@
 {
     public static class InfoSourceConstants
     {
+
+        public const string CAT_MACHINELEARNING = "Machine Learning";
+        public const string SUB_TESTML = "Test ML";
+
         public const string CAT_COMMUNICATION = "Comunicaciones";
         public const string SUB_BOTS = "Bots";
 

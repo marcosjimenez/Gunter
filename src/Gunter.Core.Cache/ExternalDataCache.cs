@@ -141,16 +141,8 @@ namespace Gunter.Core.Cache
             if (retVal)
             {
                 var fileId = new CacheFileId();
-                if (folder.Parent is not null)
-                {
-                    var destination = folder.Parent;
-                    do
-                    {
-                        fileId.PathSegments.Insert(0, $"{folder.Name}\\");
-                        destination = folder.Parent;
-                    } while (destination is not null);
-                }
-
+                var destination = GetFolderByKey(folder.Id, RootFolder) ?? RootFolder;
+                fileId.PathSegments = GetFullPathSegmentsForFolder(destination).ToList();
                 fileId.PathSegments.Add(Path.GetFileName(remoteFile));
 
                 var bytes = File.ReadAllBytes(localFile);
@@ -173,10 +165,11 @@ namespace Gunter.Core.Cache
             newVersion.Name = cacheFileId.PathSegments.Last(); // TODO, versioning 
 
             var key = cacheFileId.ToString();
-            CacheFolder? folder = GetFolderFromCacheId(RootFolder.Folders, cacheFileId.PathSegments);
-            if (folder is not null && folder.Files.Any(x => x.Name == cacheFileId.PathSegments.Last()))
+            var fileName = cacheFileId.PathSegments.Last();
+            CacheFolder? folder = GetFolderFromPathSegments(RootFolder.Folders, cacheFileId.PathSegments);
+            if (folder is not null && folder.Files.Any(x => x.Name == fileName))
             {
-                var file = folder.Files.SingleOrDefault(x => x.Name == cacheFileId.PathSegments.Last());
+                var file = folder.Files.SingleOrDefault(x => x.Name == fileName);
                 if (Options.UseVersions)
                 {
                     // TODO VERSIONING
@@ -184,7 +177,6 @@ namespace Gunter.Core.Cache
                     //newVersion.Versions
                 }
                 folder.Files.Remove(file);
-                folder.Files.Add(newVersion);
             }
             else
             {
@@ -193,14 +185,21 @@ namespace Gunter.Core.Cache
                 for (int i = 0; i < cacheFileId.PathSegments.Count - 1; i++)
                 {
                     var item = cacheFileId.PathSegments[i];
-                    TryCreateFolder(item, folder, out var newFolder);
-                    folder = newFolder;
-                    fullPath = Path.Combine(fullPath, newFolder.Name);
-                    newVersion.CachePath = fullPath;
+                    if (folder.Folders.Any(x => x.Value.Name.Equals(item, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        folder = folder.Folders.SingleOrDefault(x => x.Value.Name.Equals(item, StringComparison.InvariantCultureIgnoreCase)).Value;
+                    }
+                    else
+                    {
+                        TryCreateFolder(item, folder, out var newFolder);
+                        folder = newFolder;
+                        fullPath = Path.Combine(fullPath, newFolder.Name);
+                        newVersion.CachePath = fullPath;
+                    }
                 }
-
-                folder.Files.Add(newVersion);
             }
+            newVersion.Expiration = DateTime.MaxValue;
+            folder.Files.Add(newVersion);
             if (Options.AutoSave)
                 ToFileSystem();
         }
@@ -208,7 +207,7 @@ namespace Gunter.Core.Cache
         public bool TryGetFile(CacheFileId cacheFileId, out byte[] bytes)
         {
             var key = cacheFileId.ToString();
-            var folder = GetFolderFromCacheId(RootFolder.Folders, cacheFileId.PathSegments);
+            var folder = GetFolderFromPathSegments(RootFolder.Folders, cacheFileId.PathSegments);
             if (folder is null || folder.Files.Count == 0)
             {
                 bytes = Array.Empty<byte>();
@@ -250,7 +249,7 @@ namespace Gunter.Core.Cache
             return retVal;
         }
 
-        public CacheFolder? GetFolderFromCacheId(Dictionary<string, CacheFolder> folders, IEnumerable<string> values, int deepCounter = 0)
+        public CacheFolder? GetFolderFromPathSegments(Dictionary<string, CacheFolder> folders, IEnumerable<string> values, int deepCounter = 0)
         {
             var name = values.ElementAt(values.Count() - 1);
             CacheFolder? retVal = null;
@@ -262,7 +261,7 @@ namespace Gunter.Core.Cache
                 if (item.Files.Any(x => x.Name == name))
                     return item;
 
-                retVal = GetFolderFromCacheId(item.Folders, values.Skip(deepCounter), deepCounter++);
+                retVal = GetFolderFromPathSegments(item.Folders, values.Skip(deepCounter), deepCounter++);
                 if (retVal is not null)
                     break;
             }
@@ -332,5 +331,17 @@ namespace Gunter.Core.Cache
         public static string GenerateCacheFileIdString(params string[] values)
             => $"{string.Join('_', values)}"; // Gunter Cache Item
 
+
+        private List<string> GetFullPathSegmentsForFolder(CacheFolder folder)
+        {
+            var retVal = new List<string>();
+            if (folder.Id != RootFolder.Id)
+                retVal.Add(folder.Name);
+
+            if (folder.Parent is not null)
+                retVal.InsertRange(0, GetFullPathSegmentsForFolder(folder.Parent));
+
+            return retVal;
+        }
     }
 }

@@ -284,7 +284,7 @@ namespace Controls
             {
                 Id = processor.Id,
                 Component = processor,
-                SolutionItemType = GunterSolutionItemType.Processor
+                SolutionItemType = GunterSolutionItemType.InfoItem
             };
 
             OnGunterItemAdded?.Invoke(this, args);
