@@ -1,4 +1,5 @@
 ﻿using Gunter.Core.Contracts;
+using Gunter.Core.Contracts.Chaining;
 using Gunter.Core.Infrastructure.Exceptions;
 using System.Reflection;
 
@@ -9,7 +10,7 @@ namespace Gunter.Core
         private static readonly Lazy<GunterEnvironmentHelper> lazy = new(() => new GunterEnvironmentHelper());
         public static GunterEnvironmentHelper Instance { get => lazy.Value; }
 
-        private Type[] CoreTypes = new[] {
+        private readonly Type[] CoreTypes = new[] {
             typeof(IGunterProcessor),
             typeof(IGunterInfoItem),
             typeof(IGunterInfoSource),
@@ -50,7 +51,7 @@ namespace Gunter.Core
                 return false;
 
             var type = target?.GetType();
-            var prop = type?.GetProperty("propertyName");
+            var prop = type?.GetProperty(propertyName);
             try
             {
                 prop.SetValue(target, value, null);
@@ -77,7 +78,7 @@ namespace Gunter.Core
             try
             {
                 var instance = Activator.CreateInstance(type, args);
-                return (T)instance;
+                return (T?)instance;
 
             }
             catch (Exception ex)
@@ -99,7 +100,7 @@ namespace Gunter.Core
                 KnowTypes.Add(item, GetTypesOf(item));
         }
 
-        private List<Type> GetTypesOf(Type type)
+        private static List<Type> GetTypesOf(Type type)
         {
             //var type = typeof(T);
             //var types = AppDomain.CurrentDomain.GetAssemblies()
@@ -109,14 +110,20 @@ namespace Gunter.Core
 
             var types = GetTypesFromFileSystem(type);
 
+            // TODO: 
+            // types.AddRange(GetTypesFromPlugins());
+
             return types;
         }
 
-        private List<Type> GetTypesFromFileSystem(Type type)
+        private static List<Type> GetTypesFromFileSystem(Type type)
         {
-            var basePath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-            var files = Directory.GetFiles(basePath, "Gunter.*.dll");
             var retVal = new List<Type>();
+            var basePath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().Location).LocalPath);
+            if (string.IsNullOrWhiteSpace(basePath))
+                return retVal;
+
+            var files = Directory.GetFiles(basePath, "Gunter.*.dll");
             try
             {
                 foreach (var file in files)

@@ -9,23 +9,38 @@ using GunterUI.Extensions;
 using Krypton.Docking;
 using Krypton.Navigator;
 using Krypton.Workspace;
+using Newtonsoft.Json;
+using System.Xml.Linq;
 
 namespace GunterUI
 {
     public partial class MdiMain : Form
     {
-        private GunterSolution currentSolution;
-        private GunterProject currentProject;
+        private GunterSolution? currentSolution;
 
-        private SolutionTreeView solutionTreeview;
-        private LogViewer mainLogText;
+        private SolutionTreeView? solutionTreeview;
+        private LogViewer? mainLogText;
 
-        private KryptonDockableNavigator kryptonDockableNavigator = new();
+        private KryptonDockableNavigator? kryptonDockableNavigator = new();
+
+        private const string OptionsFile = "Gunter.WinUI..json";
+        private Models.GunterWinUIOptions options = new();
 
         public MdiMain()
         {
             InitializeComponent();
             WindowManager.Instance.MainForm = this;
+        }
+
+        public void ShowOptions()
+        {
+            using var dlg = new OptionsDialog();
+            dlg.Options = options;
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                options = dlg.Options;
+                SaveOptions();
+            }
         }
 
         public void ShowLogText(GunterLogItem logItem, object component)
@@ -78,7 +93,7 @@ namespace GunterUI
                 };
 
                 if (dlg.ShowDialog() != DialogResult.OK)
-                    return;
+                        return;
 
                 currentSolution.FileName = Path.GetFileName(dlg.FileName);
                 currentSolution.FilePath = Path.GetFullPath(dlg.FileName);
@@ -87,7 +102,6 @@ namespace GunterUI
             GunterSolutionHelper.Instance.SaveSolutionAs(currentSolution, currentSolution.FilePath);
         }
 
-        private KryptonDockingWorkspace documentWorkSpace;
         private void ShowDocument(Control control, string uniqueId, string title)
         {
             KryptonWorkspaceCell cell;
@@ -101,7 +115,7 @@ namespace GunterUI
 
             var page = NewDocument(control, title);
             page.UniqueName = uniqueId;
-            documentWorkSpace = kryptonDockingManager.AddToWorkspace("Workspace", new KryptonPage[] { page });
+            var documentWorkSpace = kryptonDockingManager.AddToWorkspace("Workspace", new KryptonPage[] { page });
             cell = kryptonDockingManager.DockingCellForPage(uniqueId);
             cell.SelectedPage = page;
         }
@@ -112,11 +126,15 @@ namespace GunterUI
             if (page is not null)
             {
                 var cell = kryptonDockingManager.DockingCellForPage(uniqueId);
-                cell.SelectedPage = page;
+                if (cell is null)
+                    page.Show();
+                else
+                    cell.SelectedPage = page;
+
                 return;
             }
 
-            Control control = null;
+            Control? control = null;
             var id = string.Empty;
             var name = string.Empty;
             switch (itemType)
@@ -169,6 +187,10 @@ namespace GunterUI
             {
                 ShowLogText(e.GunterLogItem, sender);
             };
+
+            if (!options.MainLayoutAutoPersist)
+                return;
+
             var file = Path.Combine(Directory.GetCurrentDirectory(), Constants.DockingConfigurationFile);
             if (File.Exists(file))
                 kryptonDockingManager.LoadConfigFromFile(file);
@@ -240,10 +262,47 @@ namespace GunterUI
             return p;
         }
 
+        private void LoadOptions()
+        {
+            var file= Path.Combine(Directory.GetCurrentDirectory(), Constants.GeneralConfigFile);
+            if (File.Exists(file))
+            { 
+                var json = File.ReadAllText(file);
+                try
+                {
+                    var persistedOptions = JsonConvert.DeserializeObject<Models.GunterWinUIOptions>(json);
+                    if (persistedOptions is not null)
+                        options = persistedOptions;
+                }
+                catch(Exception ex)
+                {
+                    GunterLog.Instance.Log(this, $"Cannot load options from {file}, reason: {ex.Message}");
+                }
+            }
+            else
+            {
+                SaveOptions();
+            }
+        }
+
+        private void SaveOptions()
+        {
+            var file = Path.Combine(Directory.GetCurrentDirectory(), Constants.GeneralConfigFile);
+            var json = JsonConvert.SerializeObject(options);
+            File.WriteAllText(file, json);
+        }
+
+        private void processAppUnloadTasks ()
+        {
+            if (options.MainLayoutAutoPersist)
+                kryptonDockingManager.SaveConfigToFile(Path.Combine(Directory.GetCurrentDirectory(), Constants.DockingConfigurationFile));
+        }
+
         // Events
 
         private void MdiMain_Load(object sender, EventArgs e)
         {
+            LoadOptions();
             ConfigureDocks();
             NewSolution();
         }
@@ -265,7 +324,7 @@ namespace GunterUI
 
         private void MdiMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            kryptonDockingManager.SaveConfigToFile(Path.Combine(Directory.GetCurrentDirectory(), Constants.DockingConfigurationFile));
+            processAppUnloadTasks();
         }
 
         private void cerrarActualToolStripMenuItem_Click(object sender, EventArgs e)
@@ -277,6 +336,11 @@ namespace GunterUI
         {
             using var dlg = new AboutBox();
             dlg.ShowDialog();
+        }
+
+        private void opcionesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowOptions();
         }
     }
 }

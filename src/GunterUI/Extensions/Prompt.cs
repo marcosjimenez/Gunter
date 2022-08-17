@@ -4,10 +4,13 @@ namespace GunterUI.Extensions
 {
     public static class Prompt
     {
-        public static string ShowDialog(string text, string caption, string value)
+        public static bool ShowPromptDialog(string text, string caption, string value, out string result)
         {
             var prompt = new PromptForm(caption, text, value);
-            return prompt.ShowDialog() == DialogResult.OK ? prompt.Value : "";
+            var retVal = prompt.ShowDialog();
+            result = retVal == DialogResult.OK ? prompt.Value : string.Empty;
+
+            return retVal == DialogResult.OK;
         }
     }
 }

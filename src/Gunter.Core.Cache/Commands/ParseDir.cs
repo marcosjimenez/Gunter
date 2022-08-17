@@ -31,14 +31,20 @@ namespace Gunter.Core.Cache.Commands
 
             var result = CurrentFolder.Files;
             var collections = result
-                .Where(x => x.ToString().IndexOf('_') > 1)
-                .Select(x => x.ToString().Split('_').Skip(1).FirstOrDefault() ?? x.ToString());
+                .Where(x => x.Name.ToString().IndexOf('_') > 1)
+                .Select(x => x.Name.ToString().Split('_').Skip(1).FirstOrDefault() ?? x.ToString());
 
             foreach (var col in collections)
                 sb.AppendLine($"<COL>\t{col}");
 
             foreach (var file in CurrentFolder.Files)
-                sb.AppendLine($"\t{file.Name}\t\t{new FileInfo(file.LocalPath).Length.ToString("0,0")} bytes");
+            {
+                if (File.Exists(file.LocalPath))
+                    sb.AppendLine($"\t{file.Name}\t\t{new FileInfo(file.LocalPath).Length.ToString("0,0")} bytes");
+                else
+                    sb.AppendLine($"\t{file.Name}\t\tBLOB NOT FOUND!");
+            }
+                
 
             sb.AppendLine();
             sb.AppendLine($"Colecciones\t{collections.Count()}");

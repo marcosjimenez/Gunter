@@ -2,7 +2,7 @@
 {
     public interface IGunterProcessor : IGunterComponent
     {
-        List<IGunterInfoItem> InfoItems { get; set; }
+        IList<IGunterInfoItem> InfoItems { get; set; }
 
         string GetLogAndClear();
         IGunterInfoItem CreateInfoItem(string name);

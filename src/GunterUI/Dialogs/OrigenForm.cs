@@ -47,6 +47,7 @@ namespace GunterUI.Dialogs
                 IGunterInfoSource? instance = null;
                 try
                 {
+                    Type type = item.GetType();
                     instance = GunterEnvironmentHelper.Instance
                         .CreateInstance<IGunterInfoSource>(GunterEnvironmentHelper.GetSystemTypeName(item), null);
                     if (instance is not null)

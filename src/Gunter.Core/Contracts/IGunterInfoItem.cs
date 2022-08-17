@@ -1,4 +1,6 @@
-﻿namespace Gunter.Core.Contracts
+﻿using Gunter.Core.Contracts.Chaining;
+
+namespace Gunter.Core.Contracts
 {
     public interface IGunterInfoItem : IGunterComponent
     {
@@ -15,5 +17,7 @@
         void Update();
 
         IGunterProcessor GetProcessor();
+
+        IChain<IGunterInfoSource> Chain { get; }
     }
 }

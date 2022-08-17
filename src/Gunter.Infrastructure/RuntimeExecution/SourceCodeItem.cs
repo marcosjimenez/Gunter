@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Gunter.Core.Infrastructure.Helpers
+namespace Gunter.Core.Infrastructure.RuntimeExecution
 {
     public class SourceCodeItem<TIn, TOut>
     {
@@ -31,8 +31,8 @@ namespace Gunter.Core.Infrastructure.Helpers
             this.AddRefSearchPath(typeof(object).GetTypeInfo().Assembly.Location);
 
             this.AddRefPath(new[] {
-                typeof(System.Object).GetTypeInfo().Assembly.Location,
-                this.GetType().GetTypeInfo().Assembly.Location,
+                typeof(object).GetTypeInfo().Assembly.Location,
+                GetType().GetTypeInfo().Assembly.Location,
                 Path.Combine(Path.GetDirectoryName(typeof(System.Runtime.GCSettings).GetTypeInfo().Assembly.Location), "System.Runtime.dll")
             });
         }
@@ -69,7 +69,7 @@ namespace Gunter.Core.Infrastructure.Helpers
 
         public static SourceCodeItem<TIn, TOut> AddRefPath<TIn, TOut>(this SourceCodeItem<TIn, TOut> item, string[] refs)
         {
-            foreach(var reference in refs)
+            foreach (var reference in refs)
             {
                 var newItem = GetFullPathForRef(reference);
                 if (!string.IsNullOrWhiteSpace(newItem))
@@ -80,10 +80,10 @@ namespace Gunter.Core.Infrastructure.Helpers
 
         public static SourceCodeItem<TIn, TOut> AddRefPathsForName<TIn, TOut>(this SourceCodeItem<TIn, TOut> item, string name)
         {
-            foreach(var dir in item.SearchDirectories)
+            foreach (var dir in item.SearchDirectories)
             {
                 var files = Directory.GetFiles(dir, $"{name}*.dll");
-                foreach(var file in files)
+                foreach (var file in files)
                     item.RefPaths.Add(file);
             }
 

@@ -22,8 +22,7 @@ namespace Gunter.Core.Components.BaseComponents
 
         public string Name { get; set; } = string.Empty;
 
-        [JsonIgnore]
-        public List<IGunterInfoItem> InfoItems { get; set; } = new();
+        public IList<IGunterInfoItem> InfoItems { get; set; } = new List<IGunterInfoItem>();
 
         public IEnumerable<IGunterInfoItem> GetInfoItems()
             => InfoItems;

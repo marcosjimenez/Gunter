@@ -4,6 +4,7 @@
     {
 
         public const string DockingConfigurationFile = "gunter.docking.config";
+        public const string GeneralConfigFile = "gunter.windows.ui.config";
 
     }
 }

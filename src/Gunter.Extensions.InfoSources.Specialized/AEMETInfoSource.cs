@@ -14,7 +14,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
     {
         private AEMETData lastItem { get; set; }
         private readonly IGunterInfoItem _container;
-        private readonly TimeSpan MinInterval = new TimeSpan();
 
         private const string BaseAddress = "https://www.aemet.es/xml/municipios/";
         private const string Chiloeches = "localidad_19105.xml";

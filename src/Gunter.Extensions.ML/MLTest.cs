@@ -1,8 +1,8 @@
 ﻿using Gunter.Core.Components;
 using Gunter.Core.Components.BaseComponents;
 using Gunter.Core.Contracts;
-using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Infrastructure.Log;
+using Gunter.Core.Infrastructure.RuntimeExecution;
 using Gunter.Core.Models;
 using Microsoft.ML;
 using Microsoft.ML.Data;
@@ -25,7 +25,7 @@ namespace Gunter.Extensions.ML
     public class MLTest: InfoSourceBase<object>, IGunterInfoSource
     {
         private object lastItem { get; set; }
-        private readonly IGunterInfoItem _container;
+        private readonly IGunterInfoItem? _container = null;
 
         private Dictionary<string, object> data = new();
 
@@ -41,7 +41,7 @@ namespace Gunter.Extensions.ML
         private const string OUTPUT_COLUMN_NAME = "OutputColumnNames";
         private const string ITERATIONS = "100";
 
-        private MLContext context = null;
+        private MLContext persistentContext = new MLContext();
 
         public MLTest() : base()
         {
@@ -91,60 +91,34 @@ namespace Gunter.Extensions.ML
                 InputColumnNames = inputColumnNames,
                 OutputColumnNames = outputColumnNames,
                 Iterations = 100,
-                Model = houseData
+                Model = houseData,
+                ItemToPredict = new HouseData { Size = 2.5F }
             };
 
-            List<string> source = new()
+            List<string> source = new() // TODO: Move to runtime templates
             {
-                "var size = new HouseData() { Size = 2.5F };",
                 "var mlContext = new MLContext();",
                 "IDataView trainingData = mlContext.Data.LoadFromEnumerable(parameter.Model);",
-                "Gunter.Core.Infrastructure.Log.GunterLog.Instance.Log(this, parameter.InputColumnNames[0]);",
-                "var pipeline = mlContext.Transforms.Concatenate(\"Features\", parameter.InputColumnNames.ToArray());",
-                "foreach (var outputColumn in parameter.OutputColumnNames)",
-                "{",
-                "   Gunter.Core.Infrastructure.Log.GunterLog.Instance.Log(this, \"output:\" + outputColumn);",
-                "   pipeline.Append(mlContext.Regression.Trainers.Sdca(labelColumnName: outputColumn, maximumNumberOfIterations: parameter.Iterations));",
-                "}",
-                " ",
+                "var pipeline = mlContext.Transforms.Concatenate(\"Features\", parameter.InputColumnNames.ToArray())",
+                    ".Append(mlContext.Regression.Trainers.Sdca(labelColumnName: parameter.OutputColumnNames[0], maximumNumberOfIterations: parameter.Iterations));",
+                "",
+                "if (parameter.OutputColumnNames.Count > 1)",
+                    "foreach (var item in parameter.OutputColumnNames.Skip(1))",
+                        "pipeline = pipeline.Append(mlContext.Regression.Trainers.Sdca(labelColumnName: parameter.OutputColumnNames[0], maximumNumberOfIterations: parameter.Iterations));",
+                "",
                 "var model = pipeline.Fit(trainingData);",
-                "var price = mlContext.Model.CreatePredictionEngine<HouseData, Prediction>(model).Predict(size);",
-                " ",
-                "return price;"
-        };
-
-            List<string> testSource = new()
-            {
-                "MLContext mlContext = new MLContext();",
+                "var price = mlContext.Model.CreatePredictionEngine<HouseData, Prediction>(model).Predict(parameter.ItemToPredict);",
                 "",
-                "// 1. Import or create training data",
-                "HouseData[] houseData = {",
-                   "new HouseData() { Size = 1.1F, Price = 1.2F },",
-                "   new HouseData() { Size = 1.9F, Price = 2.3F },",
-                   "new HouseData() { Size = 2.8F, Price = 3.0F },",
-                "   new HouseData() { Size = 3.4F, Price = 3.7F } };",
-                "IDataView trainingData = mlContext.Data.LoadFromEnumerable(houseData);",
+                "RetVal = price;",
                 "",
-                "// 2. Specify data preparation and model training pipeline",
-                "var pipeline = mlContext.Transforms.Concatenate(\"Features\", new[] { \"Size\" })",
-                   ".Append(mlContext.Regression.Trainers.Sdca(labelColumnName: \"Price\", maximumNumberOfIterations: 100));",
-                "",
-                "// 3. Train model",
-                "var model = pipeline.Fit(trainingData);",
-                "",
-                "// 4. Make a prediction",
-                "var size = new HouseData() { Size = 2.5F };",
-                "var price = mlContext.Model.CreatePredictionEngine<HouseData, Prediction>(model).Predict(size);",
-                "",
-                "Gunter.Core.Infrastructure.Log.GunterLog.Instance.Log(this, $\"Predicted price for size: {size.Size*1000} sq ft= {price.Price*100:C}k\");",
-                "",
-                "return price;"
             };
 
             var usings = new[] {
                 "Gunter.Extensions.ML",
                 "Microsoft.ML",
-                "System.Reflection.Metadata"
+                "System.Reflection.Metadata", 
+                "System.Collections",
+                "System.Linq"
             };
 
             //var predictionClassModel = GeneratePredictionClass(typeof(HouseData), parameter.InputColumnNames);
@@ -156,7 +130,7 @@ namespace Gunter.Extensions.ML
                 NameSpace = "Gunter.Test",
                 Parameter = parameter,
                 Parent = this,
-                Source = testSource,
+                Source = source,
                 InputType = typeof(MLParameters),
                 ReturnType = typeof(Prediction)
             };
@@ -165,10 +139,40 @@ namespace Gunter.Extensions.ML
 
             item.AddRefPath(usings);
             item.AddRefPathsForName("Microsoft.ML"); // Add all ML libraries
+            item.AddRefPathsForName("Newtonsoft.Json");
             item.AddRefPathsForName("Gunter.Extensions.ML");
 
-            var helper = new RuntimeHelper();
-            var result = helper.CompileAndRun(item);
+            bool testing; 
+            testing = false;
+
+            Prediction result;
+            if (!testing)
+            {
+                var helper = new RuntimeHelper();
+                result = helper.CompileAndRun(item);
+            }
+            else
+            {
+                var shared = new SharedTestExecution<MLParameters, Prediction>();
+                shared.FuncToTest = (parameter) =>
+                {
+                    var mlContext = new MLContext();
+                    IDataView trainingData = mlContext.Data.LoadFromEnumerable(parameter.Model);
+                    var pipeline = mlContext.Transforms.Concatenate("Features", parameter.InputColumnNames.ToArray())
+                        .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: parameter.OutputColumnNames[0], maximumNumberOfIterations: parameter.Iterations));
+
+                    if (parameter.OutputColumnNames.Count > 1)
+                        foreach (var item in outputColumnNames.Skip(1))
+                            pipeline = pipeline.Append(mlContext.Regression.Trainers.Sdca(labelColumnName: parameter.OutputColumnNames[0], maximumNumberOfIterations: parameter.Iterations));
+
+                    var model = pipeline.Fit(trainingData);
+                    var price = mlContext.Model.CreatePredictionEngine<HouseData, Prediction>(model).Predict(parameter.ItemToPredict);
+
+                    return price;
+                };
+                result = shared.RunTest(parameter);
+            }
+
 
             if (result is not null)
             {

@@ -12,7 +12,7 @@ namespace Gunter.Core.Cache
         public List<ExternalDataCacheItem> Files { get; set; } = new();
 
         [Newtonsoft.Json.JsonIgnore]
-        public CacheFolder Parent { get; set; }
+        public CacheFolder? Parent { get; set; }
 
         public CacheFolder? GetFolder(string name)
         {

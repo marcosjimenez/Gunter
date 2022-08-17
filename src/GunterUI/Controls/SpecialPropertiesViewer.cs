@@ -62,25 +62,22 @@ namespace GunterUI
                 return;
 
             var item = listView1.SelectedItems[0];
-            var newValue = Prompt.ShowDialog("Introduce el nuevo valor", "Nuevo Valor", item.SubItems[1].Text);
-            if (string.IsNullOrWhiteSpace(newValue.Trim()))
-                return;
+            if (Prompt.ShowPromptDialog("Introduce el nuevo valor", "Nuevo Valor", item.SubItems[1].Text, out var newValue))
+            { 
+                SpecialProperties.AddOrUpdate(item.Text, newValue, out var property);
+                item.SubItems[1].Text = newValue;
 
-            SpecialProperties.AddOrUpdate(item.Text, newValue, out var property);
-            item.SubItems[1].Text = newValue;
-
-            OnPropertyChanged?.Invoke(this, new PropertyUpdatedEventArgs { Property = (SpecialProperty)property });
-
+                OnPropertyChanged?.Invoke(this, new PropertyUpdatedEventArgs { Property = (SpecialProperty)property });
+            }
         }
 
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var newValue = Prompt.ShowDialog("Nueva variable", "Añadir", string.Empty);
-            if (string.IsNullOrWhiteSpace(newValue))
-                return;
-
-            SpecialProperties.AddOrUpdate(newValue, string.Empty, out var property);
-            OnPropertyChanged?.Invoke(this, new PropertyUpdatedEventArgs { Property = (SpecialProperty)property });
+            if (Prompt.ShowPromptDialog("Nueva variable", "Añadir", string.Empty, out var newValue))
+            { 
+                SpecialProperties.AddOrUpdate(newValue, string.Empty, out var property);
+                OnPropertyChanged?.Invoke(this, new PropertyUpdatedEventArgs { Property = (SpecialProperty)property });
+            }
         }
 
         private void listView1_MouseDown(object sender, MouseEventArgs e)

@@ -28,18 +28,19 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(InfoItemViewer));
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Start()");
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.cmdAddSource = new System.Windows.Forms.ToolStripButton();
             this.cmdEditSource = new System.Windows.Forms.ToolStripButton();
             this.cmdRemoveSource = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.cmdRefreshSources = new System.Windows.Forms.ToolStripButton();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.lvSources = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.redLed = new System.Windows.Forms.PictureBox();
             this.cmdUpdate = new System.Windows.Forms.Button();
             this.lblUltimaActualizacion = new System.Windows.Forms.Label();
             this.grpActualizar = new System.Windows.Forms.GroupBox();
@@ -57,6 +58,12 @@
             this.txtNombre = new System.Windows.Forms.TextBox();
             this.greenLed = new System.Windows.Forms.PictureBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.cmdAddChainLink = new System.Windows.Forms.ToolStripDropDownButton();
+            this.tvChain = new System.Windows.Forms.TreeView();
+            this.imlChain = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.cmdAddVisualization = new System.Windows.Forms.ToolStripButton();
             this.cmdRemoveVisualization = new System.Windows.Forms.ToolStripButton();
@@ -64,8 +71,8 @@
             this.lvVisualizations = new System.Windows.Forms.ListView();
             this.columnHeader5 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
+            this.imlBalls = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.redLed)).BeginInit();
             this.grpActualizar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtSegundos)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtMinutos)).BeginInit();
@@ -76,6 +83,11 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            this.toolStrip3.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -84,17 +96,23 @@
             this.toolStrip2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.toolStrip2.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
             this.cmdAddSource,
             this.cmdEditSource,
             this.cmdRemoveSource,
             this.toolStripSeparator3,
-            this.cmdRefreshSources,
-            this.toolStripLabel1});
+            this.cmdRefreshSources});
             this.toolStrip2.Location = new System.Drawing.Point(0, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(637, 27);
+            this.toolStrip2.Size = new System.Drawing.Size(283, 27);
             this.toolStrip2.TabIndex = 56;
             this.toolStrip2.Text = "toolStrip2";
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(60, 24);
+            this.toolStripLabel1.Text = "Sources";
             // 
             // cmdAddSource
             // 
@@ -139,13 +157,6 @@
             this.cmdRefreshSources.Text = "toolStripButton4";
             this.cmdRefreshSources.Click += new System.EventHandler(this.cmdRefreshSources_Click);
             // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(60, 24);
-            this.toolStripLabel1.Text = "Sources";
-            // 
             // lvSources
             // 
             this.lvSources.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -156,11 +167,11 @@
             this.columnHeader1,
             this.columnHeader2});
             this.lvSources.FullRowSelect = true;
-            this.lvSources.Location = new System.Drawing.Point(3, 30);
+            this.lvSources.Location = new System.Drawing.Point(0, 30);
             this.lvSources.MultiSelect = false;
             this.lvSources.Name = "lvSources";
             this.lvSources.ShowGroups = false;
-            this.lvSources.Size = new System.Drawing.Size(634, 336);
+            this.lvSources.Size = new System.Drawing.Size(283, 314);
             this.lvSources.TabIndex = 43;
             this.lvSources.UseCompatibleStateImageBehavior = false;
             this.lvSources.View = System.Windows.Forms.View.Details;
@@ -177,22 +188,11 @@
             this.columnHeader2.Text = "Id";
             this.columnHeader2.Width = 200;
             // 
-            // redLed
-            // 
-            this.redLed.Image = ((System.Drawing.Image)(resources.GetObject("redLed.Image")));
-            this.redLed.Location = new System.Drawing.Point(3, 13);
-            this.redLed.Name = "redLed";
-            this.redLed.Size = new System.Drawing.Size(96, 96);
-            this.redLed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.redLed.TabIndex = 49;
-            this.redLed.TabStop = false;
-            this.redLed.Visible = false;
-            // 
             // cmdUpdate
             // 
             this.cmdUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cmdUpdate.Image = ((System.Drawing.Image)(resources.GetObject("cmdUpdate.Image")));
-            this.cmdUpdate.Location = new System.Drawing.Point(281, 83);
+            this.cmdUpdate.Location = new System.Drawing.Point(493, 77);
             this.cmdUpdate.Name = "cmdUpdate";
             this.cmdUpdate.Size = new System.Drawing.Size(105, 29);
             this.cmdUpdate.TabIndex = 46;
@@ -205,7 +205,7 @@
             // lblUltimaActualizacion
             // 
             this.lblUltimaActualizacion.AutoSize = true;
-            this.lblUltimaActualizacion.Location = new System.Drawing.Point(105, 87);
+            this.lblUltimaActualizacion.Location = new System.Drawing.Point(28, 81);
             this.lblUltimaActualizacion.Name = "lblUltimaActualizacion";
             this.lblUltimaActualizacion.Size = new System.Drawing.Size(159, 20);
             this.lblUltimaActualizacion.TabIndex = 51;
@@ -224,7 +224,7 @@
             this.grpActualizar.Controls.Add(this.txtHoras);
             this.grpActualizar.Controls.Add(this.chkActualizar);
             this.grpActualizar.Controls.Add(this.txtDias);
-            this.grpActualizar.Location = new System.Drawing.Point(392, 6);
+            this.grpActualizar.Location = new System.Drawing.Point(604, 6);
             this.grpActualizar.Name = "grpActualizar";
             this.grpActualizar.Size = new System.Drawing.Size(252, 106);
             this.grpActualizar.TabIndex = 47;
@@ -336,28 +336,28 @@
             // 
             this.txtId.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtId.Location = new System.Drawing.Point(105, 13);
+            this.txtId.Location = new System.Drawing.Point(6, 6);
             this.txtId.Name = "txtId";
             this.txtId.ReadOnly = true;
-            this.txtId.Size = new System.Drawing.Size(281, 27);
+            this.txtId.Size = new System.Drawing.Size(592, 27);
             this.txtId.TabIndex = 45;
             // 
             // txtNombre
             // 
             this.txtNombre.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtNombre.Location = new System.Drawing.Point(105, 50);
+            this.txtNombre.Location = new System.Drawing.Point(6, 41);
             this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(281, 27);
+            this.txtNombre.Size = new System.Drawing.Size(592, 27);
             this.txtNombre.TabIndex = 44;
             this.txtNombre.TextChanged += new System.EventHandler(this.txtNombre_TextChanged);
             // 
             // greenLed
             // 
             this.greenLed.Image = ((System.Drawing.Image)(resources.GetObject("greenLed.Image")));
-            this.greenLed.Location = new System.Drawing.Point(3, 13);
+            this.greenLed.Location = new System.Drawing.Point(6, 84);
             this.greenLed.Name = "greenLed";
-            this.greenLed.Size = new System.Drawing.Size(96, 96);
+            this.greenLed.Size = new System.Drawing.Size(16, 16);
             this.greenLed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.greenLed.TabIndex = 50;
             this.greenLed.TabStop = false;
@@ -373,16 +373,96 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.toolStrip2);
-            this.splitContainer2.Panel1.Controls.Add(this.lvSources);
+            this.splitContainer2.Panel1.Controls.Add(this.splitContainer1);
             // 
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.toolStrip1);
             this.splitContainer2.Panel2.Controls.Add(this.lvVisualizations);
-            this.splitContainer2.Size = new System.Drawing.Size(637, 748);
-            this.splitContainer2.SplitterDistance = 369;
+            this.splitContainer2.Size = new System.Drawing.Size(849, 727);
+            this.splitContainer2.SplitterDistance = 347;
+            this.splitContainer2.SplitterWidth = 8;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.toolStrip2);
+            this.splitContainer1.Panel1.Controls.Add(this.lvSources);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.toolStrip3);
+            this.splitContainer1.Panel2.Controls.Add(this.tvChain);
+            this.splitContainer1.Size = new System.Drawing.Size(849, 347);
+            this.splitContainer1.SplitterDistance = 283;
+            this.splitContainer1.SplitterWidth = 8;
+            this.splitContainer1.TabIndex = 59;
+            // 
+            // toolStrip3
+            // 
+            this.toolStrip3.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel2,
+            this.cmdAddChainLink});
+            this.toolStrip3.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip3.Name = "toolStrip3";
+            this.toolStrip3.Size = new System.Drawing.Size(558, 27);
+            this.toolStrip3.TabIndex = 58;
+            this.toolStrip3.Text = "toolStrip3";
+            // 
+            // toolStripLabel2
+            // 
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Size = new System.Drawing.Size(112, 24);
+            this.toolStripLabel2.Text = "Execution chain";
+            // 
+            // cmdAddChainLink
+            // 
+            this.cmdAddChainLink.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdAddChainLink.Image = ((System.Drawing.Image)(resources.GetObject("cmdAddChainLink.Image")));
+            this.cmdAddChainLink.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdAddChainLink.Name = "cmdAddChainLink";
+            this.cmdAddChainLink.Size = new System.Drawing.Size(34, 24);
+            // 
+            // tvChain
+            // 
+            this.tvChain.AllowDrop = true;
+            this.tvChain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tvChain.ImageIndex = 0;
+            this.tvChain.ImageList = this.imlChain;
+            this.tvChain.Location = new System.Drawing.Point(3, 30);
+            this.tvChain.Name = "tvChain";
+            treeNode1.Name = "ChainStartNode";
+            treeNode1.Text = "Start()";
+            this.tvChain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1});
+            this.tvChain.SelectedImageIndex = 0;
+            this.tvChain.Size = new System.Drawing.Size(512, 314);
+            this.tvChain.TabIndex = 57;
+            this.tvChain.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvChain_ItemDrag);
+            this.tvChain.DragDrop += new System.Windows.Forms.DragEventHandler(this.tvChain_DragDrop);
+            this.tvChain.DragEnter += new System.Windows.Forms.DragEventHandler(this.tvChain_DragEnter);
+            // 
+            // imlChain
+            // 
+            this.imlChain.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.imlChain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imlChain.ImageStream")));
+            this.imlChain.TransparentColor = System.Drawing.Color.Transparent;
+            this.imlChain.Images.SetKeyName(0, "StartPoint");
+            this.imlChain.Images.SetKeyName(1, "LinkedDatabase");
+            this.imlChain.Images.SetKeyName(2, "SilverBall");
+            this.imlChain.Images.SetKeyName(3, "RedBall");
+            this.imlChain.Images.SetKeyName(4, "OrangeBall");
+            this.imlChain.Images.SetKeyName(5, "GreenBall");
+            this.imlChain.Images.SetKeyName(6, "BlueBall");
             // 
             // toolStrip1
             // 
@@ -393,7 +473,7 @@
             this.toolStripSeparator1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(637, 27);
+            this.toolStrip1.Size = new System.Drawing.Size(849, 27);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -428,7 +508,7 @@
             this.lvVisualizations.Location = new System.Drawing.Point(3, 30);
             this.lvVisualizations.Name = "lvVisualizations";
             this.lvVisualizations.ShowGroups = false;
-            this.lvVisualizations.Size = new System.Drawing.Size(634, 345);
+            this.lvVisualizations.Size = new System.Drawing.Size(280, 345);
             this.lvVisualizations.TabIndex = 0;
             this.lvVisualizations.UseCompatibleStateImageBehavior = false;
             this.lvVisualizations.View = System.Windows.Forms.View.Details;
@@ -444,13 +524,23 @@
             this.columnHeader3.Text = "Id";
             this.columnHeader3.Width = 300;
             // 
+            // imlBalls
+            // 
+            this.imlBalls.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
+            this.imlBalls.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imlBalls.ImageStream")));
+            this.imlBalls.TransparentColor = System.Drawing.Color.Transparent;
+            this.imlBalls.Images.SetKeyName(0, "SilverBall");
+            this.imlBalls.Images.SetKeyName(1, "RedBall");
+            this.imlBalls.Images.SetKeyName(2, "OrangeBall");
+            this.imlBalls.Images.SetKeyName(3, "GreenBall");
+            this.imlBalls.Images.SetKeyName(4, "BlueBall");
+            // 
             // InfoItemViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.splitContainer2);
-            this.Controls.Add(this.redLed);
             this.Controls.Add(this.cmdUpdate);
             this.Controls.Add(this.lblUltimaActualizacion);
             this.Controls.Add(this.grpActualizar);
@@ -458,11 +548,10 @@
             this.Controls.Add(this.txtNombre);
             this.Controls.Add(this.greenLed);
             this.Name = "InfoItemViewer";
-            this.Size = new System.Drawing.Size(647, 866);
+            this.Size = new System.Drawing.Size(859, 845);
             this.Load += new System.EventHandler(this.InfoItemViewer_Load);
             this.toolStrip2.ResumeLayout(false);
             this.toolStrip2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.redLed)).EndInit();
             this.grpActualizar.ResumeLayout(false);
             this.grpActualizar.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtSegundos)).EndInit();
@@ -471,11 +560,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtDias)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.greenLed)).EndInit();
             this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel1.PerformLayout();
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.toolStrip3.ResumeLayout(false);
+            this.toolStrip3.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -494,7 +590,6 @@
         private ListView lvSources;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
-        private PictureBox redLed;
         private Button cmdUpdate;
         private Label lblUltimaActualizacion;
         private GroupBox grpActualizar;
@@ -520,5 +615,12 @@
         private ListView lvVisualizations;
         private ColumnHeader columnHeader5;
         private ColumnHeader columnHeader3;
+        private TreeView tvChain;
+        private ImageList imlChain;
+        private ToolStrip toolStrip3;
+        private ToolStripLabel toolStripLabel2;
+        private SplitContainer splitContainer1;
+        private ImageList imlBalls;
+        private ToolStripDropDownButton cmdAddChainLink;
     }
 }

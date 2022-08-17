@@ -13,6 +13,7 @@
         public const string SUB_ENCYCLOPAEDIA = "Encyclopaedia";
         public const string SUB_SOCIALNETWORKS = "Redes sociales";
         public const string SUB_WEATHER = "Meteorología";
+        public const string SUB_PRICES = "Precios";
 
         public const string CAT_MEASURED_VALUES = "Valores medidos";
         public const string SUB_PERFORMANCE_COUNTERS = "Contadores de rendimiento";

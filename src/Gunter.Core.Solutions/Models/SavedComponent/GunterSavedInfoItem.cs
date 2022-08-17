@@ -7,6 +7,8 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
         public List<GunterSavedInfoSource> InfoSources { get; set; } = new();
         public List<GunterSavedVisualizationHandler> VisualizationHandlers { get; set; } = new();
 
+        public List<GunterSavedChainLink> ChainLinks { get; set; } = new();
+
         public static GunterSavedInfoItem FromInfoItem(IGunterInfoItem infoItem)
         {
             var retVal = new GunterSavedInfoItem
@@ -22,6 +24,11 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
             foreach (var visualization in infoItem.VisualizationHandlers)
                 retVal.VisualizationHandlers.Add(GunterSavedVisualizationHandler.FromVisualizationHandler(visualization));
 
+            foreach(var chainlink in infoItem.Chain.Links)
+            {
+                retVal.ChainLinks.Add(GunterSavedChainLink.FromChainLink(chainlink));
+            }
+
             return retVal;
         }
 
@@ -36,6 +43,14 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
 
             foreach (var visualization in infoItem.VisualizationHandlers)
                 retVal.VisualizationHandlers.Add(GunterSavedVisualizationHandler.ToVisualizationHandler(visualization));
+
+            foreach(var chainLink in infoItem.ChainLinks)
+            {
+                var ds = retVal.InfoSources.FirstOrDefault(x => x.Id == chainLink.ComponentId);
+                var origin = infoItem.ChainLinks.FirstOrDefault(x => x.ComponentId == chainLink.LinkOriginId);
+                var dest = infoItem.ChainLinks.FirstOrDefault(x => x.ComponentId == chainLink.LinkDestinationId);
+                retVal.Chain.AddLink(ds.Name, ds, origin?.ComponentId ?? string.Empty, dest?.ComponentId ?? string.Empty);
+            }
 
             return retVal;
         }

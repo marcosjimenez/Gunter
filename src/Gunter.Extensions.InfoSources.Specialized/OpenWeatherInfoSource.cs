@@ -11,9 +11,8 @@ namespace Gunter.Extensions.InfoSources.Specialized
 {
     public class OpenWeatherInfoSource : InfoSourceBase<OpenWeatherData>, IGunterInfoSource
     {
-        private OpenWeatherData lastItem { get; set; }
+        private OpenWeatherData LastItem { get; set; }
         private readonly IGunterInfoItem _container;
-        private readonly TimeSpan MinInterval = new TimeSpan();
 
         private Dictionary<string, OpenWeatherData> data = new();
 
@@ -34,7 +33,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate("APPID", APPID);
             _mandatoryInputs.AddOrUpdate("city", "Chiloeches");
-            lastItem = new();
+            LastItem = new();
         }
 
         public OpenWeatherInfoSource(string id)
@@ -50,12 +49,12 @@ namespace Gunter.Extensions.InfoSources.Specialized
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate("APPID", APPID);
             _mandatoryInputs.AddOrUpdate("city", "Chiloeches");
-            lastItem = new();
+            LastItem = new();
             _container = container;
         }
         public object GetLastItem()
         {
-            return lastItem;
+            return LastItem;
         }
 
         public override Dictionary<string, OpenWeatherData> GetLastData()
@@ -64,7 +63,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             SpecialProperties.TryGetProperty("APPID", out string? appid);
 
             var fileUrl = ExternalDataCache.GenerateCacheFileID("OPENWEATHER", city, "weather");
-            OpenWeatherData weather = null;
+            OpenWeatherData? weather = null;
             if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
             {
                 var json = Encoding.UTF8.GetString(content);
@@ -72,14 +71,14 @@ namespace Gunter.Extensions.InfoSources.Specialized
             }
             else
             {
-                weather = WeatherApi.getOneDayWeather(city, appid);
+                weather = WeatherApi.getOneDayWeather(city);
                 var json = System.Text.Json.JsonSerializer.Serialize(weather, typeof(OpenWeatherData));
                 ExternalDataCache.Instance.TryAddFile(json, fileUrl, DateTimeManipulationHelper.QuarterDayTimeSpan);
             }
 
             if (weather is not null)
             {
-                lastItem = weather;
+                LastItem = weather;
             }
 
             return data;
@@ -92,7 +91,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         class WeatherApi
         {
-            public static OpenWeatherData getOneDayWeather(string cityName, string appid)
+            public static OpenWeatherData getOneDayWeather(string cityName)
             {
                 var parameters = new Dictionary<string, string>
                 {

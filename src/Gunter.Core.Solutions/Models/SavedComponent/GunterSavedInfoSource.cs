@@ -12,7 +12,7 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
                 Id = source.Id,
                 Name = source.Name,
                 SystemType = GunterEnvironmentHelper.GetSystemTypeName(source.GetType()),
-                SpecialProperties = (SpecialProperties)source.SpecialProperties
+                SpecialProperties = source.SpecialProperties
             };
 
             return retVal;
@@ -22,7 +22,7 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
         {
             var retVal = GunterEnvironmentHelper.Instance.CreateInstance<IGunterInfoSource>(infoSource.SystemType, infoSource.Id);
             retVal.Name = infoSource.Name;
-            retVal.SetSpecialProperties((SpecialProperties)infoSource.SpecialProperties);
+            retVal.SetSpecialProperties(infoSource.SpecialProperties);
 
             return retVal;
         }

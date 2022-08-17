@@ -29,6 +29,7 @@ namespace Gunter.Core.Cache.Commands
                     break;
                 case "vol":
                 default:
+                    retVal = $"Invalid parameter {parameters[1]}";
                     break;
             }
 
@@ -38,12 +39,12 @@ namespace Gunter.Core.Cache.Commands
         public string TryDeleteFile(string fileName)
         {
 
-            return ExternalDataCache.Instance.TryDeleteFile(CurrentFolder.Id, fileName) ? string.Empty : $"cannot delete {fileName}";
+            return ExternalDataCache.Instance.TryDeleteFile(CurrentFolder, fileName) ? string.Empty : $"cannot delete {fileName}";
         }
 
         private string TryDeleteFolder(string folderName)
         {
-            return ExternalDataCache.Instance.TryDeleteFolder(folderName) ? string.Empty : $"Cannot delete {folderName}";
+            return ExternalDataCache.Instance.TryDeleteFolder(CurrentFolder, folderName) ? string.Empty : $"Cannot delete {folderName}";
         }
 
         public string TryDeleteCollection(string collectionName)

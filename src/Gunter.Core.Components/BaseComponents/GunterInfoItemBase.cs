@@ -1,5 +1,7 @@
-﻿using Gunter.Core.Constants;
+﻿using Gunter.Core.Components.BaseComponents.Chaining;
+using Gunter.Core.Constants;
 using Gunter.Core.Contracts;
+using Gunter.Core.Contracts.Chaining;
 using System.Text.Json.Serialization;
 
 namespace Gunter.Core.Components.BaseComponents
@@ -21,12 +23,14 @@ namespace Gunter.Core.Components.BaseComponents
         [JsonIgnore]
         public List<IGunterInfoSource> InfoSources { get; } = new();
 
+        [JsonIgnore]
+        public List<IGunterVisualizationHandler> VisualizationHandlers { get; } = new();
+
+        public IChain<IGunterInfoSource> Chain { get; private set; } = new GunterInfoSourceChainBase();
+        
         private readonly IGunterProcessor _processor;
 
         public IGunterProcessor GetProcessor() => _processor;
-
-        [JsonIgnore]
-        public List<IGunterVisualizationHandler> VisualizationHandlers { get; } = new();
 
         private DateTime _lastUpdate = DateTime.Now;
         public DateTime LastUpdate { get => _lastUpdate; }

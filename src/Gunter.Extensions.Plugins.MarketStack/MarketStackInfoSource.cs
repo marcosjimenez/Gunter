@@ -15,7 +15,6 @@ namespace Gunter.Extensions.Plugins.MarketStack
         private MarketStackInfoSourceItem lastItem { get; set; } = new();
 
         private readonly IGunterInfoItem _container;
-        private readonly TimeSpan MinInterval = new TimeSpan();
 
         private Dictionary<string, MarketStackInfoSourceItem> data = new();
 

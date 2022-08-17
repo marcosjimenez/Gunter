@@ -216,10 +216,10 @@ namespace Controls
 
         private void jsonValueTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (!isValidating)
-            {
-                StartValidationTimer();
-            }
+            //if (!isValidating)
+            //{
+            //    StartValidationTimer();
+            //}
         }
 
         private void jsonValueTextBox_Leave(object sender, EventArgs e)
@@ -295,7 +295,6 @@ namespace Controls
             jsonStatusLabel.Text = text;
             jsonStatusLabel.ForeColor = isError ? Color.OrangeRed : Color.Black;
         }
-        private bool isValidating;
 
         private void StartValidationTimer()
         {

@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Dialogs;
 using Gunter.Core.Contracts;
+using Gunter.Core.Contracts.Chaining;
 using Gunter.Core.Infrastructure.Helpers;
 using GunterUI.Dialogs;
 using System.Data;
@@ -33,50 +34,20 @@ namespace Controls
             InfoItem = target;
             InitializeComponent();
 
-            ShowData();
+            UpdateData();
             CalculateNextUpdate();
             timer.Tick += timer_Tick;
             timer.Interval = 1000;
             timer.Enabled = chkActualizar.Checked;
-
+            greenLed.Image = imlBalls.Images["BlueBall"];
         }
 
-        public void ShowData()
+        public void UpdateData()
         {
             txtNombre.Text = InfoItem.Name;
             txtId.Text = InfoItem.Id.ToString();
             LoadSources();
-            LoadVisualizations();
-
-            if (InfoItem.VisualizationHandlers.Count > 0)
-            {
-                var handler = InfoItem.VisualizationHandlers[0];
-                var html = handler.GetHTML();
-                if (!string.IsNullOrWhiteSpace(html))
-                    try
-                    {
-                        //WindowManager.Instance.ShowForm(WindowManager.AvailableForm.WebViewer, "HTML", html);
-                    }
-                    catch { }
-                else
-                {
-
-                    //using var bmp = new Bitmap(1200, 600, PixelFormat.Format24bppRgb);
-                    //using var g = Graphics.FromImage(bmp);
-                    //using var ms = new MemoryStream(handler.GetImage());
-                    //var image = Image.FromStream(ms);
-                    //imageVisualization.Image = image;
-
-                    //var base64Image = Convert.ToBase64String(handler.GetImage());
-                    //html = @$"<!DOCTYPE html>
-                    //        <html>
-                    //          <body>
-                    //            <img src=""data:image/png;base64, {base64Image}"" alt=""{ txtNombre.Text }"" />
-                    //          </body>
-                    //        </html>";
-
-                }
-            }
+            //LoadVisualizations();
         }
 
         private ListViewItem CreateSourceListViewItem(string key, string value, string imageKey, ListViewGroup group, params string[] subitems)
@@ -99,21 +70,87 @@ namespace Controls
             return item;
         }
 
+        private void ReLoadChain()
+        {
+            tvChain.BeginUpdate();
+            var startNode = tvChain.Nodes[0];
+            var currentNode = tvChain.Nodes[0];
+
+            startNode.Nodes.Clear();
+            foreach(var item in InfoItem.Chain.Links)
+            {
+                currentNode = string.IsNullOrEmpty(item.LinkOriginId) 
+                    ? startNode 
+                    : SearchNode(item.LinkOriginId, startNode);
+
+                var ds = InfoItem.InfoSources.FirstOrDefault(x => x.Id == item.ComponentId);
+                if (ds is not null)
+                {
+                    currentNode.Nodes.Add(ds.Id, ds.Name, "SilverBall", "BlueBall");
+                    currentNode.Expand();
+                }
+            }
+
+            tvChain.EndUpdate();
+        }
+
+        private TreeNode SearchNode(string id, TreeNode parent)
+        {
+            TreeNode retVal = parent;
+            if (!parent.Nodes.ContainsKey(id))
+            {
+                foreach (TreeNode node in parent.Nodes)
+                {
+                    retVal = SearchNode(id, node);
+                    if (retVal.Name == id)
+                        break;
+                }
+            }
+
+            return retVal;
+        }
+
         private void LoadSources()
         {
             lvSources.BeginUpdate();
             lvSources.Items.Clear();
-
             foreach (var item in InfoItem.InfoSources)
             {
                 try
                 {
+                    AddAvailableChainLink(item);
                     CreateSourceListViewItem(item.Id, item.Name, "DataSource", null, item.Id);
                 }
                 catch { }
             }
-
             lvSources.EndUpdate();
+
+            if (InfoItem.Chain.Links.Count() > 0)
+                ReLoadChain();
+
+        }
+
+        private void AddAvailableChainLink(IGunterInfoSource infosource)
+        {
+            if (cmdAddChainLink.DropDownItems.ContainsKey(infosource.Id))
+                return;
+
+            var item = new ToolStripMenuItem(infosource.Name, imlBalls.Images["SilverBall"], (sender, e) => AddChainLink_Click(sender, e));
+            item.Name = infosource.Id;
+            cmdAddChainLink.DropDownItems.Add(item);
+        }
+
+        private void AddChainLink_Click(object sender, EventArgs e)
+        {
+            var menu = sender as ToolStripMenuItem;
+            var id = menu?.Name ?? "";
+
+            if (InfoItem.Chain.Links.Any(x => x.ComponentId == id))
+                return;
+
+            InfoItem.Chain.AddLink("New Link", InfoItem.InfoSources.First(x => x.Id == id), string.Empty, string.Empty);
+
+            ReLoadChain();
         }
 
         private void LoadVisualizations()
@@ -131,16 +168,16 @@ namespace Controls
 
         private void UpdateAll()
         {
-            greenLed.Visible = false;
-            redLed.Visible = true;
+            greenLed.Image = imlBalls.Images["OrangeBall"];
+            //redLed.Visible = true;
             var enableTimer = timer.Enabled;
             timer.Enabled = false;
             InfoItem?.Update();
-            lblUltimaActualizacion.Text = $"Updated {DateTime.Now.ToString()}";
-            ShowData();
+            lblUltimaActualizacion.Text = $"Updated {DateTime.Now}";
+            UpdateData();
             CalculateNextUpdate();
-            greenLed.Visible = true;
-            redLed.Visible = false;
+            greenLed.Image = imlBalls.Images["GreenBall"];
+            //redLed.Visible = false;
             timer.Enabled = enableTimer;
         }
 
@@ -300,6 +337,45 @@ namespace Controls
                     Name = visualization.Name
                 });
 
+        }
+
+        private void tvChain_DragDrop(object sender, DragEventArgs e)
+        {
+            Point targetPoint = tvChain.PointToClient(new Point(e.X, e.Y));
+
+            // Retrieve the node at the drop location.
+            TreeNode targetNode = tvChain.GetNodeAt(targetPoint);
+
+            // Retrieve the node that was dragged.
+            TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
+
+            // Confirm that the node at the drop location is not 
+            // the dragged node and that target node isn't null
+            // (for example if you drag outside the control)
+            if (!draggedNode.Equals(targetNode) && targetNode != null && !draggedNode.Parent.Equals(targetNode) && !targetNode.FullPath.Contains(draggedNode.Text))
+            {
+                draggedNode.Remove();
+                targetNode.Nodes.Add(draggedNode);
+
+                // Expand the node at the location 
+                // to show the dropped node.
+                targetNode.Expand();
+            }
+        }
+
+        private void tvChain_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.Move;
+        }
+
+        private void tvChain_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            var node = e.Item as TreeNode;
+
+            if (node?.Parent is null)
+                return;
+
+            DoDragDrop(e.Item, DragDropEffects.Move);
         }
     }
 }

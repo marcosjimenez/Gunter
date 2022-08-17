@@ -47,10 +47,10 @@ namespace Gunter.Core.Cache
             File.WriteAllText(file, json);
         }
 
-        private static ExternalDataCache? FromFileSystem(string volumeName)
+        private static ExternalDataCache FromFileSystem(string volumeName)
         {
             var file = Path.Combine(InitialDirectory, volumeName);
-            ExternalDataCache retVal;
+            ExternalDataCache? retVal;
             if (!File.Exists(file))
             {
                 retVal = new ExternalDataCache();
@@ -76,7 +76,7 @@ namespace Gunter.Core.Cache
                 }
             }
 
-            return retVal;
+            return retVal ?? new ExternalDataCache();
         }
 
         #endregion
@@ -166,7 +166,7 @@ namespace Gunter.Core.Cache
 
             var key = cacheFileId.ToString();
             var fileName = cacheFileId.PathSegments.Last();
-            CacheFolder? folder = GetFolderFromPathSegments(RootFolder.Folders, cacheFileId.PathSegments);
+            CacheFolder? folder = GetFolderFromPathSegments(RootFolder.Folders, cacheFileId.PathSegments.SkipLast(1));
             if (folder is not null && folder.Files.Any(x => x.Name == fileName))
             {
                 var file = folder.Files.SingleOrDefault(x => x.Name == fileName);
@@ -176,13 +176,14 @@ namespace Gunter.Core.Cache
                     //var lastVersion = Files[key];
                     //newVersion.Versions
                 }
-                folder.Files.Remove(file);
+                if (file is not null)
+                    folder.Files.Remove(file);
             }
             else
             {
                 folder = RootFolder;
                 string fullPath = RootFolder.Name;
-                for (int i = 0; i < cacheFileId.PathSegments.Count - 1; i++)
+                for (int i = 0; i < cacheFileId.PathSegments.Count - 1; i++)  // TODO: Move to methods
                 {
                     var item = cacheFileId.PathSegments[i];
                     if (folder.Folders.Any(x => x.Value.Name.Equals(item, StringComparison.InvariantCultureIgnoreCase)))
@@ -207,7 +208,7 @@ namespace Gunter.Core.Cache
         public bool TryGetFile(CacheFileId cacheFileId, out byte[] bytes)
         {
             var key = cacheFileId.ToString();
-            var folder = GetFolderFromPathSegments(RootFolder.Folders, cacheFileId.PathSegments);
+            var folder = GetFolderFromPathSegments(RootFolder.Folders, cacheFileId.PathSegments.SkipLast(1));
             if (folder is null || folder.Files.Count == 0)
             {
                 bytes = Array.Empty<byte>();
@@ -217,13 +218,19 @@ namespace Gunter.Core.Cache
             if (folder.Files.Any(x => x.Name == cacheFileId.PathSegments.Last()))
             {
                 var cachedItem = folder.Files.Where(x => x.Name == cacheFileId.PathSegments.Last()).SingleOrDefault();
-                if (cachedItem.Expiration < DateTime.Now)
+                if (cachedItem is null)
                 {
-                    folder.Files.Remove(cachedItem);
-                    cachedItem.Destroy();
+                    bytes = Array.Empty<byte>();
+                    return false;
                 }
 
                 bytes = File.ReadAllBytes(cachedItem.LocalPath);
+                if (cachedItem.Expiration < DateTime.Now)
+                {
+                    //folder.Files.Remove(cachedItem);
+                    //cachedItem.Destroy();
+                }
+
                 return true;
             }
             else
@@ -233,7 +240,7 @@ namespace Gunter.Core.Cache
             }
         }
 
-        public CacheFolder GetFolder(CacheFolder parent, string hash)
+        public CacheFolder? GetFolder(CacheFolder parent, string hash)
         {
             if (parent.Folders.ContainsKey(hash))
                 return parent;
@@ -249,19 +256,18 @@ namespace Gunter.Core.Cache
             return retVal;
         }
 
-        public CacheFolder? GetFolderFromPathSegments(Dictionary<string, CacheFolder> folders, IEnumerable<string> values, int deepCounter = 0)
+        public CacheFolder? GetFolderFromPathSegments(Dictionary<string, CacheFolder> folders, IEnumerable<string> values, int deepCounter = 1)
         {
-            var name = values.ElementAt(values.Count() - 1);
+            var name = values.Last();
             CacheFolder? retVal = null;
             foreach (var item in folders.Values)
             {
                 if (item.Name == name)
                     return item;
 
-                if (item.Files.Any(x => x.Name == name))
-                    return item;
+                if (folders.Any(x => x.Value.Name == name))
+                    retVal = GetFolderFromPathSegments(folders.FirstOrDefault(x => x.Value.Name == name).Value.Folders, values.Skip(deepCounter), deepCounter++);
 
-                retVal = GetFolderFromPathSegments(item.Folders, values.Skip(deepCounter), deepCounter++);
                 if (retVal is not null)
                     break;
             }
@@ -269,32 +275,38 @@ namespace Gunter.Core.Cache
             return retVal ?? default(CacheFolder);
         }
 
-        public bool TryDeleteFile(string folderId, string fileName)
+        public bool TryDeleteFile(CacheFolder folder, string fileName)
         {
-            var folder = GetFolderByKey(folderId.ToUpper());
-            var file = folder?.Files.Where(x => x.Name == fileName).SingleOrDefault();
+            var file = folder.Files.Where(x => x.Name == fileName).SingleOrDefault();
             var retVal = (file is not null);
 
             if (retVal)
-                retVal = (file.ParentFolderId == folderId);
+                retVal = (file.ParentFolderId == folder.Id);
 
             if (retVal)
             {
-                folder.Files.Remove(file);
-                if (Options.AutoSave)
+                if (file is not null && Options.AutoSave)
+                {
+                    folder.Files.Remove(file);
                     ToFileSystem();
+                }
             }
 
             return retVal;
         }
 
-        public bool TryDeleteFolder(string folderName)
+        public bool TryDeleteFolder(CacheFolder folder, string folderName)
         {
-            var folder = GetFolderByName(folderName);
+            var target = folder.Folders.SingleOrDefault(x => x.Value.Name == folderName);
             if (folder is null)
                 return false;
 
-            return folder.Parent.Folders.Remove(folder.Id);
+            var retval = folder.Folders.Remove(target.Key);
+
+            if (retval && Options.AutoSave)
+                ToFileSystem();
+
+            return retval;
         }
 
         public bool TryDeleteCollection(string collectionName)
@@ -322,7 +334,8 @@ namespace Gunter.Core.Cache
             var itemString = GenerateCacheFileIdString(parameters);
             var hash = MD5Helper.GetHash(itemString);
 
-            var retVal = CacheFileId.FromString(itemString);
+            var retVal = new CacheFileId();
+            retVal.PathSegments = parameters.ToList();
             retVal.NameHash = hash;
 
             return retVal;

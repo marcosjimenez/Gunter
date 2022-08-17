@@ -13,7 +13,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         private ScriptInfoSourceItem lastItem { get; set; } = new();
 
-        private readonly TimeSpan MinInterval = new TimeSpan();
 
         private Dictionary<string, ScriptInfoSourceItem> data = new();
 

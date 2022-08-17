@@ -72,8 +72,8 @@ namespace Controls
 
         private void cmdBuscar_Click(object sender, EventArgs e)
         {
-            var newValue = Prompt.ShowDialog("Texto a buscar", "Buscar", string.Empty);
-            txtLog.Find(newValue);
+            if(Prompt.ShowPromptDialog("Search text", "Search", string.Empty, out var newValue))
+                txtLog.Find(newValue);
         }
 
         private void cmdFindNext_Click(object sender, EventArgs e)

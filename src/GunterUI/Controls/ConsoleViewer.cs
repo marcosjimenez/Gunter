@@ -11,7 +11,6 @@ namespace Controls
         private MessagingClient? messagingClient;
 
         private int recentPosition = 1;
-        private int lastCharIndex = 0;
         private List<string> RecentCommands = new();
         public event Action<string> ReceiveMessage;
         public string MessagingClientId => messagingClient?.Id ?? String.Empty;
@@ -55,7 +54,6 @@ namespace Controls
             if (parameters[0].ToLower() == "cls")
             {
                 txtConsole.Clear();
-                lastCharIndex = 0;
             }
             else
             {

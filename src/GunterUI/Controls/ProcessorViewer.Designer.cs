@@ -152,7 +152,6 @@
         }
 
         #endregion
-        private ColumnHeader columnHeader3;
         private ToolStrip toolStrip1;
         private ToolStripButton nuevoToolStripButton;
         private ToolStripButton abrirToolStripButton;
@@ -160,7 +159,6 @@
         private ToolStripSeparator toolStripSeparator;
         private ToolStripButton toolStripButton1;
         private ToolStripSeparator toolStripSeparator2;
-        private Krypton.Toolkit.KryptonListView lvItems;
         private ListView lvInfoItems;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;

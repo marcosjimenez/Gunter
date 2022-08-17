@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
 
-namespace Gunter.Core.Infrastructure.Helpers
+namespace Gunter.Core.Infrastructure.RuntimeExecution
 {
     public class RuntimeHelper
     {
@@ -20,7 +20,7 @@ namespace Gunter.Core.Infrastructure.Helpers
             {
                 return compileAndRun(item);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var exception = ex;
                 do
@@ -30,7 +30,7 @@ namespace Gunter.Core.Infrastructure.Helpers
                 } while (exception is not null);
             }
 
-            return default(TOut);
+            return default;
         }
 
         private TOut compileAndRun<TIn, TOut>(SourceCodeItem<TIn, TOut> item)
@@ -60,7 +60,7 @@ namespace Gunter.Core.Infrastructure.Helpers
                 assemblyName,
                 syntaxTrees: new[] { syntaxTree },
                 references: references.ToArray(),
-                options: new CSharpCompilationOptions (outputKind: OutputKind.DynamicallyLinkedLibrary));
+                options: new CSharpCompilationOptions(outputKind: OutputKind.DynamicallyLinkedLibrary));
 
             using var ms = new MemoryStream();
 
@@ -90,19 +90,20 @@ namespace Gunter.Core.Infrastructure.Helpers
                 var type = assembly.GetType($"{item.NameSpace}.{item.ClassName}");
                 var instance = assembly.CreateInstance($"{item.NameSpace}.{item.ClassName}");
                 var meth = type.GetMember(item.MethodName).First() as MethodInfo;
-                var executionResult = (TOut)meth.Invoke(instance, new object[] { item.Parameter });
+                var executionResult = (string)meth.Invoke(instance, new object[] { item.Parameter });
 
-                return executionResult;
+                return Newtonsoft.Json.JsonConvert.DeserializeObject<TOut>(executionResult);
             }
         }
 
         public virtual string GenerateMethodHeader<TIn, TOut>(string methodName = "GunterMethod", Type? inputType = null, Type? returnType = null)
         => string.Concat(
-            string.Format("public {0} {1} ({2} parameter)",
-                (returnType?.Name) ?? typeof(TOut).Name, // return type first
+            string.Format("public string {0} ({1} parameter)",
                 methodName,
                 (inputType?.Name) ?? typeof(TIn).Name),
-            "{");
+            @"{
+                " + (returnType?.Name) ?? typeof(TOut).Name,
+            " RetVal;");
 
         public virtual string GenerateUsings()
         => @"
@@ -122,7 +123,10 @@ namespace Gunter.Core.Infrastructure.Helpers
         => @"
             }";
 
-        public virtual string GenerateClassForSource<TIn, TOut>(SourceCodeItem<TIn,TOut> sourceItem)
+        public virtual string GenerateReturn()
+        => string.Format("return Newtonsoft.Json.JsonConvert.SerializeObject(RetVal);");
+
+        public virtual string GenerateClassForSource<TIn, TOut>(SourceCodeItem<TIn, TOut> sourceItem)
         {
             var sb = new StringBuilder(GenerateUsings());
             foreach (var item in sourceItem.Usings)
@@ -140,6 +144,7 @@ namespace Gunter.Core.Infrastructure.Helpers
             foreach (var line in sourceItem.Source)
                 sb.AppendLine(line);
 
+            sb.Append(GenerateReturn()); // Always return RetVal = Serialized result of TOut
             sb.AppendLine(GenerateCloseTag()); // method 
             sb.AppendLine(GenerateCloseTag()); // class
             sb.AppendLine(GenerateCloseTag()); // namespace
