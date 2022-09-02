@@ -1,16 +1,11 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Gunter.Extensions.Plugins.PoePublicStash.Models
 {
-    public class PoePublicStashInfoSourceItem
+#pragma warning disable CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
+    public class PoePublicStashApiResponse
     {
         public DateTimeOffset TimeStamp { get; set; } = DateTimeOffset.UtcNow;
-#pragma warning disable CS8618 // Un campo que no acepta valores NULL debe contener un valor distinto de NULL al salir del constructor. Considere la posibilidad de declararlo como que admite un valor NULL.
         public string next_change_id { get; set; }
         public List<Stash> stashes { get; set; }
     }

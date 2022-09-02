@@ -1,12 +1,12 @@
 ﻿using Gunter.Core.Components;
 using Gunter.Core.Components.BaseComponents;
 using Gunter.Core.Contracts;
+using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Infrastructure.Log;
 using Gunter.Core.Infrastructure.RuntimeExecution;
 using Gunter.Core.Models;
 using Microsoft.ML;
-using Microsoft.ML.Data;
-using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace Gunter.Extensions.ML
 {
@@ -18,25 +18,26 @@ namespace Gunter.Extensions.ML
 
     public class Prediction
     {
-        [ColumnName("Score")]
-        public float Price { get; set; }
+        //[ColumnName("Score")]
+        //public float Price { get; set; }
     }
 
-    public class MLTest: InfoSourceBase<object>, IGunterInfoSource
+    public class MLTest : InfoSourceBase<object>, IGunterInfoSource 
     {
-        private object lastItem { get; set; }
         private readonly IGunterInfoItem? _container = null;
-
-        private Dictionary<string, object> data = new();
+        private Dictionary<string, object> data = new ();
 
         public bool IsOnline => true;
 
         public IGunterInfoItem Container { get => _container; }
+        private object lastItem { get; set; } = new();
+        public override object LastItem { get => lastItem; protected set { lastItem = value; } }
 
         public string Category { get => InfoSourceConstants.CAT_MACHINELEARNING; }
         public string SubCategory { get => InfoSourceConstants.SUB_TESTML; }
 
         private const string MODEL = "model";
+        private const string TRAININGDATA = "TrainingData";
         private const string INPUT_COLUMN_NAME = "InputColumnNames";
         private const string OUTPUT_COLUMN_NAME = "OutputColumnNames";
         private const string ITERATIONS = "100";
@@ -48,6 +49,7 @@ namespace Gunter.Extensions.ML
             Name = "ML Test";
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate(MODEL, new List<object>());
+            _mandatoryInputs.AddOrUpdate(TRAININGDATA, new List<object>());
             _mandatoryInputs.AddOrUpdate(INPUT_COLUMN_NAME, "inputColumnName1, inputColumnName2");
             _mandatoryInputs.AddOrUpdate(OUTPUT_COLUMN_NAME, "outputColumnName1, outputColumnName2");
             _mandatoryInputs.AddOrUpdate(ITERATIONS, ITERATIONS);
@@ -74,26 +76,25 @@ namespace Gunter.Extensions.ML
             SpecialProperties.TryGetProperty(INPUT_COLUMN_NAME, out var inputColumns);
             SpecialProperties.TryGetProperty(OUTPUT_COLUMN_NAME, out var outputColumns);
             SpecialProperties.TryGetProperty(ITERATIONS, out var iterations);
-            //SpecialProperties.TryGetProperty(MODEL, out var value);
+            SpecialProperties.TryGetProperty(TRAININGDATA, out var trainingData);
+            SpecialProperties.TryGetProperty(MODEL, out var modelToPredict);
 
             var inputColumnNames = inputColumns.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
             var outputColumnNames = outputColumns.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList();
 
-            //var dataList = JsonConvert.DeserializeObject<IEnumerable<object>>(value);
-            HouseData[] houseData = {
-               new HouseData() { Size = 1.1F, Price = 1.2F },
-               new HouseData() { Size = 1.9F, Price = 2.3F },
-               new HouseData() { Size = 2.8F, Price = 3.0F },
-               new HouseData() { Size = 3.4F, Price = 3.7F } };
+            var dataList = JsonConvert.DeserializeObject<IEnumerable<object>>(trainingData);
 
-            var parameter = new MLParameters
+            var parameter = new DynamicMLParameters
             {
                 InputColumnNames = inputColumnNames,
                 OutputColumnNames = outputColumnNames,
                 Iterations = 100,
-                Model = houseData,
-                ItemToPredict = new HouseData { Size = 2.5F }
+                TrainingData = dataList ?? new List<object>(),
+                ModelToPredict = modelToPredict
             };
+
+            var properties = new Dictionary<string, Type>();
+            var prediction = RuntimeCreationHelper.Instance.GenerateType(properties, out var type);
 
             List<string> source = new() // TODO: Move to runtime templates
             {
@@ -121,9 +122,7 @@ namespace Gunter.Extensions.ML
                 "System.Linq"
             };
 
-            //var predictionClassModel = GeneratePredictionClass(typeof(HouseData), parameter.InputColumnNames);
-
-            var item = new SourceCodeItem<MLParameters, Prediction>
+            var item = new SourceCodeItem<DynamicMLParameters, Prediction>
             {
                 ClassName = "MLTesting",
                 MethodName = "RunTest",
@@ -142,56 +141,62 @@ namespace Gunter.Extensions.ML
             item.AddRefPathsForName("Newtonsoft.Json");
             item.AddRefPathsForName("Gunter.Extensions.ML");
 
+            var helper = new RuntimeHelper();
+            var result = helper.CompileAndRun(item);
+
             bool testing; 
             testing = false;
 
-            Prediction result;
-            if (!testing)
-            {
-                var helper = new RuntimeHelper();
-                result = helper.CompileAndRun(item);
-            }
-            else
-            {
-                var shared = new SharedTestExecution<MLParameters, Prediction>();
-                shared.FuncToTest = (parameter) =>
-                {
-                    var mlContext = new MLContext();
-                    IDataView trainingData = mlContext.Data.LoadFromEnumerable(parameter.Model);
-                    var pipeline = mlContext.Transforms.Concatenate("Features", parameter.InputColumnNames.ToArray())
-                        .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: parameter.OutputColumnNames[0], maximumNumberOfIterations: parameter.Iterations));
+            //Prediction result;
+            //if (!testing)
+            //{
+            //}
+            //else
+            //{
+            //    var shared = new SharedTestExecution<MLParameters, Prediction>();
+            //    shared.FuncToTest = (parameter) =>
+            //    {
+            //        var mlContext = new MLContext();
+            //        IDataView trainingData = mlContext.Data.LoadFromEnumerable(parameter.TrainingData);
+            //        var pipeline = mlContext.Transforms.Concatenate("Features", parameter.InputColumnNames.ToArray())
+            //            .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: parameter.OutputColumnNames[0], maximumNumberOfIterations: parameter.Iterations));
 
-                    if (parameter.OutputColumnNames.Count > 1)
-                        foreach (var item in outputColumnNames.Skip(1))
-                            pipeline = pipeline.Append(mlContext.Regression.Trainers.Sdca(labelColumnName: parameter.OutputColumnNames[0], maximumNumberOfIterations: parameter.Iterations));
+            //        if (parameter.OutputColumnNames.Count > 1)
+            //            foreach (var item in outputColumnNames.Skip(1))
+            //                pipeline = pipeline.Append(mlContext.Regression.Trainers.Sdca(labelColumnName: parameter.OutputColumnNames[0], maximumNumberOfIterations: parameter.Iterations));
 
-                    var model = pipeline.Fit(trainingData);
-                    var price = mlContext.Model.CreatePredictionEngine<HouseData, Prediction>(model).Predict(parameter.ItemToPredict);
+            //        var model = pipeline.Fit(trainingData);
+            //        var price = mlContext.Model.CreatePredictionEngine<object, Prediction>(model).Predict(parameter.ModelToPredict);
 
-                    return price;
-                };
-                result = shared.RunTest(parameter);
-            }
+            //        return price;
+            //    };
+            //    result = shared.RunTest(parameter);
+            //}
 
 
             if (result is not null)
             {
-                GunterLog.Instance.Log(this, "Price is :" + result.Price.ToString());
+                GunterLog.Instance.Log(this, "result:" + result.ToString());
 
                 if (data.ContainsKey("lastData"))
-                    data["lastData"] = result.Price;
+                    data["lastData"] = result;
                 else
-                    data.Add("lastData", result.Price);
+                    data.Add("lastData", result);
             }
 
             return data;
         }
 
-        public static IEnumerable<string> GeneratePredictionClass(Type type, IEnumerable<string> fieldsToPredict)
+        public static IEnumerable<string> GenerateModelClass(string className, string genericModifiers, string inheritsFrom, Type type, IEnumerable<string> fieldsToPredict)
         {
             var props = type.GetProperties();
             var retVal = new List<string>();
-            retVal.Add($"public class Prediction<{type.Name}> : Prediction");
+
+            retVal.Add(string.Format($"public class {0}{1} {2}",
+                className,
+                genericModifiers,
+                !string.IsNullOrWhiteSpace(inheritsFrom) ? inheritsFrom : string.Empty
+                ));
             retVal.Add("{");
             foreach (var prop in props)
             {

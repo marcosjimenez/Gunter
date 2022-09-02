@@ -7,8 +7,8 @@
         string LinkDestinationId { get; set; }
 
 
-        void SetParent(IChainLinkInfo parent);
-        void SetChild(IChainLinkInfo child);
+        void SetParent(IChainLinkInfo? parent);
+        void SetChild(IChainLinkInfo? child);
 
     }
 }

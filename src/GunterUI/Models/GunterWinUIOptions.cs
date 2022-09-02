@@ -3,7 +3,15 @@
     public class GunterWinUIOptions
     {
         public bool MainLayoutAutoPersist { get; set; }
+        public MainWindowStatus MainWindow { get; set; } = new ();
         public GunterWinUIOptionsGunterDefaults GunterDefaults { get; set; } = new();
+
+        public class MainWindowStatus
+        {
+            public Point MainWindowLocation { get; set; }
+            public Size MainWindowSize { get; set; }
+        }
+
         public class GunterWinUIOptionsGunterDefaults
         {
             public string GenerationDirectory { get; set; } = string.Empty;

@@ -32,7 +32,6 @@ namespace Gunter.Core.Solutions.Models.SavedComponent
             return retVal;
         }
 
-
         public static IGunterInfoItem ToInfoItem(GunterSavedInfoItem infoItem)
         {
             var retVal = GunterEnvironmentHelper.Instance.CreateInstance<IGunterInfoItem>(infoItem.SystemType, infoItem.Id);

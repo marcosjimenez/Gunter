@@ -8,14 +8,14 @@ namespace Gunter.Core.Components.BaseComponents.Chaining
         public string LinkDestinationId { get; set; } = string.Empty;
         public string LinkOriginId { get; set; } = string.Empty;
 
-        public void SetParent(IChainLinkInfo parent)
+        public void SetParent(IChainLinkInfo? parent)
         {
-            LinkOriginId = parent.ComponentId;
+            LinkOriginId = parent?.ComponentId ?? string.Empty;
         }
 
-        public void SetChild(IChainLinkInfo child)
+        public void SetChild(IChainLinkInfo? child)
         {
-            LinkDestinationId = child.ComponentId;
+            LinkDestinationId = child?.ComponentId ?? string.Empty;
         }
 
         public int CompareTo(object? obj)

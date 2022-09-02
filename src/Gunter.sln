@@ -55,7 +55,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Console", "Console", "{9C1E
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MAUI", "MAUI", "{3ACC79F2-6746-47AE-B14D-5AFF880ECE92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gunter.Extensions.Plugins.PoePublicStash", "Gunter.Extensions.Plugins.PoePublicStash\Gunter.Extensions.Plugins.PoePublicStash.csproj", "{081AE286-FC4F-4743-AC36-C7FF321636B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gunter.Extensions.Plugins.PoePublicStash", "Gunter.Extensions.Plugins.PoePublicStash\Gunter.Extensions.Plugins.PoePublicStash.csproj", "{081AE286-FC4F-4743-AC36-C7FF321636B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gunter.Extensions.Plugins.Twitter", "Gunter.Extensions.Plugins.Twitter\Gunter.Extensions.Plugins.Twitter.csproj", "{B468E500-757E-45F3-B7F2-F8E2CFAA84BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -225,6 +227,14 @@ Global
 		{081AE286-FC4F-4743-AC36-C7FF321636B5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{081AE286-FC4F-4743-AC36-C7FF321636B5}.Release|x86.ActiveCfg = Release|Any CPU
 		{081AE286-FC4F-4743-AC36-C7FF321636B5}.Release|x86.Build.0 = Release|Any CPU
+		{B468E500-757E-45F3-B7F2-F8E2CFAA84BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B468E500-757E-45F3-B7F2-F8E2CFAA84BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B468E500-757E-45F3-B7F2-F8E2CFAA84BD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B468E500-757E-45F3-B7F2-F8E2CFAA84BD}.Debug|x86.Build.0 = Debug|Any CPU
+		{B468E500-757E-45F3-B7F2-F8E2CFAA84BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B468E500-757E-45F3-B7F2-F8E2CFAA84BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B468E500-757E-45F3-B7F2-F8E2CFAA84BD}.Release|x86.ActiveCfg = Release|Any CPU
+		{B468E500-757E-45F3-B7F2-F8E2CFAA84BD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -253,6 +263,7 @@ Global
 		{9C1EFC19-25FF-4A0A-980C-C8C7D5EA014F} = {69DAE934-4EDD-44F6-B0E4-600B912D094C}
 		{3ACC79F2-6746-47AE-B14D-5AFF880ECE92} = {69DAE934-4EDD-44F6-B0E4-600B912D094C}
 		{081AE286-FC4F-4743-AC36-C7FF321636B5} = {8E5428B9-226E-4891-BC0D-5C7C96790698}
+		{B468E500-757E-45F3-B7F2-F8E2CFAA84BD} = {8E5428B9-226E-4891-BC0D-5C7C96790698}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCCDBC49-0629-4B96-82A0-0718A49BC3F3}

@@ -277,7 +277,7 @@ namespace Gunter.Core.Cache
 
         public bool TryDeleteFile(CacheFolder folder, string fileName)
         {
-            var file = folder.Files.Where(x => x.Name == fileName).SingleOrDefault();
+            var file = folder.Files.Where(x => x.Name == fileName).FirstOrDefault();
             var retVal = (file is not null);
 
             if (retVal)

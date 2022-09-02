@@ -16,8 +16,8 @@ namespace Controls
 
         public void AppendText(string text, (Color backColor, Color foreColor) colors)
         {
-            if (txtLog.InvokeRequired)
-                this.txtLog.Invoke((MethodInvoker)delegate
+            if (InvokeRequired)
+                Invoke((MethodInvoker)delegate
                 {
                     appendText(text, colors);
                 });

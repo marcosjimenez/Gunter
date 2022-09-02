@@ -12,11 +12,11 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public string SubCategory { get => InfoSourceConstants.SUB_SCRIPT; }
 
         private ScriptInfoSourceItem lastItem { get; set; } = new();
+        public override ScriptInfoSourceItem LastItem { get => lastItem; protected set { lastItem = value; } }
 
 
         private Dictionary<string, ScriptInfoSourceItem> data = new();
 
-        public ScriptInfoSourceItem LastItem { get => lastItem; }
 
         public bool IsOnline => false;
 
@@ -86,6 +86,9 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         private string ExecuteScript(string fileName)
         {
+            if (!File.Exists(fileName))
+                return string.Empty;
+
             System.Diagnostics.Process process = new System.Diagnostics.Process();
             process.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             process.StartInfo.FileName = "python";

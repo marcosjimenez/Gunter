@@ -5,6 +5,9 @@ namespace Gunter.Core.Components
 {
     public class GunterInfoSource<T> : InfoSourceBase<T>, IMessagingComponent
     {
+
+        public override T LastItem { get; protected set; }
+
         public GunterInfoSource() : base()
         {
 

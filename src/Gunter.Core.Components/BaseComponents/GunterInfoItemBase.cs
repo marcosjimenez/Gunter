@@ -2,6 +2,8 @@
 using Gunter.Core.Constants;
 using Gunter.Core.Contracts;
 using Gunter.Core.Contracts.Chaining;
+using Newtonsoft.Json.Linq;
+using System.Collections.Concurrent;
 using System.Text.Json.Serialization;
 
 namespace Gunter.Core.Components.BaseComponents
@@ -102,6 +104,36 @@ namespace Gunter.Core.Components.BaseComponents
                 return;
 
             VisualizationHandlers.Add(handler);
+        }
+
+
+        CancellationTokenSource source = new CancellationTokenSource();
+        CancellationToken token;
+        public Task<bool> ExecuteChain(Action<string, string> onItemUpdated)
+        {
+            token = source.Token;
+            if (token.CanBeCanceled)
+            {
+                if (!source.TryReset())
+                    source = new CancellationTokenSource();
+
+                token = source.Token;
+            }
+            else
+            {
+                return Task.FromResult(false);
+            }
+            //token.UnsafeRegister((obj) => {
+            //    source = new CancellationTokenSource();
+            //}, null);
+
+            return Chain.ExecuteChain(token, InfoSources, onItemUpdated);
+        }
+
+        public void StopChain()
+        {
+            if (token.CanBeCanceled)
+                source.Cancel();
         }
 
         private void OnUpdateHandler()

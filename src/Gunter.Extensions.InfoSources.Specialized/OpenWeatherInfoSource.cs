@@ -11,7 +11,8 @@ namespace Gunter.Extensions.InfoSources.Specialized
 {
     public class OpenWeatherInfoSource : InfoSourceBase<OpenWeatherData>, IGunterInfoSource
     {
-        private OpenWeatherData LastItem { get; set; }
+        public override OpenWeatherData LastItem { get; protected set; }
+
         private readonly IGunterInfoItem _container;
 
         private Dictionary<string, OpenWeatherData> data = new();

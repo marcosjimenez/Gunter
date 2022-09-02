@@ -41,7 +41,6 @@
             this.lvSources = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
-            this.cmdUpdate = new System.Windows.Forms.Button();
             this.lblUltimaActualizacion = new System.Windows.Forms.Label();
             this.grpActualizar = new System.Windows.Forms.GroupBox();
             this.lblSiguienteActualizacion = new System.Windows.Forms.Label();
@@ -62,6 +61,10 @@
             this.toolStrip3 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.cmdAddChainLink = new System.Windows.Forms.ToolStripDropDownButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.cmdPlayChain = new System.Windows.Forms.ToolStripButton();
+            this.cmdPauseChain = new System.Windows.Forms.ToolStripButton();
+            this.cmdStopChain = new System.Windows.Forms.ToolStripButton();
             this.tvChain = new System.Windows.Forms.TreeView();
             this.imlChain = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
@@ -171,7 +174,7 @@
             this.lvSources.MultiSelect = false;
             this.lvSources.Name = "lvSources";
             this.lvSources.ShowGroups = false;
-            this.lvSources.Size = new System.Drawing.Size(283, 314);
+            this.lvSources.Size = new System.Drawing.Size(283, 317);
             this.lvSources.TabIndex = 43;
             this.lvSources.UseCompatibleStateImageBehavior = false;
             this.lvSources.View = System.Windows.Forms.View.Details;
@@ -188,24 +191,10 @@
             this.columnHeader2.Text = "Id";
             this.columnHeader2.Width = 200;
             // 
-            // cmdUpdate
-            // 
-            this.cmdUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmdUpdate.Image = ((System.Drawing.Image)(resources.GetObject("cmdUpdate.Image")));
-            this.cmdUpdate.Location = new System.Drawing.Point(493, 77);
-            this.cmdUpdate.Name = "cmdUpdate";
-            this.cmdUpdate.Size = new System.Drawing.Size(105, 29);
-            this.cmdUpdate.TabIndex = 46;
-            this.cmdUpdate.Text = "&Actualizar";
-            this.cmdUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.cmdUpdate.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.cmdUpdate.UseVisualStyleBackColor = true;
-            this.cmdUpdate.Click += new System.EventHandler(this.cmdUpdate_Click);
-            // 
             // lblUltimaActualizacion
             // 
             this.lblUltimaActualizacion.AutoSize = true;
-            this.lblUltimaActualizacion.Location = new System.Drawing.Point(28, 81);
+            this.lblUltimaActualizacion.Location = new System.Drawing.Point(28, 77);
             this.lblUltimaActualizacion.Name = "lblUltimaActualizacion";
             this.lblUltimaActualizacion.Size = new System.Drawing.Size(159, 20);
             this.lblUltimaActualizacion.TabIndex = 51;
@@ -224,7 +213,7 @@
             this.grpActualizar.Controls.Add(this.txtHoras);
             this.grpActualizar.Controls.Add(this.chkActualizar);
             this.grpActualizar.Controls.Add(this.txtDias);
-            this.grpActualizar.Location = new System.Drawing.Point(604, 6);
+            this.grpActualizar.Location = new System.Drawing.Point(603, -4);
             this.grpActualizar.Name = "grpActualizar";
             this.grpActualizar.Size = new System.Drawing.Size(252, 106);
             this.grpActualizar.TabIndex = 47;
@@ -355,7 +344,7 @@
             // greenLed
             // 
             this.greenLed.Image = ((System.Drawing.Image)(resources.GetObject("greenLed.Image")));
-            this.greenLed.Location = new System.Drawing.Point(6, 84);
+            this.greenLed.Location = new System.Drawing.Point(6, 81);
             this.greenLed.Name = "greenLed";
             this.greenLed.Size = new System.Drawing.Size(16, 16);
             this.greenLed.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -367,7 +356,7 @@
             this.splitContainer2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer2.Location = new System.Drawing.Point(3, 115);
+            this.splitContainer2.Location = new System.Drawing.Point(3, 108);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -379,8 +368,8 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.toolStrip1);
             this.splitContainer2.Panel2.Controls.Add(this.lvVisualizations);
-            this.splitContainer2.Size = new System.Drawing.Size(849, 727);
-            this.splitContainer2.SplitterDistance = 347;
+            this.splitContainer2.Size = new System.Drawing.Size(849, 734);
+            this.splitContainer2.SplitterDistance = 350;
             this.splitContainer2.SplitterWidth = 8;
             this.splitContainer2.TabIndex = 0;
             // 
@@ -399,7 +388,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.toolStrip3);
             this.splitContainer1.Panel2.Controls.Add(this.tvChain);
-            this.splitContainer1.Size = new System.Drawing.Size(849, 347);
+            this.splitContainer1.Size = new System.Drawing.Size(849, 350);
             this.splitContainer1.SplitterDistance = 283;
             this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 59;
@@ -409,7 +398,11 @@
             this.toolStrip3.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel2,
-            this.cmdAddChainLink});
+            this.cmdAddChainLink,
+            this.toolStripSeparator2,
+            this.cmdPlayChain,
+            this.cmdPauseChain,
+            this.cmdStopChain});
             this.toolStrip3.Location = new System.Drawing.Point(0, 0);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Size = new System.Drawing.Size(558, 27);
@@ -430,6 +423,42 @@
             this.cmdAddChainLink.Name = "cmdAddChainLink";
             this.cmdAddChainLink.Size = new System.Drawing.Size(34, 24);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 27);
+            // 
+            // cmdPlayChain
+            // 
+            this.cmdPlayChain.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdPlayChain.Image = ((System.Drawing.Image)(resources.GetObject("cmdPlayChain.Image")));
+            this.cmdPlayChain.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdPlayChain.Name = "cmdPlayChain";
+            this.cmdPlayChain.Size = new System.Drawing.Size(29, 24);
+            this.cmdPlayChain.Text = "Start chain";
+            this.cmdPlayChain.Click += new System.EventHandler(this.cmdPlayChain_Click);
+            // 
+            // cmdPauseChain
+            // 
+            this.cmdPauseChain.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdPauseChain.Enabled = false;
+            this.cmdPauseChain.Image = ((System.Drawing.Image)(resources.GetObject("cmdPauseChain.Image")));
+            this.cmdPauseChain.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdPauseChain.Name = "cmdPauseChain";
+            this.cmdPauseChain.Size = new System.Drawing.Size(29, 24);
+            this.cmdPauseChain.Text = "toolStripButton2";
+            this.cmdPauseChain.Click += new System.EventHandler(this.cmdPauseChain_Click);
+            // 
+            // cmdStopChain
+            // 
+            this.cmdStopChain.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.cmdStopChain.Enabled = false;
+            this.cmdStopChain.Image = ((System.Drawing.Image)(resources.GetObject("cmdStopChain.Image")));
+            this.cmdStopChain.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.cmdStopChain.Name = "cmdStopChain";
+            this.cmdStopChain.Size = new System.Drawing.Size(29, 24);
+            this.cmdStopChain.Click += new System.EventHandler(this.cmdStopChain_Click);
+            // 
             // tvChain
             // 
             this.tvChain.AllowDrop = true;
@@ -445,7 +474,7 @@
             this.tvChain.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
             this.tvChain.SelectedImageIndex = 0;
-            this.tvChain.Size = new System.Drawing.Size(512, 314);
+            this.tvChain.Size = new System.Drawing.Size(496, 317);
             this.tvChain.TabIndex = 57;
             this.tvChain.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.tvChain_ItemDrag);
             this.tvChain.DragDrop += new System.Windows.Forms.DragEventHandler(this.tvChain_DragDrop);
@@ -541,7 +570,6 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.Controls.Add(this.splitContainer2);
-            this.Controls.Add(this.cmdUpdate);
             this.Controls.Add(this.lblUltimaActualizacion);
             this.Controls.Add(this.grpActualizar);
             this.Controls.Add(this.txtId);
@@ -590,7 +618,6 @@
         private ListView lvSources;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
-        private Button cmdUpdate;
         private Label lblUltimaActualizacion;
         private GroupBox grpActualizar;
         private Label lblSiguienteActualizacion;
@@ -622,5 +649,9 @@
         private SplitContainer splitContainer1;
         private ImageList imlBalls;
         private ToolStripDropDownButton cmdAddChainLink;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripButton cmdPlayChain;
+        private ToolStripButton cmdPauseChain;
+        private ToolStripButton cmdStopChain;
     }
 }

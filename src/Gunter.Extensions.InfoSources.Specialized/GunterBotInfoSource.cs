@@ -4,6 +4,7 @@ using Gunter.Core.Contracts;
 using Gunter.Core.Infrastructure.Helpers;
 using Gunter.Core.Models;
 using Gunter.Extensions.InfoSources.Specialized.Models;
+using MQTTnet.Client;
 using System.Collections.Concurrent;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
@@ -27,6 +28,8 @@ namespace Gunter.Extensions.InfoSources.Specialized
         private readonly IGunterInfoItem _container;
 
         private Dictionary<string, GunterBotData> data = new();
+
+        public override GunterBotData LastItem { get; protected set; }
 
         private TelegramBotClient botClient;
         private User botUser;

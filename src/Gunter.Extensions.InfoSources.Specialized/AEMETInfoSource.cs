@@ -12,7 +12,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
 {
     public class AEMETInfoSource : InfoSourceBase<AEMETData>, IGunterInfoSource
     {
-        private AEMETData lastItem { get; set; }
         private readonly IGunterInfoItem _container;
 
         private const string BaseAddress = "https://www.aemet.es/xml/municipios/";
@@ -22,6 +21,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
         public bool IsOnline => true;
 
         public IGunterInfoItem Container { get => _container; }
+        public override AEMETData LastItem { get; protected set; }
 
         public string Category { get => InfoSourceConstants.CAT_INFORMATION; }
         public string SubCategory { get => InfoSourceConstants.SUB_WEATHER; }
@@ -36,7 +36,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             Name = "AEMET InfoSource";
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate("file", Chiloeches);
-            lastItem = new();
+            LastItem = new();
         }
 
         public AEMETInfoSource(IGunterInfoItem container, string id, string name)
@@ -45,7 +45,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
             Name = name;
             SpecialProperties = new SpecialProperties();
             _mandatoryInputs.AddOrUpdate("file", Chiloeches);
-            lastItem = new();
+            LastItem = new();
             _container = container;
         }
         public SpecialProperties GetMandatoryParams()
@@ -55,7 +55,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public object GetLastItem()
         {
-            return lastItem;
+            return LastItem;
         }
 
         public override Dictionary<string, AEMETData> GetLastData()
@@ -80,7 +80,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
             if (item is not null)
             {
-                lastItem = item;
+                LastItem = item;
 
                 var datos = item.prediccion.FirstOrDefault()?
                     .estado_cielo.Where(x => !string.IsNullOrWhiteSpace(x.descripcion))

@@ -283,19 +283,29 @@ namespace GunterUI
             {
                 SaveOptions();
             }
+
+            if (options.MainLayoutAutoPersist)
+            {
+                if (!options.MainWindow.MainWindowLocation.Equals(Point.Empty))
+                {
+                    this.Location = options.MainWindow.MainWindowLocation;
+                    this.Size = options.MainWindow.MainWindowSize;
+                }
+            }
+
         }
 
         private void SaveOptions()
         {
+            if (options.MainLayoutAutoPersist)
+            {
+                options.MainWindow.MainWindowLocation = this.Location;
+                options.MainWindow.MainWindowSize = this.Size;
+                kryptonDockingManager.SaveConfigToFile(Path.Combine(Directory.GetCurrentDirectory(), Constants.DockingConfigurationFile));
+            }
             var file = Path.Combine(Directory.GetCurrentDirectory(), Constants.GeneralConfigFile);
             var json = JsonConvert.SerializeObject(options);
             File.WriteAllText(file, json);
-        }
-
-        private void processAppUnloadTasks ()
-        {
-            if (options.MainLayoutAutoPersist)
-                kryptonDockingManager.SaveConfigToFile(Path.Combine(Directory.GetCurrentDirectory(), Constants.DockingConfigurationFile));
         }
 
         // Events
@@ -305,6 +315,11 @@ namespace GunterUI
             LoadOptions();
             ConfigureDocks();
             NewSolution();
+        }
+
+        private void MdiMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveOptions();
         }
 
         private void nuevoToolStripButton_Click(object sender, EventArgs e)
@@ -320,11 +335,6 @@ namespace GunterUI
         private void guardarToolStripButton_Click(object sender, EventArgs e)
         {
             SaveSolution();
-        }
-
-        private void MdiMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            processAppUnloadTasks();
         }
 
         private void cerrarActualToolStripMenuItem_Click(object sender, EventArgs e)

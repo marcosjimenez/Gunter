@@ -12,13 +12,13 @@ namespace Gunter.Extensions.Plugins.MarketStack
     public class MarketStackInfoSource : InfoSourceBase<MarketStackInfoSourceItem>, IGunterInfoSource
     {
 
-        private MarketStackInfoSourceItem lastItem { get; set; } = new();
 
         private readonly IGunterInfoItem _container;
 
         private Dictionary<string, MarketStackInfoSourceItem> data = new();
 
-        public MarketStackInfoSourceItem LastItem { get => lastItem; }
+        private MarketStackInfoSourceItem lastItem { get; set; } = new();
+        public override MarketStackInfoSourceItem LastItem { get => lastItem; protected set { lastItem = value; } }
 
         public bool IsOnline => true;
 

@@ -23,7 +23,7 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         public string Category { get => InfoSourceConstants.CAT_COMMUNICATION; }
         public string SubCategory { get => InfoSourceConstants.SUB_ENCYCLOPAEDIA; }
-
+        public override WikipediaData LastItem { get; protected set; }
 
         public WikipediaInfoSource()
         {

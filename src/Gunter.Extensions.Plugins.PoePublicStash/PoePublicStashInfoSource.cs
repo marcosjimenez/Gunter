@@ -12,8 +12,7 @@ namespace Gunter.Extensions.Plugins.PoePublicStash
     public class PoePublicStashInfoSource : InfoSourceBase<PoePublicStashInfoSourceItem>, IGunterInfoSource
     {
         private PoePublicStashInfoSourceItem lastItem { get; set; } = new();
-        public new PoePublicStashInfoSourceItem LastItem { get => lastItem; }
-
+        public override PoePublicStashInfoSourceItem LastItem { get => lastItem; protected set { lastItem = value; } }
 
         private Dictionary<string, PoePublicStashInfoSourceItem> data = new();
 
@@ -61,27 +60,30 @@ namespace Gunter.Extensions.Plugins.PoePublicStash
                 { "next_change_id", next_change_id}
             };
 
-            var movements = TryGetPublicStash(
+            var response = TryGetPublicStash(
                 PoeAPI.Endpoint_PublicStashTabs,
                 DateTimeManipulationHelper.OneMonth,
                 "PoE",
                 string.IsNullOrWhiteSpace(next_change_id) ? "FirstPage" : next_change_id,
                 parameters);
-            if (movements is not null)
+            if (response is not null)
             {
-                lastItem = movements;
-                SpecialProperties.AddOrUpdate(NEXT_CHANGE_ID, movements.next_change_id);
+                lastItem = response as PoePublicStashInfoSourceItem;
+                SpecialProperties.AddOrUpdate(NEXT_CHANGE_ID, response.next_change_id);
             }
 
-            if (data.ContainsKey(next_change_id))
-                data[next_change_id] = lastItem;
-            else
-                data.Add(next_change_id, LastItem);
+            if (lastItem is not null)
+            {
+                if (data.ContainsKey(next_change_id))
+                    data[next_change_id] = lastItem;
+                else
+                    data.Add(next_change_id, LastItem);
+            }
 
             return data;
         }
 
-        private PoePublicStashInfoSourceItem TryGetPublicStash(
+        private PoePublicStashApiResponse TryGetPublicStash(
             string endpoint,
             TimeSpan expirationIfCached,
             string cachedFilePrefix = "PoE",
@@ -89,27 +91,27 @@ namespace Gunter.Extensions.Plugins.PoePublicStash
             Dictionary<string, string>? parameters = null)
         {
             var fileUrl = ExternalDataCache.GenerateCacheFileID(cachedFilePrefix, cachedFileMiddle, DateTime.Now.ToString("ddMMyyyHHmmss"));
-            PoePublicStashInfoSourceItem? stashData = null;
+            PoePublicStashApiResponse? stashData = null;
             if (ExternalDataCache.Instance.TryGetFile(fileUrl, out byte[] content))
             {
                 var json = Encoding.UTF8.GetString(content);
-                var result = System.Text.Json.JsonSerializer.Deserialize<PoePublicStashInfoSourceItem>(json);
+                var result = System.Text.Json.JsonSerializer.Deserialize<PoePublicStashApiResponse>(json);
                 if (result is not null)
                     stashData = result;
             }
             else
             {
-                var newStashData = PoeAPI.GetFromEndPoint<PoePublicStashInfoSourceItem>(string.Empty, endpoint, parameters);
+                var newStashData = PoeAPI.GetFromEndPoint<PoePublicStashApiResponse>(PoeAPI.Endpoint_PublicStashTabs, endpoint, parameters);
                 if (newStashData is not null)
                 {
                     newStashData.stashes.RemoveAll(x => !x.IsPublic);
-                    var json = System.Text.Json.JsonSerializer.Serialize(newStashData, typeof(PoePublicStashInfoSourceItem));
+                    var json = System.Text.Json.JsonSerializer.Serialize(newStashData, typeof(PoePublicStashApiResponse));
                     ExternalDataCache.Instance.TryAddFile(json, fileUrl, expirationIfCached);
                     stashData = newStashData;
                 }
             }
 
-            return stashData ?? new PoePublicStashInfoSourceItem();
+            return stashData ?? new PoePublicStashApiResponse();
         }
 
         public void Update()

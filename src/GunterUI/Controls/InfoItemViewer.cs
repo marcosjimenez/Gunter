@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Dialogs;
+using Gunter.Core.Constants;
 using Gunter.Core.Contracts;
 using Gunter.Core.Contracts.Chaining;
 using Gunter.Core.Infrastructure.Helpers;
@@ -86,7 +87,7 @@ namespace Controls
                 var ds = InfoItem.InfoSources.FirstOrDefault(x => x.Id == item.ComponentId);
                 if (ds is not null)
                 {
-                    currentNode.Nodes.Add(ds.Id, ds.Name, "SilverBall", "BlueBall");
+                    currentNode.Nodes.Add(ds.Id, ds.Name, "SilverBall", "SilverBall");
                     currentNode.Expand();
                 }
             }
@@ -105,6 +106,10 @@ namespace Controls
                     if (retVal.Name == id)
                         break;
                 }
+            }
+            else
+            {
+                retVal = parent.Nodes[id];
             }
 
             return retVal;
@@ -199,13 +204,87 @@ namespace Controls
             MaxTimerCounter = (int)nextTimeSpan.TotalSeconds;
             timerCounter = 0;
 
-            lblSiguienteActualizacion.Text = $"Next {nextUpdate.ToString()}";
+            lblSiguienteActualizacion.Text = $"Next {nextUpdate}";
             timer.Enabled = enableTimer;
         }
 
         private TimeSpan GetUITimeSpan()
             => new TimeSpan((int)txtDias.Value, (int)txtHoras.Value, (int)txtMinutos.Value, (int)txtSegundos.Value);
 
+
+        private delegate void SetItemStatusDelegate(string id, string linkStatus);
+
+        private void SetItemStatus(string id, string linkStatus)
+        {
+            if (tvChain.InvokeRequired)
+            {
+                var tvCall = new SetItemStatusDelegate(SetItemStatus);
+                tvChain.Invoke(tvCall, new object[] { id, linkStatus });
+            }
+            else
+            {
+                var node = string.IsNullOrWhiteSpace(id) ? tvChain.Nodes[0] : SearchNode(id, tvChain.Nodes[0]);
+                string icon = "SilverBall";
+                switch(linkStatus)
+                {
+                    case ChainConstants.LinkStatus.Started:
+                        icon = "GreenBall";
+                        break;
+                    case ChainConstants.LinkStatus.StartedWithChilds:
+                        icon = "OrangeBall";
+                        break;
+                    case ChainConstants.LinkStatus.Completed:
+                        icon = "SilverBall";
+                        break;
+                    case ChainConstants.LinkStatus.Paused:
+                        icon = "BlueBall";
+                        break;
+                    case ChainConstants.LinkStatus.Error:
+                        icon = "RedBall";
+                        break;
+                }
+                node.ImageKey = icon;
+                node.ImageKey = icon;
+            }
+        }
+
+        private void StartChain()
+        {
+            cmdPlayChain.Enabled = false;
+            cmdPauseChain.Enabled = true;
+            cmdStopChain.Enabled = true;
+
+            Task.Run(() => {
+                InfoItem.ExecuteChain(
+                    (id, status) =>
+                    {
+                        SetItemStatus(id, status);
+                    });
+                StopChain();
+            });
+        }
+
+        private void PauseChain()
+        {
+            //cmdPlayChain.Enabled = true;
+            //cmdPauseChain.Enabled = false;
+            //cmdStopChain.Enabled = true;
+        }
+
+        private void StopChain()
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(StopChain, null);
+            }
+            else
+            {
+                cmdPlayChain.Enabled = true;
+                cmdPauseChain.Enabled = false;
+                cmdStopChain.Enabled = false;
+            }
+            InfoItem.StopChain();
+        }
 
         // Events
         private void cmdUpdate_Click(object sender, EventArgs e)
@@ -317,6 +396,7 @@ namespace Controls
 
         private void cmdRefreshSources_Click(object sender, EventArgs e)
         {
+            UpdateAll();
             LoadSources();
             LoadVisualizations();
         }
@@ -354,6 +434,40 @@ namespace Controls
             // (for example if you drag outside the control)
             if (!draggedNode.Equals(targetNode) && targetNode != null && !draggedNode.Parent.Equals(targetNode) && !targetNode.FullPath.Contains(draggedNode.Text))
             {
+                var originId = draggedNode.Name;
+                var destinatioId = targetNode.Name;
+
+                var originDataSource = InfoItem.InfoSources.FirstOrDefault(x => x.Id == originId);
+                var originLink = InfoItem.Chain.Links
+                    .FirstOrDefault(x => x.ComponentId.Equals(originId)) ??
+                    InfoItem.Chain.AddLink(originDataSource.Name, originDataSource, string.Empty, string.Empty);
+
+                var destinationDataSource = InfoItem.InfoSources.FirstOrDefault(x => x.Id == destinatioId);
+                var destinationLink = InfoItem.Chain.Links
+                                        .FirstOrDefault(x => x.ComponentId.Equals(destinatioId));
+                if (destinationDataSource is null)
+                {
+                    var oldLink = InfoItem.Chain.Links.FirstOrDefault(x => x.ComponentId.Equals(originLink.LinkOriginId));
+                    if (oldLink is not null)
+                    {
+                        oldLink.SetChild(null);
+                    }
+
+                    originLink.SetParent(null);
+                    //if (destinationLink is not null)
+                    //{
+                    //    destinationLink.SetChild(originLink);
+                    //}
+                }
+                else
+                {
+                    destinationLink = destinationLink ?? 
+                        InfoItem.Chain.AddLink(originDataSource.Name, destinationDataSource, string.Empty, string.Empty);
+
+                    originLink.SetParent(destinationLink);
+                    destinationLink.SetChild(originLink);
+                }
+
                 draggedNode.Remove();
                 targetNode.Nodes.Add(draggedNode);
 
@@ -376,6 +490,22 @@ namespace Controls
                 return;
 
             DoDragDrop(e.Item, DragDropEffects.Move);
+        }
+
+        private void cmdPlayChain_Click(object sender, EventArgs e)
+        {
+            StartChain();
+        }
+
+        private void cmdPauseChain_Click(object sender, EventArgs e)
+        {
+            PauseChain();
+        }
+
+        private void cmdStopChain_Click(object sender, EventArgs e)
+        {
+            var a = InfoItem.Chain;
+            StopChain();
         }
     }
 }

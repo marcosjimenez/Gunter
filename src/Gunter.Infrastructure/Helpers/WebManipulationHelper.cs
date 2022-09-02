@@ -1,5 +1,7 @@
 ﻿using Flurl;
 using Flurl.Http;
+using Gunter.Core.Infrastructure.Exceptions;
+using Gunter.Core.Infrastructure.Log;
 
 namespace Gunter.Core.Infrastructure.Helpers
 {
@@ -8,7 +10,7 @@ namespace Gunter.Core.Infrastructure.Helpers
 
         public static async Task<T?> Get<T>(string url, Dictionary<string, string> parameters)
         {
-            var webUrl = url.WithHeader("Accept", "text/plain");
+            var webUrl = url.WithHeader("Accept", "*/*");
 
             foreach (var item in parameters)
                 webUrl = webUrl.SetQueryParam(item.Key, item.Value);
@@ -18,7 +20,11 @@ namespace Gunter.Core.Infrastructure.Helpers
             {
                 result = await webUrl.GetJsonAsync<T>();
             }
-            catch { }
+            catch (Exception ex)
+            {
+                throw new GunterAsyncHelperException($"Error retrieving {url}\t\t{ex.Message}", ex);
+            
+            }
 
             return result;
         }

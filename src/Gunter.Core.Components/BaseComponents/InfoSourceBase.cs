@@ -11,7 +11,7 @@ namespace Gunter.Core.Components.BaseComponents
 {
     public abstract class InfoSourceBase<T> : IMessagingComponent
     {
-        public T LastItem { get; protected set; }
+        public abstract T LastItem { get; protected set; }
 
         public string ClassId { get => IdentificationConstants.CLASSID.GunterInfoSource; }
 

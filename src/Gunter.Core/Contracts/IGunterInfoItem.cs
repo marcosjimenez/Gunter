@@ -19,5 +19,9 @@ namespace Gunter.Core.Contracts
         IGunterProcessor GetProcessor();
 
         IChain<IGunterInfoSource> Chain { get; }
+
+        Task<bool> ExecuteChain(Action<string, string> onItemUpdated);
+
+        void StopChain();
     }
 }
