@@ -57,7 +57,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gunter.Extensions.Plugins.P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gunter.Extensions.Plugins.Twitter", "Gunter.Extensions.Plugins.Twitter\Gunter.Extensions.Plugins.Twitter.csproj", "{B468E500-757E-45F3-B7F2-F8E2CFAA84BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gunter.UI.MAUI", "Gunter.UI.MAUI\Gunter.UI.MAUI.csproj", "{A1328F8F-7EB8-4C39-AC5C-BB216FCF43BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gunter.UI.MAUI", "Gunter.UI.MAUI\Gunter.UI.MAUI.csproj", "{A1328F8F-7EB8-4C39-AC5C-BB216FCF43BE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementos de la solución", "Elementos de la solución", "{7809D287-954B-44EB-A298-0786480783D4}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
