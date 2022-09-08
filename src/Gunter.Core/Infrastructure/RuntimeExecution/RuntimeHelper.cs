@@ -11,7 +11,7 @@ namespace Gunter.Core.Infrastructure.RuntimeExecution
     public class RuntimeHelper
     {
         /// <summary>
-        /// https://github.com/joelmartinez/dotnet-core-roslyn-sample/blob/master/Program.cs
+        /// From https://github.com/joelmartinez/dotnet-core-roslyn-sample/blob/master/Program.cs
         /// </summary>
         /// 
         public virtual TOut CompileAndRun<TIn, TOut>(SourceCodeItem<TIn, TOut> item)

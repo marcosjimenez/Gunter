@@ -18,8 +18,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
     {
         private ConcurrentBag<GunterBotData> _messages = new();
 
-        public bool IsOnline => true;
-
         public IGunterInfoItem Container { get => _container; }
 
         public string Category { get => InfoSourceConstants.CAT_COMMUNICATION; }

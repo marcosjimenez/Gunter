@@ -16,9 +16,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         private readonly IGunterInfoItem _container;
 
         private Dictionary<string, OpenWeatherData> data = new();
-
-        public bool IsOnline => true;
-
         public IGunterInfoItem Container { get => _container; }
 
         private const string BaseUrl = "http://api.openweathermap.org/data/2.5";

@@ -9,7 +9,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Gunter.Core.Visualization\Gunter.Core.Visualization.csproj" />
     <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
-    <ProjectReference Include="..\Gunter.Infrastructure\Gunter.Core.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

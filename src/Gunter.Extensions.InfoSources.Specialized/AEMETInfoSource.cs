@@ -18,8 +18,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         private const string Chiloeches = "localidad_19105.xml";
         private Dictionary<string, AEMETData> data = new();
 
-        public bool IsOnline => true;
-
         public IGunterInfoItem Container { get => _container; }
         public override AEMETData LastItem { get; protected set; }
 

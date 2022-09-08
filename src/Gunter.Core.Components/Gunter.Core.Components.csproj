@@ -14,7 +14,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Gunter.Core.Messaging\Gunter.Core.Messaging.csproj" />
     <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
-    <ProjectReference Include="..\Gunter.Infrastructure\Gunter.Core.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

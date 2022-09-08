@@ -26,9 +26,6 @@ namespace Gunter.Extensions.ML
     {
         private readonly IGunterInfoItem? _container = null;
         private Dictionary<string, object> data = new ();
-
-        public bool IsOnline => true;
-
         public IGunterInfoItem Container { get => _container; }
         private object lastItem { get; set; } = new();
         public override object LastItem { get => lastItem; protected set { lastItem = value; } }

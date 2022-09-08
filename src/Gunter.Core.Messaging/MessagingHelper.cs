@@ -3,6 +3,7 @@ using Gunter.Core.Infrastructure.Log;
 using Gunter.Core.Messaging.Models;
 using MQTTnet;
 using MQTTnet.Server;
+using System.Text;
 
 namespace Gunter.Core.Messaging
 {
@@ -15,14 +16,19 @@ namespace Gunter.Core.Messaging
 
         public delegate void MessageReceivedEventHandler(object sender, TextMessageReceivedEventArgs e);
 
-        private MessagingClient messagingClient;
-        private MqttServer mqttServer;
+        private MessagingClient? messagingClient;
+        private MqttServer? mqttServer;
 
         public static MessagingHelper Instance { get { return lazy.Value; } }
 
         private MessagingHelper()
         {
-            AsyncHelper.RunSync(() => CreateServer());
+
+        }
+
+        public async Task InitializeServer()
+        {
+            await CreateServer();
             messagingClient = CreateClient(ManagerID);
             messagingClient.TextMessageReceived += (sender, e) =>
             {
@@ -30,9 +36,10 @@ namespace Gunter.Core.Messaging
             };
         }
 
-        ~MessagingHelper()
+        public async Task CloseServer()
         {
-            AsyncHelper.RunSync(() => mqttServer.StopAsync());
+            if (mqttServer is not null)
+                await mqttServer.StopAsync();
         }
 
         private async Task CreateServer()
@@ -53,26 +60,27 @@ namespace Gunter.Core.Messaging
             //     .Build();
 
             mqttServer = mqttFactory.CreateMqttServer(mqttServerOptions);
-            mqttServer.ClientConnectedAsync += (ClientConnectedEventArgs e) =>
+            mqttServer.ClientConnectedAsync += async (ClientConnectedEventArgs e) =>
             {
                 GunterLog.Instance.Log(this, $"{e.ClientId} connected");
-                return Task.CompletedTask;
             };
 
-            mqttServer.ApplicationMessageNotConsumedAsync += (ApplicationMessageNotConsumedEventArgs e) =>
+            mqttServer.ApplicationMessageNotConsumedAsync += async (ApplicationMessageNotConsumedEventArgs e) =>
             {
-                return Task.CompletedTask;
+                var payload = e.ApplicationMessage.Payload ?? Array.Empty<byte>();
+                var content = Encoding.UTF8.GetString(payload);
+                GunterLog.Instance.Log(this, $"Message not consumed from {e.SenderId}: {content}");
             };
 
             await mqttServer.StartAsync();
         }
 
         public MessagingClient CreateClient(string ownerId)
-            => new MessagingClient(ownerId);
+            => new(ownerId);
 
-        public List<string> GetClientIds()
+        public async Task<List<string>> GetClientIds()
         {
-            var clients = AsyncHelper.RunSync(() => mqttServer.GetClientsAsync());
+            var clients = await mqttServer.GetClientsAsync();
             return clients.Select(x => x.Id).ToList();
         }
     }

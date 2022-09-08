@@ -16,8 +16,6 @@ namespace Gunter.Extensions.Plugins.PoePublicStash.PoENinja
 
         private Dictionary<string, PoeNinjaInfoSourceItem> data = new();
 
-        public bool IsOnline => true;
-
         private readonly IGunterInfoItem? _container;
         public IGunterInfoItem? Container => _container;
 

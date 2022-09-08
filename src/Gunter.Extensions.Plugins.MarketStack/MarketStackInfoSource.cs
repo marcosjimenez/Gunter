@@ -20,8 +20,6 @@ namespace Gunter.Extensions.Plugins.MarketStack
         private MarketStackInfoSourceItem lastItem { get; set; } = new();
         public override MarketStackInfoSourceItem LastItem { get => lastItem; protected set { lastItem = value; } }
 
-        public bool IsOnline => true;
-
         public IGunterInfoItem Container { get => _container; }
 
         private const string APIKEY = "{ YOUR APIKEY HERE }";

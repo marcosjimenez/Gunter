@@ -35,7 +35,6 @@
     <ProjectReference Include="..\Gunter.Extensions.Plugins.PoePublicStash\Gunter.Extensions.Plugins.PoePublicStash.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.Plugins.ScriptExecution\Gunter.Extensions.Plugins.ScriptExecution.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.Plugins.Twitter\Gunter.Extensions.Plugins.Twitter.csproj" />
-    <ProjectReference Include="..\Gunter.Infrastructure\Gunter.Core.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

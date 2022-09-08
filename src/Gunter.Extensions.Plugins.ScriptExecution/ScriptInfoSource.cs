@@ -17,9 +17,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
 
         private Dictionary<string, ScriptInfoSourceItem> data = new();
 
-
-        public bool IsOnline => false;
-
         private readonly IGunterInfoItem? _container;
         public IGunterInfoItem? Container { get => _container; }
 

@@ -17,8 +17,6 @@ namespace Gunter.Extensions.InfoSources.Specialized
         private readonly IGunterInfoItem _container;
         private Dictionary<string, WikipediaData> data = new();
 
-        public bool IsOnline => true;
-
         public IGunterInfoItem Container { get => _container; }
 
         public string Category { get => InfoSourceConstants.CAT_COMMUNICATION; }

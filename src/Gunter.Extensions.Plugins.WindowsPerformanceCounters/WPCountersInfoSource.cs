@@ -13,19 +13,13 @@ namespace Gunter.Extensions.Plugins.WindowsPerformanceCounters
 
         private const string MachineName = "Machine Name";
         private const string Priority = "Priority (1-5) (NOT WORKING)";
-
-        private WPCountersInfoSourceItem lastItem { get; set; } = new();
-
         private readonly TimeSpan MinInterval = new TimeSpan();
-
-        private Dictionary<string, WPCountersInfoSourceItem> data = new();
-
-        public WPCountersInfoSourceItem LastItem { get => lastItem; }
-
-        public bool IsOnline => false;
-
         private readonly IGunterInfoItem? _container;
         public IGunterInfoItem? Container { get => _container; }
+        private Dictionary<string, WPCountersInfoSourceItem> data = new();
+        private WPCountersInfoSourceItem lastItem = new();
+        public override WPCountersInfoSourceItem LastItem { get => lastItem; protected set { lastItem = value; } }
+
 
         public WPCountersInfoSource() : base()
         {

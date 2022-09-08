@@ -33,6 +33,9 @@
             this.cmdOk = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.kryptonThemeComboBox1 = new Krypton.Toolkit.KryptonThemeComboBox();
             this.chkAutoLoadWindoLayout = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -52,6 +55,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonThemeComboBox1)).BeginInit();
             this.tabPage2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -84,8 +88,8 @@
             this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -94,6 +98,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.groupBox2);
+            this.tabPage1.Controls.Add(this.label6);
+            this.tabPage1.Controls.Add(this.kryptonThemeComboBox1);
             this.tabPage1.Controls.Add(this.chkAutoLoadWindoLayout);
             this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Name = "tabPage1";
@@ -103,10 +110,39 @@
             this.tabPage1.Text = "Interface";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Location = new System.Drawing.Point(6, 66);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(621, 14);
+            this.groupBox2.TabIndex = 3;
+            this.groupBox2.TabStop = false;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 12);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(48, 20);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Tema:";
+            // 
+            // kryptonThemeComboBox1
+            // 
+            this.kryptonThemeComboBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
+            this.kryptonThemeComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.kryptonThemeComboBox1.DropDownWidth = 273;
+            this.kryptonThemeComboBox1.IntegralHeight = false;
+            this.kryptonThemeComboBox1.Location = new System.Drawing.Point(6, 35);
+            this.kryptonThemeComboBox1.Name = "kryptonThemeComboBox1";
+            this.kryptonThemeComboBox1.Size = new System.Drawing.Size(273, 25);
+            this.kryptonThemeComboBox1.StateCommon.ComboBox.Content.TextH = Krypton.Toolkit.PaletteRelativeAlign.Near;
+            this.kryptonThemeComboBox1.TabIndex = 1;
+            // 
             // chkAutoLoadWindoLayout
             // 
             this.chkAutoLoadWindoLayout.AutoSize = true;
-            this.chkAutoLoadWindoLayout.Location = new System.Drawing.Point(35, 27);
+            this.chkAutoLoadWindoLayout.Location = new System.Drawing.Point(353, 36);
             this.chkAutoLoadWindoLayout.Name = "chkAutoLoadWindoLayout";
             this.chkAutoLoadWindoLayout.Size = new System.Drawing.Size(271, 24);
             this.chkAutoLoadWindoLayout.TabIndex = 0;
@@ -168,9 +204,9 @@
             this.chkFileSytemVersioning.Enabled = false;
             this.chkFileSytemVersioning.Location = new System.Drawing.Point(463, 26);
             this.chkFileSytemVersioning.Name = "chkFileSytemVersioning";
-            this.chkFileSytemVersioning.Size = new System.Drawing.Size(100, 24);
+            this.chkFileSytemVersioning.Size = new System.Drawing.Size(126, 24);
             this.chkFileSytemVersioning.TabIndex = 4;
-            this.chkFileSytemVersioning.Text = "Versioning";
+            this.chkFileSytemVersioning.Text = "File versioning";
             this.chkFileSytemVersioning.UseVisualStyleBackColor = true;
             // 
             // cboFilesystemType
@@ -305,6 +341,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.kryptonThemeComboBox1)).EndInit();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -336,5 +373,8 @@
         private Label label5;
         private CheckBox chkFileSytemAutosave;
         private CheckBox chkFileSytemVersioning;
+        private GroupBox groupBox2;
+        private Label label6;
+        private Krypton.Toolkit.KryptonThemeComboBox kryptonThemeComboBox1;
     }
 }
