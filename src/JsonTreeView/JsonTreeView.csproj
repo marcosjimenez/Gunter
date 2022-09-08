@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-	  <TargetFramework>net6.0-windows</TargetFramework>
+	<TargetFramework>net6.0-windows</TargetFramework>
+	<EnableWindowsTargeting>true</EnableWindowsTargeting>
     <Product>Json Editor by ZTn</Product>
     <Description>Simple Json TreeView control based on Newtonsoft.Json library</Description>
     <Copyright>ZeToken.net 2013-2020 (MIT License)</Copyright>
