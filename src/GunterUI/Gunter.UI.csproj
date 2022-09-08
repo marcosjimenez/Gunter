@@ -25,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Json-Editor\JsonTreeView\JsonTreeView.csproj" />
     <ProjectReference Include="..\Gunter.Core.Messaging\Gunter.Core.Messaging.csproj" />
     <ProjectReference Include="..\Gunter.Core.Solutions\Gunter.Core.Solutions.csproj" />
     <ProjectReference Include="..\Gunter.Core\Gunter.Core.csproj" />
@@ -35,6 +34,7 @@
     <ProjectReference Include="..\Gunter.Extensions.Plugins.PoePublicStash\Gunter.Extensions.Plugins.PoePublicStash.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.Plugins.ScriptExecution\Gunter.Extensions.Plugins.ScriptExecution.csproj" />
     <ProjectReference Include="..\Gunter.Extensions.Plugins.Twitter\Gunter.Extensions.Plugins.Twitter.csproj" />
+    <ProjectReference Include="..\JsonTreeView\JsonTreeView.csproj" />
   </ItemGroup>
 
   <ItemGroup>
